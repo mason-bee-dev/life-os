@@ -32,6 +32,14 @@ export default {
           DEFAULT: "#182137",
           foreground: "#e8edf5",
         },
+        secondary: {
+          DEFAULT: "#182137",
+          foreground: "#e8edf5",
+        },
+        popover: {
+          DEFAULT: "#0f1626",
+          foreground: "#e8edf5",
+        },
         destructive: {
           DEFAULT: "#ef4444",
           foreground: "#ffffff",

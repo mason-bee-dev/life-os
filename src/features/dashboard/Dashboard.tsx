@@ -365,7 +365,13 @@ export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: Dashbo
 
         <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2 xl:grid-cols-1">
           <Calendar />
-          <TodosCard compact todos={todos} onToggle={toggleTodo} />
+          <TodosCard
+            compact
+            todos={todos}
+            onToggle={toggleTodo}
+            onEdit={() => {}}
+            onDelete={() => {}}
+          />
           <InsightsPreview />
         </div>
       </div>
