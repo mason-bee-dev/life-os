@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   CalendarDays,
+  CheckSquare,
   BookOpen,
   Heart,
   Activity,
@@ -18,6 +19,7 @@ type NavItem = { icon: LucideIcon; label: PageId; labelVi: string; path: string 
 export const navMain: NavItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", labelVi: "Tổng quan", path: PAGE_PATHS.Dashboard },
   { icon: CalendarDays, label: "Today", labelVi: "Hôm nay", path: PAGE_PATHS.Today },
+  { icon: CheckSquare, label: "Todos", labelVi: "Công việc", path: PAGE_PATHS.Todos },
   { icon: BookOpen, label: "Journal", labelVi: "Nhật ký", path: PAGE_PATHS.Journal },
 ];
 export const navAnalytics: NavItem[] = [

@@ -11,6 +11,7 @@ import { Spark } from "@/components/charts/Spark";
 import { Delta } from "@/components/charts/Delta";
 import { MiniTrend } from "@/components/charts/MiniTrend";
 import { HabitsCard } from "@/features/habits/HabitsCard";
+import { TodosCard } from "@/features/todos/TodosCard";
 import { insightItems } from "@/features/insights/data";
 import { qColor } from "@/lib/calendar";
 import { useDailyRecords } from "@/features/health/useDailyRecords";
@@ -18,6 +19,7 @@ import { sumCoffeeCups, sumWaterLiters } from "@/features/health/stats";
 import { useNavigate } from "react-router-dom";
 import type { Habit } from "@/features/habits/types";
 import type { JournalEntry } from "@/features/journal/types";
+import type { Todo } from "@/features/todos/types";
 import {
   energyData, moodData, sleepData, prodData, weekData, calWeeks, quality,
 } from "./data";
@@ -287,9 +289,11 @@ type DashboardProps = {
   habits: Habit[];
   toggle: (index: number) => void;
   journal: JournalEntry[];
+  todos: Todo[];
+  toggleTodo: (id: number) => void;
 };
 
-export function Dashboard({ habits, toggle, journal }: DashboardProps) {
+export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: DashboardProps) {
   const navigate = useNavigate();
   const { todayKey, getRecord } = useDailyRecords();
   const yesterdayKey = dayjs(todayKey).subtract(1, "day").format("YYYY-MM-DD");
@@ -361,6 +365,7 @@ export function Dashboard({ habits, toggle, journal }: DashboardProps) {
 
         <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2 xl:grid-cols-1">
           <Calendar />
+          <TodosCard compact todos={todos} onToggle={toggleTodo} />
           <InsightsPreview />
         </div>
       </div>

@@ -3,6 +3,7 @@ import type { PageId } from "@/types";
 export const PAGE_PATHS: Record<PageId, string> = {
   Dashboard: "/",
   Today: "/today",
+  Todos: "/todos",
   Journal: "/journal",
   Health: "/health",
   Productivity: "/productivity",

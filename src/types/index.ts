@@ -5,6 +5,7 @@ export type SparkPoint = { i: number; v: number };
 export type PageId =
   | "Dashboard"
   | "Today"
+  | "Todos"
   | "Journal"
   | "Health"
   | "Productivity"

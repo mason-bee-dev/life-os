@@ -12,6 +12,8 @@ import { Today } from "@/features/today/Today";
 import { Journal } from "@/features/journal/Journal";
 import { Insights } from "@/features/insights/Insights";
 import { Health } from "@/features/health/Health";
+import { Todos } from "@/features/todos/Todos";
+import { useTodos } from "@/features/todos/useTodos";
 import { defaultHabits } from "@/features/habits/data";
 import { defaultJournal } from "@/features/journal/data";
 import type { Habit } from "@/features/habits/types";
@@ -21,6 +23,7 @@ import type { PageId } from "@/types";
 const headers: Record<string, { title: string; sub: string }> = {
   Dashboard: { title: "Chào buổi sáng, Alex 👋", sub: "Đây là tình hình cuộc sống của bạn hôm nay." },
   Today: { title: "Hôm nay", sub: "Ghi lại một ngày của bạn — chỉ mất một phút." },
+  Todos: { title: "Công việc", sub: "Danh sách việc cần làm — ưu tiên và hoàn thành." },
   Journal: { title: "Nhật ký", sub: "Những suy nghĩ của bạn, từng ngày." },
   Insights: { title: "Phân tích", sub: "Những xu hướng mà số liệu đang cho thấy." },
 };
@@ -31,6 +34,7 @@ function AppInner() {
   const [date, setDate] = useState<Date>(DEMO_TODAY);
   const [habits, setHabits] = usePersistentState<Habit[]>("habits", defaultHabits);
   const [journal, setJournal] = usePersistentState<JournalEntry[]>("journal", defaultJournal);
+  const { todos, addTodo, updateTodo, deleteTodo, toggleTodo } = useTodos();
 
   const toggle = (i: number) =>
     setHabits((hs) => hs.map((h, idx) => (idx === i ? { ...h, done: !h.done } : h)));
@@ -55,8 +59,31 @@ function AppInner() {
       <main className="flex-1 overflow-y-auto px-[30px] pb-[60px] pt-[26px]">
         <Header title={h.title} subtitle={h.sub} date={date} onShift={shift} />
         <Routes>
-          <Route path="/" element={<Dashboard habits={habits} toggle={toggle} journal={journal} />} />
+          <Route
+            path="/"
+            element={
+              <Dashboard
+                habits={habits}
+                toggle={toggle}
+                journal={journal}
+                todos={todos}
+                toggleTodo={toggleTodo}
+              />
+            }
+          />
           <Route path="/today" element={<Today habits={habits} toggle={toggle} addEntry={addEntry} />} />
+          <Route
+            path="/todos"
+            element={
+              <Todos
+                todos={todos}
+                addTodo={addTodo}
+                updateTodo={updateTodo}
+                deleteTodo={deleteTodo}
+                toggleTodo={toggleTodo}
+              />
+            }
+          />
           <Route path="/journal" element={<Journal journal={journal} addEntry={addEntry} />} />
           <Route path="/health" element={<Health />} />
           <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
