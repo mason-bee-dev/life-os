@@ -8,44 +8,43 @@ import {
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { PAGE_PATHS } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import type { PageId } from "@/types";
 
-type NavItem = { icon: LucideIcon; label: PageId; labelVi: string };
+type NavItem = { icon: LucideIcon; label: PageId; labelVi: string; path: string };
 
 export const navMain: NavItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", labelVi: "Tổng quan" },
-  { icon: CalendarDays, label: "Today", labelVi: "Hôm nay" },
-  { icon: BookOpen, label: "Journal", labelVi: "Nhật ký" },
+  { icon: LayoutDashboard, label: "Dashboard", labelVi: "Tổng quan", path: PAGE_PATHS.Dashboard },
+  { icon: CalendarDays, label: "Today", labelVi: "Hôm nay", path: PAGE_PATHS.Today },
+  { icon: BookOpen, label: "Journal", labelVi: "Nhật ký", path: PAGE_PATHS.Journal },
 ];
 export const navAnalytics: NavItem[] = [
-  { icon: Heart, label: "Health", labelVi: "Sức khoẻ" },
-  { icon: Activity, label: "Productivity", labelVi: "Năng suất" },
+  { icon: Heart, label: "Health", labelVi: "Sức khoẻ", path: PAGE_PATHS.Health },
+  { icon: Activity, label: "Productivity", labelVi: "Năng suất", path: PAGE_PATHS.Productivity },
 ];
 export const navInsights: NavItem[] = [
-  { icon: Lightbulb, label: "Insights", labelVi: "Phân tích" },
+  { icon: Lightbulb, label: "Insights", labelVi: "Phân tích", path: PAGE_PATHS.Insights },
 ];
 export const allNav = [...navMain, ...navAnalytics, ...navInsights];
 
-type SidebarProps = {
-  active: PageId;
-  setActive: (p: PageId) => void;
-};
+export function Sidebar() {
+  const { pathname } = useLocation();
 
-export function Sidebar({ active, setActive }: SidebarProps) {
-  const Item = ({ icon: Icon, label, labelVi }: NavItem) => (
-    <button
-      onClick={() => setActive(label)}
+  const Item = ({ icon: Icon, labelVi, path }: NavItem) => (
+    <Link
+      to={path}
       className={cn(
         "flex items-center gap-[11px] rounded-[9px] px-[11px] py-[9px] text-left text-[13.5px] font-medium transition-colors",
-        active === label
+        pathname === path
           ? "bg-primary/15 text-emerald-300"
           : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
       )}
     >
       <Icon size={18} strokeWidth={2} />
       <span>{labelVi}</span>
-    </button>
+    </Link>
   );
 
   return (

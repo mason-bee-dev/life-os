@@ -1,9 +1,10 @@
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
 } from "recharts";
+import dayjs from "dayjs";
 import {
   Zap, Smile, Moon, Target, ChevronLeft, ChevronRight, Heart, Activity,
-  Dumbbell, Scale, Droplets, Brain, Monitor, Clock, BookMarked, type LucideIcon,
+  Dumbbell, Scale, Droplets, Coffee, Brain, Monitor, Clock, BookMarked, type LucideIcon,
 } from "lucide-react";
 import { Gauge } from "@/components/charts/Gauge";
 import { Spark } from "@/components/charts/Spark";
@@ -12,6 +13,9 @@ import { MiniTrend } from "@/components/charts/MiniTrend";
 import { HabitsCard } from "@/features/habits/HabitsCard";
 import { insightItems } from "@/features/insights/data";
 import { qColor } from "@/lib/calendar";
+import { useDailyRecords } from "@/features/health/useDailyRecords";
+import { sumCoffeeCups, sumWaterLiters } from "@/features/health/stats";
+import { useNavigate } from "react-router-dom";
 import type { Habit } from "@/features/habits/types";
 import type { JournalEntry } from "@/features/journal/types";
 import {
@@ -211,8 +215,15 @@ type OverviewRow = {
   delta?: { dir: "up" | "down"; value: string; color: string };
 };
 function OverviewCard({
-  icon: Icon, iconColor, title, rows, link,
-}: { icon: LucideIcon; iconColor: string; title: string; rows: OverviewRow[]; link: string }) {
+  icon: Icon, iconColor, title, rows, link, onLinkClick,
+}: {
+  icon: LucideIcon;
+  iconColor: string;
+  title: string;
+  rows: OverviewRow[];
+  link: string;
+  onLinkClick?: () => void;
+}) {
   return (
     <div className={card}>
       <div className="mb-3.5 flex items-center gap-[9px]">
@@ -234,7 +245,12 @@ function OverviewCard({
           );
         })}
       </div>
-      <button className="mt-3.5 text-[12.5px] font-semibold text-blue-500 hover:underline">{link} →</button>
+      <button
+        className="mt-3.5 text-[12.5px] font-semibold text-blue-500 hover:underline"
+        onClick={onLinkClick}
+      >
+        {link} →
+      </button>
     </div>
   );
 }
@@ -274,6 +290,26 @@ type DashboardProps = {
 };
 
 export function Dashboard({ habits, toggle, journal }: DashboardProps) {
+  const navigate = useNavigate();
+  const { todayKey, getRecord } = useDailyRecords();
+  const yesterdayKey = dayjs(todayKey).subtract(1, "day").format("YYYY-MM-DD");
+  const todayRecord = getRecord(todayKey);
+  const yesterdayWater = getRecord(yesterdayKey).waterGlasses;
+  const waterLiters = sumWaterLiters([todayRecord]);
+  const coffeeCups = sumCoffeeCups([todayRecord]);
+
+  let waterDelta: OverviewRow["delta"];
+  if (yesterdayWater != null) {
+    const diff = waterLiters - yesterdayWater * 0.25;
+    if (diff !== 0) {
+      waterDelta = {
+        dir: diff > 0 ? "up" : "down",
+        value: `${Math.abs(diff).toFixed(2)} L`,
+        color: diff > 0 ? "#10b981" : "#ef4444",
+      };
+    }
+  }
+
   const latest = journal[0];
   return (
     <>
@@ -288,15 +324,18 @@ export function Dashboard({ habits, toggle, journal }: DashboardProps) {
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <OverviewCard
               icon={Heart} iconColor="#ef4444" title="Tổng quan sức khoẻ" link="Xem tất cả chỉ số sức khoẻ"
+              onLinkClick={() => navigate("/health")}
               rows={[
                 { ricon: Moon, label: "Giấc ngủ", value: "7h 08m", delta: { dir: "up", value: "12m", color: "#10b981" } },
                 { ricon: Dumbbell, label: "Vận động", value: "4 / 7 ngày", delta: { dir: "up", value: "1 ngày", color: "#10b981" } },
                 { ricon: Scale, label: "Cân nặng", value: "68.4 kg", delta: { dir: "down", value: "0.3 kg", color: "#10b981" } },
-                { ricon: Droplets, label: "Nước", value: "2.1 L", delta: { dir: "down", value: "0.4 L", color: "#ef4444" } },
+                { ricon: Droplets, label: "Nước", value: `${waterLiters.toFixed(2)} L`, delta: waterDelta },
+                { ricon: Coffee, label: "Cà phê", value: `${coffeeCups} cốc` },
               ]}
             />
             <OverviewCard
               icon={Activity} iconColor="#8b5cf6" title="Tổng quan năng suất" link="Xem tất cả chỉ số năng suất"
+              onLinkClick={() => navigate("/productivity")}
               rows={[
                 { ricon: Target, label: "Tập trung sâu", value: "4h 12m", delta: { dir: "up", value: "22m", color: "#10b981" } },
                 { ricon: Clock, label: "Giờ làm việc", value: "7h 38m", delta: { dir: "down", value: "1h 02m", color: "#ef4444" } },

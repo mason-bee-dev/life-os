@@ -6,6 +6,7 @@ import { HabitsCard } from "@/features/habits/HabitsCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { moodFaces, moodLabels } from "@/lib/mood";
+import { useDailyRecords } from "@/features/health/useDailyRecords";
 import type { Habit } from "@/features/habits/types";
 import type { Mood } from "@/features/journal/types";
 
@@ -39,10 +40,11 @@ type TodayProps = {
 
 export function Today({ habits, toggle, addEntry }: TodayProps) {
   const { notify } = useToast();
+  const { todayKey, getRecord, updateRecord } = useDailyRecords();
+  const glasses = getRecord(todayKey).waterGlasses ?? 0;
   const [mood, setMood] = useState<Mood>(4);
   const [energy, setEnergy] = useState(82);
   const [sleep, setSleep] = useState(7.2);
-  const [glasses, setGlasses] = useState(6);
   const [weight, setWeight] = useState(68.4);
   const [note, setNote] = useState("");
 
@@ -115,7 +117,7 @@ export function Today({ habits, toggle, addEntry }: TodayProps) {
             {Array.from({ length: 8 }).map((_, i) => (
               <button
                 key={i}
-                onClick={() => setGlasses(i + 1 === glasses ? i : i + 1)}
+                onClick={() => updateRecord(todayKey, { waterGlasses: i + 1 === glasses ? i : i + 1 })}
                 className={
                   "grid h-10 w-10 place-items-center rounded-[10px] border-[1.5px] transition-colors " +
                   (i < glasses ? "border-cyan-500 bg-cyan-500/10 text-cyan-400" : "border-border text-faint hover:border-cyan-500")
