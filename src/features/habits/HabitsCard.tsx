@@ -41,7 +41,7 @@ export function HabitsCard({ habits, toggle }: HabitsCardProps) {
                 "grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full border-2 text-white transition-colors " +
                 (h.done
                   ? "border-primary bg-primary"
-                  : "border-[#2a3752] hover:border-primary")
+                  : "border-border-hover hover:border-primary")
               }
             >
               {h.done && <Check size={13} strokeWidth={3} />}

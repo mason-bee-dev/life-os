@@ -6,6 +6,7 @@ export const PAGE_PATHS: Record<PageId, string> = {
   Todos: "/todos",
   Journal: "/journal",
   Health: "/health",
+  Sleep: "/sleep",
   Productivity: "/productivity",
   Insights: "/insights",
 };

@@ -17,7 +17,7 @@ export function PeriodTabs({ value, onChange }: Props) {
           key={t.value}
           onClick={() => onChange(t.value)}
           className={
-            "rounded-lg border px-2.5 py-[5px] text-[12.5px] font-semibold transition-colors " +
+            "rounded-lg border px-2.5 py-1 text-[12.5px] font-semibold transition-colors " +
             (value === t.value
               ? "border-primary bg-primary/10 text-primary"
               : "border-border text-muted-foreground hover:border-primary hover:text-primary")

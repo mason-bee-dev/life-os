@@ -8,5 +8,6 @@ export type PageId =
   | "Todos"
   | "Journal"
   | "Health"
+  | "Sleep"
   | "Productivity"
   | "Insights";

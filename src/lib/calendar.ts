@@ -15,8 +15,8 @@ export const DEMO_TODAY = dayjs("2026-08-31").toDate();
 
 /** Quality-of-day color map used by the calendar + legend. */
 export const qColor: Record<string, string> = {
-  low: "#ef4444",
-  avg: "#f59e0b",
-  good: "#eab308",
-  exc: "#10b981",
+  low: "var(--destructive)",
+  avg: "var(--metric-productivity)",
+  good: "var(--score-good)",
+  exc: "var(--primary)",
 };

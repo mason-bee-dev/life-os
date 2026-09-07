@@ -100,8 +100,8 @@ export function MigrateLocalData() {
   };
 
   return (
-    <div className="max-w-xl rounded-2xl border border-border bg-card p-[18px]">
-      <h2 className="m-0 text-[15px] font-semibold tracking-tight">Migrate dữ liệu local</h2>
+    <div className="max-w-xl rounded-2xl border border-border bg-card p-5">
+      <h2 className="m-0 text-heading tracking-tight">Migrate dữ liệu local</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Đọc <code className="text-foreground">lifeos:dailyRecords</code> từ localStorage và ghi vào
         Supabase. Chạy một lần sau khi schema đã được tạo. Trang này sẽ được xoá sau khi xác nhận
@@ -120,13 +120,13 @@ export function MigrateLocalData() {
 
       {okCount !== null && (
         <p className="mt-4 text-sm">
-          Đã migrate thành công <b className="font-bold">{okCount}</b> ngày.
+          Đã migrate thành công <span className="text-body">{okCount}</span> ngày.
         </p>
       )}
 
       {errors.length > 0 && (
         <div className="mt-4">
-          <p className="text-sm font-semibold text-red-400">Lỗi ({errors.length})</p>
+          <p className="text-sm text-red-400">Lỗi ({errors.length})</p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-red-400">
             {errors.map((e) => (
               <li key={e}>{e}</li>

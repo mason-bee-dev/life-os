@@ -42,7 +42,7 @@ export function Journal({ journal, addEntry }: JournalProps) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Hôm nay đã xảy ra chuyện gì? Bạn cảm thấy ra sao?"
-          className="mb-2.5 min-h-[92px] w-full resize-y rounded-xl border-[1.5px] border-border bg-transparent px-3.5 py-3 text-sm leading-relaxed outline-none placeholder:text-faint focus:border-primary"
+          className="mb-2.5 min-h-[92px] w-full resize-y rounded-xl border-[1.5px] border-border bg-transparent px-3.5 py-3 text-sm outline-none placeholder:text-faint focus:border-primary"
         />
         <div className="mb-3 flex gap-1.5">
           {moodFaces.map((f, i) => (
@@ -67,7 +67,7 @@ export function Journal({ journal, addEntry }: JournalProps) {
                 "inline-flex items-center gap-1 rounded-full border px-[9px] py-1 text-[11.5px] font-semibold transition-colors " +
                 (tags.includes(t)
                   ? "border-primary bg-primary/10 text-primary"
-                  : "border-border text-muted-foreground hover:border-[#2a3752]")
+                  : "border-border text-muted-foreground hover:border-border-hover")
               }
             >
               <Tag size={11} /> {t}

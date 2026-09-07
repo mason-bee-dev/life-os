@@ -22,7 +22,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ notify }}>
       {children}
       {message && (
-        <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-[#0f172a] px-[18px] py-[11px] text-sm font-semibold text-white shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+        <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-toast px-5 py-3 text-sm text-white shadow-[0_10px_30px_var(--shadow-color-35)]">
           <Check size={15} strokeWidth={3} className="text-primary" />
           {message}
         </div>

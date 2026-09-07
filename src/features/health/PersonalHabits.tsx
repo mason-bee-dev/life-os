@@ -39,14 +39,14 @@ export function PersonalHabits() {
   return (
     <div>
       {/* Header — always visible */}
-      <div className="flex items-center gap-[9px]">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-slate-400" style={{ background: "#64748b20" }}>
+      <div className="flex items-center gap-2">
+        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-slate-400" style={{ background: "var(--icon-muted-soft)" }}>
           {open ? <Eye size={15} /> : <EyeOff size={15} />}
         </span>
-        <span className="text-[15px] font-semibold tracking-tight">Thói quen cá nhân</span>
+        <span className="text-heading tracking-tight">Thói quen cá nhân</span>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="ml-auto rounded-lg border border-border px-2.5 py-[5px] text-[12.5px] font-semibold text-muted-foreground hover:border-primary hover:text-primary"
+          className="ml-auto rounded-lg border border-border px-2.5 py-1 text-[12.5px] font-semibold text-muted-foreground hover:border-primary hover:text-primary"
         >
           {open ? "Ẩn" : "Hiện"}
         </button>
@@ -64,7 +64,7 @@ export function PersonalHabits() {
               >
                 <Minus size={14} />
               </button>
-              <span className="min-w-[40px] text-center text-lg font-bold">{count}</span>
+              <span className="min-w-[40px] text-center text-lg">{count}</span>
               <button
                 onClick={() => updateRecord(todayKey, { masturbationCount: count + 1 })}
                 className="grid h-[36px] w-[36px] place-items-center rounded-xl border-[1.5px] border-border hover:border-primary hover:text-primary"
@@ -93,13 +93,13 @@ export function PersonalHabits() {
           {/* Stats */}
           <div className="border-t border-border pt-4">
             <div className="mb-3 flex items-center justify-between">
-              <span className="text-[13px] font-semibold text-muted-foreground">Thống kê</span>
+              <span className="text-[12.5px] font-semibold text-muted-foreground">Thống kê</span>
               <PeriodTabs value={period} onChange={setPeriod} />
             </div>
-            <div className="flex flex-col gap-1.5 text-[13px]">
-              <span>Tổng số lần: <b className="font-bold">{totalM}</b></span>
-              <span>Số ngày có xem nội dung người lớn: <b className="font-bold">{pornDays}</b></span>
-              <span>Chuỗi ngày sạch gần nhất: <b className="font-bold">{streak} ngày</b></span>
+            <div className="flex flex-col space-y-3 text-[13px]">
+              <span>Tổng số lần: <span>{totalM}</span></span>
+              <span>Số ngày có xem nội dung người lớn: <span>{pornDays}</span></span>
+              <span>Chuỗi ngày sạch gần nhất: <span>{streak} <span className="text-[12.5px] text-faint">ngày</span></span></span>
             </div>
           </div>
         </div>

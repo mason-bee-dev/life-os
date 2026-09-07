@@ -79,7 +79,7 @@ export function Todos({ todos, addTodo, updateTodo, deleteTodo, toggleTodo }: To
       <div>
         <div className="mb-1.5 flex items-center justify-between text-[12.5px] text-muted-foreground">
           <span>Tiến độ</span>
-          <span className="font-semibold text-foreground">{pct}%</span>
+          <span className="text-foreground">{pct}%</span>
         </div>
         <Progress value={pct} />
       </div>

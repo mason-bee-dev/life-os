@@ -21,16 +21,16 @@ export function WaterTracker() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-4 flex items-center gap-[9px]">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-cyan-400" style={{ background: "#06b6d420" }}>
+      <div className="mb-4 flex items-center gap-2">
+        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-cyan-400" style={{ background: "var(--metric-water-soft)" }}>
           <GlassWater size={15} />
         </span>
-        <span className="text-[15px] font-semibold tracking-tight">Uống nước</span>
+        <span className="text-heading tracking-tight">Uống nước</span>
         <span className="ml-auto text-[15px] font-bold">{(glasses * 0.25).toFixed(2)} L</span>
       </div>
 
       {/* Grid 8 glasses */}
-      <div className="flex flex-wrap gap-[7px]">
+      <div className="flex flex-wrap gap-2">
         {Array.from({ length: 8 }).map((_, i) => (
           <button
             key={i}
@@ -44,7 +44,7 @@ export function WaterTracker() {
           </button>
         ))}
       </div>
-      <div className="mt-2.5 text-[12.5px] text-muted-foreground">
+      <div className="mt-2.5 text-[12.5px] text-faint">
         Hôm nay: {(glasses * 0.25).toFixed(2)} L / mục tiêu 2.0 L
       </div>
 
@@ -55,10 +55,10 @@ export function WaterTracker() {
           <PeriodTabs value={period} onChange={setPeriod} />
         </div>
         <div className="mb-3 flex gap-6 text-[13px]">
-          <span>Tổng: <b className="font-bold">{total.toFixed(2)} L</b></span>
-          <span>Trung bình: <b className="font-bold">{avg.toFixed(2)} L/ngày</b></span>
+          <span>Tổng: <span className="text-body">{total.toFixed(2)} <span className="text-[12.5px] text-faint">L</span></span></span>
+          <span>Trung bình: <span className="text-body">{avg.toFixed(2)} <span className="text-[12.5px] text-faint">L/ngày</span></span></span>
         </div>
-        <StatBar data={series} color="#06b6d4" />
+        <StatBar data={series} color="var(--metric-water)" />
       </div>
     </div>
   );

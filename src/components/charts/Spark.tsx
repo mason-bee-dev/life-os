@@ -2,7 +2,7 @@ import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import type { SparkPoint } from "@/types";
 
 export function Spark({ data, color }: { data: SparkPoint[]; color: string }) {
-  const id = "spark-" + color.replace("#", "");
+  const id = "spark-" + color.replace(/[^a-zA-Z0-9_-]/g, "");
   return (
     <div className="mt-auto -mb-1 h-[52px]">
       <ResponsiveContainer width="100%" height="100%">
