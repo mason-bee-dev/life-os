@@ -68,7 +68,7 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="flex w-[236px] shrink-0 flex-col bg-sidebar px-[14px] py-5">
+    <aside className="hidden w-[236px] shrink-0 flex-col bg-sidebar px-[14px] py-5 lg:flex">
       <div className="flex items-center gap-[11px] px-2 pb-[22px] pt-1.5">
         <div className="grid h-[34px] w-[34px] place-items-center rounded-[9px] bg-gradient-to-br from-teal-400 to-emerald-500">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
