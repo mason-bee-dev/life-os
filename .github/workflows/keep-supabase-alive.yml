@@ -1,0 +1,26 @@
+# Pings the Supabase REST API once a week so the free-tier project
+# is not auto-paused after 7 days of inactivity.
+#
+# Add these repository secrets (Settings → Secrets and variables → Actions):
+#   SUPABASE_URL       — Project URL, e.g. https://xxxx.supabase.co
+#   SUPABASE_ANON_KEY  — Project anon/public key
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping daily_records
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          curl -fsS \
+            "${SUPABASE_URL}/rest/v1/daily_records?select=date&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}"
