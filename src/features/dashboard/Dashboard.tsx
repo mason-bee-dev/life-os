@@ -103,13 +103,6 @@ function StatCards() {
         </div>
         <Spark data={prodData} color="#f59e0b" />
       </div>
-
-      {/* Skeleton */}
-      <div className={card + " flex min-h-[196px] flex-col justify-center gap-3"}>
-        {[45, 80, 65, 72, 50].map((w, i) => (
-          <div key={i} className="h-[11px] rounded-md bg-[#1a2338]" style={{ width: w + "%" }} />
-        ))}
-      </div>
     </div>
   );
 }
