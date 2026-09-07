@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { ComingSoon } from "@/components/ComingSoon";
 import { ToastProvider } from "@/components/ui/toast";
 import { usePersistentState } from "@/hooks/usePersistentState";
-import { DEMO_TODAY, shiftDate } from "@/lib/calendar";
+import { shiftDate } from "@/lib/calendar";
 import { pageIdFromPath } from "@/lib/routes";
 import { AuthProvider, useAuth } from "@/features/auth/AuthProvider";
 import { Login } from "@/features/auth/Login";
@@ -15,6 +15,7 @@ import { Today } from "@/features/today/Today";
 import { Journal } from "@/features/journal/Journal";
 import { Insights } from "@/features/insights/Insights";
 import { Health } from "@/features/health/Health";
+import { Sleep } from "@/features/sleep/Sleep";
 import { Todos } from "@/features/todos/Todos";
 import { useTodos } from "@/features/todos/useTodos";
 import { MigrateLocalData } from "@/features/settings-temp/MigrateLocalData";
@@ -35,7 +36,7 @@ const headers: Record<string, { title: string; sub: string }> = {
 function AppInner() {
   const { pathname } = useLocation();
   const active: PageId = pageIdFromPath(pathname);
-  const [date, setDate] = useState<Date>(DEMO_TODAY);
+  const [date, setDate] = useState<Date>(() => new Date());
   const [habits, setHabits] = usePersistentState<Habit[]>("habits", defaultHabits);
   const [journal, setJournal] = usePersistentState<JournalEntry[]>("journal", defaultJournal);
   const { todos, addTodo, updateTodo, deleteTodo, toggleTodo } = useTodos();
@@ -55,8 +56,20 @@ function AppInner() {
     pathname === "/migrate-local-data"
       ? { title: "Migrate dữ liệu", sub: "Chuyển DailyRecords từ localStorage sang Supabase." }
       : headers[active] ?? {
-          title: active === "Health" ? "Sức khoẻ" : active === "Productivity" ? "Năng suất" : active,
-          sub: active === "Health" ? "Theo dõi nước, cà phê và thói quen cá nhân." : "Sắp ra mắt",
+          title:
+            active === "Health"
+              ? "Sức khoẻ"
+              : active === "Sleep"
+                ? "Giấc ngủ"
+                : active === "Productivity"
+                  ? "Năng suất"
+                  : active,
+          sub:
+            active === "Health"
+              ? "Theo dõi nước, cà phê và thói quen cá nhân."
+              : active === "Sleep"
+                ? "Ghi nhận đêm ngủ, ngủ trưa và xu hướng theo kỳ."
+                : "Sắp ra mắt",
         };
 
   return (
@@ -92,6 +105,10 @@ function AppInner() {
           />
           <Route path="/journal" element={<Journal journal={journal} addEntry={addEntry} />} />
           <Route path="/health" element={<Health />} />
+          <Route
+            path="/sleep"
+            element={<Sleep date={date} onDateChange={setDate} />}
+          />
           <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/migrate-local-data" element={<MigrateLocalData />} />

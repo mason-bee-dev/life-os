@@ -5,6 +5,7 @@ import {
   CheckSquare,
   BookOpen,
   Heart,
+  Moon,
   Activity,
   Lightbulb,
   Loader2,
@@ -27,6 +28,7 @@ export const navMain: NavItem[] = [
 ];
 export const navAnalytics: NavItem[] = [
   { icon: Heart, label: "Health", labelVi: "Sức khoẻ", path: PAGE_PATHS.Health },
+  { icon: Moon, label: "Sleep", labelVi: "Giấc ngủ", path: PAGE_PATHS.Sleep },
   { icon: Activity, label: "Productivity", labelVi: "Năng suất", path: PAGE_PATHS.Productivity },
 ];
 export const navInsights: NavItem[] = [
