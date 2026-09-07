@@ -11,22 +11,22 @@ export type Insight = {
 export const insightItems: Insight[] = [
   {
     icon: Sprout,
-    color: "#10b981",
-    bg: "rgba(16,185,129,.10)",
+    color: "var(--primary)",
+    bg: "var(--primary-muted)",
     title: "Giấc ngủ & Năng suất",
     text: "Bạn làm việc hiệu quả hơn 23% vào những ngày ngủ trên 7 tiếng.",
   },
   {
     icon: Moon,
-    color: "#8b5cf6",
-    bg: "rgba(139,92,246,.10)",
+    color: "var(--metric-mood)",
+    bg: "var(--metric-mood-muted)",
     title: "Vận động & Tâm trạng",
     text: "Tâm trạng của bạn tốt hơn 18% vào những ngày có vận động.",
   },
   {
     icon: Clock,
-    color: "#f59e0b",
-    bg: "rgba(245,158,11,.10)",
+    color: "var(--metric-productivity)",
+    bg: "var(--metric-productivity-muted)",
     title: "Thời điểm tốt nhất",
     text: "Bạn làm việc hiệu quả nhất trong khoảng 9h–12h sáng.",
   },

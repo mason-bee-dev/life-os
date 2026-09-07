@@ -70,7 +70,7 @@ export function Sidebar() {
       <div className="flex items-center gap-[11px] px-2 pb-[22px] pt-1.5">
         <div className="grid h-[34px] w-[34px] place-items-center rounded-[9px] bg-gradient-to-br from-teal-400 to-emerald-500">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="#fff" fillOpacity="0.95" />
+            <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="var(--primary-foreground)" fillOpacity="0.95" />
           </svg>
         </div>
         <div>
@@ -81,11 +81,11 @@ export function Sidebar() {
 
       <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto">
         {navMain.map((n) => <Item key={n.label} {...n} />)}
-        <div className="px-[11px] pb-1.5 pt-4 text-[10.5px] font-semibold uppercase tracking-[0.7px] text-slate-600">
+        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-slate-600">
           Phân tích
         </div>
         {navAnalytics.map((n) => <Item key={n.label} {...n} />)}
-        <div className="px-[11px] pb-1.5 pt-4 text-[10.5px] font-semibold uppercase tracking-[0.7px] text-slate-600">
+        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-slate-600">
           Phân tích
         </div>
         {navInsights.map((n) => <Item key={n.label} {...n} />)}

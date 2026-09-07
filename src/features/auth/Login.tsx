@@ -24,7 +24,7 @@ function BrandLogo({ compact = false }: { compact?: boolean }) {
         }
       >
         <svg width={compact ? 18 : 22} height={compact ? 18 : 22} viewBox="0 0 24 24" fill="none">
-          <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="#fff" fillOpacity="0.95" />
+          <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="var(--primary-foreground)" fillOpacity="0.95" />
         </svg>
       </div>
       <div>
@@ -96,11 +96,11 @@ export function Login() {
       <div className="relative hidden overflow-hidden bg-sidebar px-10 py-12 lg:flex lg:flex-col lg:justify-between">
         <div
           className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(circle, #10b981 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--primary) 0%, transparent 70%)" }}
         />
         <div
           className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full opacity-20 blur-3xl"
-          style={{ background: "radial-gradient(circle, #6366f1 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--login-orb) 0%, transparent 70%)" }}
         />
 
         <BrandLogo />
@@ -113,7 +113,7 @@ export function Login() {
           <h1 className="m-0 text-[2rem] font-bold leading-tight tracking-tight text-white">
             Một nơi để theo dõi, ghi chép và hiểu rõ bản thân hơn.
           </h1>
-          <p className="mt-4 text-[15px] leading-relaxed text-slate-400">
+          <p className="mt-4 text-xs text-slate-400">
             Life OS giúp bạn đồng bộ dữ liệu sức khoẻ, thói quen và nhật ký — mọi lúc, mọi thiết bị.
           </p>
 

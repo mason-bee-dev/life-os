@@ -48,21 +48,21 @@ export function CoffeeTracker() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-4 flex items-center gap-[9px]">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-amber-400" style={{ background: "#f59e0b20" }}>
+      <div className="mb-4 flex items-center gap-2">
+        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-amber-400" style={{ background: "var(--metric-productivity-soft)" }}>
           <Coffee size={15} />
         </span>
-        <span className="text-[15px] font-semibold tracking-tight">Cà phê</span>
+        <span className="text-heading tracking-tight">Cà phê</span>
       </div>
 
       {/* Type selector */}
-      <div className="mb-3 flex flex-wrap gap-[6px]">
+      <div className="mb-3 flex flex-wrap gap-1.5">
         {PRESETS.map((t) => (
           <button
             key={t}
             onClick={() => setSelectedType(t)}
             className={
-              "rounded-lg border px-2.5 py-[5px] text-[12.5px] font-semibold transition-colors " +
+              "rounded-lg border px-2.5 py-1 text-[12.5px] font-semibold transition-colors " +
               (selectedType === t
                 ? "border-amber-500 bg-amber-500/10 text-amber-400"
                 : "border-border text-muted-foreground hover:border-amber-500")
@@ -87,22 +87,22 @@ export function CoffeeTracker() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setCups((c) => Math.max(1, c - 1))}
-            className="grid h-[36px] w-[36px] place-items-center rounded-xl border-[1.5px] border-border hover:border-primary hover:text-primary"
+            className="grid h-[36px] w-[36px] place-items-center rounded-xl border border-border hover:border-primary hover:text-primary"
           >
             <Minus size={14} />
           </button>
-          <span className="min-w-[40px] text-center text-lg font-bold">{cups}</span>
+          <span className="min-w-[40px] text-center text-lg">{cups}</span>
           <button
             onClick={() => setCups((c) => c + 1)}
-            className="grid h-[36px] w-[36px] place-items-center rounded-xl border-[1.5px] border-border hover:border-primary hover:text-primary"
+            className="grid h-[36px] w-[36px] place-items-center rounded-xl border border-border hover:border-primary hover:text-primary"
           >
             <Plus size={14} />
           </button>
-          <span className="text-[12.5px] text-muted-foreground">cốc</span>
+          <span className="text-[12.5px] text-faint">cốc</span>
         </div>
         <button
           onClick={addLog}
-          className="rounded-lg bg-primary px-4 py-[7px] text-[13px] font-semibold text-primary-foreground hover:bg-primary/90"
+          className="rounded-lg bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground hover:bg-primary/90"
         >
           Thêm
         </button>
@@ -110,7 +110,7 @@ export function CoffeeTracker() {
 
       {/* Today's logs */}
       {coffeeList.length > 0 && (
-        <div className="mb-4 flex flex-col gap-1.5">
+        <div className="mb-4 flex flex-col space-y-3">
           {coffeeList.map((c) => (
             <div key={c.id} className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[13px]">
               <span className="flex-1">
@@ -131,10 +131,10 @@ export function CoffeeTracker() {
           <PeriodTabs value={period} onChange={setPeriod} />
         </div>
         <div className="mb-3 flex gap-6 text-[13px]">
-          <span>Tổng: <b className="font-bold">{totalCups} cốc</b></span>
-          {topType && <span>Hay uống nhất: <b className="font-bold">{topType}</b></span>}
+          <span>Tổng: <span className="text-[13px] font-bold">{totalCups} <span className="text-[12.5px] text-faint">cốc</span></span></span>
+          {topType && <span>Hay uống nhất: <span className="text-[13px] font-bold">{topType}</span></span>}
         </div>
-        <StatBar data={series} color="#f59e0b" />
+        <StatBar data={series} color="var(--metric-productivity)" />
       </div>
     </div>
   );

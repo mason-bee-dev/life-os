@@ -10,7 +10,7 @@ function ScatterTip({ active, payload }: { active?: boolean; payload?: any[] }) 
   if (active && payload && payload.length) {
     const d = payload[0].payload;
     return (
-      <div className="rounded-[9px] border border-[#2a3752] bg-card px-[11px] py-[7px] shadow-[0_6px_20px_rgba(0,0,0,0.4)]">
+      <div className="rounded-[9px] border border-border-hover bg-card px-[11px] py-[7px] shadow-[0_6px_20px_var(--shadow-color-40)]">
         <div className="mb-0.5 text-[11.5px] text-muted-foreground">Giấc ngủ {d.s}h</div>
         <div className="text-base font-bold">
           {d.p}<small className="ml-1 text-[11px] font-medium text-muted-foreground">năng suất</small>
@@ -34,7 +34,7 @@ export function Insights() {
                 <Icon size={16} />
               </span>
               <div className="mt-3 text-[13px] font-bold">{it.title}</div>
-              <div className="mt-1.5 text-xs leading-snug text-muted-foreground">{it.text}</div>
+              <div className="mt-1.5 text-xs text-muted-foreground">{it.text}</div>
             </div>
           );
         })}
@@ -44,24 +44,24 @@ export function Insights() {
         {/* scatter */}
         <div className={card}>
           <div className="mb-3.5 flex items-center justify-between">
-            <span className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
+            <span className="flex items-center gap-2 text-heading tracking-tight">
               <Sparkles size={15} className="text-primary" /> Giấc ngủ và Năng suất
             </span>
           </div>
           <div className="h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 10, right: 12, left: -14, bottom: 4 }}>
-                <CartesianGrid stroke="#1c2740" strokeDasharray="3 3" />
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
                 <XAxis type="number" dataKey="s" domain={[5, 9]} tickLine={false} axisLine={false}
-                  tick={{ fill: "#5c6b85", fontSize: 11 }} tickFormatter={(v) => v + "h"} />
+                  tick={{ fill: "var(--faint)", fontSize: 11 }} tickFormatter={(v) => v + "h"} />
                 <YAxis type="number" dataKey="p" domain={[40, 100]} tickLine={false} axisLine={false}
-                  tick={{ fill: "#5c6b85", fontSize: 11 }} width={40} />
+                  tick={{ fill: "var(--faint)", fontSize: 11 }} width={40} />
                 <Tooltip content={<ScatterTip />} cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter data={scatterData} fill="#10b981" fillOpacity={0.85} />
+                <Scatter data={scatterData} fill="var(--primary)" fillOpacity={0.85} />
               </ScatterChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-3 border-t border-border pt-3 text-[12.5px] leading-relaxed text-muted-foreground">
+          <div className="mt-3 border-t border-border pt-3 text-base text-muted-foreground">
             Mỗi chấm là một ngày. Xu hướng đi lên cho thấy ngủ nhiều hơn thường đi kèm năng suất
             cao hơn — rõ nhất khi ngủ trên 7 tiếng.
           </div>
@@ -70,22 +70,22 @@ export function Insights() {
         {/* correlations */}
         <div className={card}>
           <div className="mb-3.5 flex items-center justify-between">
-            <span className="text-[15px] font-semibold tracking-tight">Tương quan</span>
+            <span className="text-heading tracking-tight">Tương quan</span>
             <span className="text-[12.5px] text-muted-foreground">90 ngày gần nhất</span>
           </div>
           <div className="flex flex-col gap-4">
             {correlations.map((c) => (
               <div key={c.a + c.b}>
                 <div className="mb-[7px] flex items-center justify-between">
-                  <span className="text-[13px] font-semibold">
+                  <span className="text-body font-semibold">
                     {c.a} <span className="mx-0.5 text-faint">↔</span> {c.b}
                   </span>
-                  <span className="text-[13px] font-bold tabular-nums" style={{ color: c.dir === "pos" ? "#10b981" : "#ef4444" }}>
+                  <span className="text-body font-bold tabular-nums" style={{ color: c.dir === "pos" ? "var(--primary)" : "var(--destructive)" }}>
                     {c.dir === "pos" ? "+" : ""}{c.r.toFixed(2)}
                   </span>
                 </div>
                 <div className="h-[7px] overflow-hidden rounded-full bg-track">
-                  <div className="h-full rounded-full" style={{ width: Math.abs(c.r) * 100 + "%", background: c.dir === "pos" ? "#10b981" : "#ef4444" }} />
+                  <div className="h-full rounded-full" style={{ width: Math.abs(c.r) * 100 + "%", background: c.dir === "pos" ? "var(--primary)" : "var(--destructive)" }} />
                 </div>
                 <div className="mt-[5px] text-[11.5px] text-muted-foreground">{c.note}</div>
               </div>
@@ -97,7 +97,7 @@ export function Insights() {
       {/* comparison */}
       <div className={card}>
         <div className="mb-3.5 flex items-center justify-between">
-          <span className="text-[15px] font-semibold tracking-tight">Tháng này so với tháng trước</span>
+          <span className="text-heading tracking-tight">Tháng này so với tháng trước</span>
           <span className="text-[12.5px] text-muted-foreground">Tháng 8 so với tháng 7</span>
         </div>
         <div className="flex flex-col gap-[18px]">
@@ -107,10 +107,10 @@ export function Insights() {
             const pct = Math.round(((r.now - r.last) / r.last) * 100);
             return (
               <div key={r.label} className="grid grid-cols-[96px_1fr_56px] items-center gap-3.5">
-                <div className="text-[13px] font-semibold">{r.label}</div>
+                <div className="text-body font-semibold">{r.label}</div>
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-2">
-                    <div className="h-4 shrink-0 rounded-[5px] bg-[#2a3752]" style={{ width: (r.last / max) * 100 + "%" }} />
+                    <div className="h-4 shrink-0 rounded-[5px] bg-border-hover" style={{ width: (r.last / max) * 100 + "%" }} />
                     <span className="whitespace-nowrap text-[11.5px] tabular-nums text-muted-foreground">
                       {r.last}{r.unit} <em className="not-italic text-faint">trước</em>
                     </span>
@@ -122,7 +122,7 @@ export function Insights() {
                     </span>
                   </div>
                 </div>
-                <div className="text-right text-[13px] font-bold" style={{ color: up ? "#10b981" : "#ef4444" }}>
+                <div className="text-right text-body font-bold" style={{ color: up ? "var(--primary)" : "var(--destructive)" }}>
                   {up ? "▲" : "▼"} {Math.abs(pct)}%
                 </div>
               </div>

@@ -5,13 +5,13 @@ export function Gauge({ value }: { value: number }) {
   return (
     <div className="relative mx-auto mt-0.5 h-32 w-32">
       <svg width="128" height="128" viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r={r} fill="none" stroke="#1e293b" strokeWidth="9" />
+        <circle cx="60" cy="60" r={r} fill="none" stroke="var(--track)" strokeWidth="9" />
         <circle
           cx="60"
           cy="60"
           r={r}
           fill="none"
-          stroke="#10b981"
+          stroke="var(--primary)"
           strokeWidth="9"
           strokeLinecap="round"
           strokeDasharray={c}

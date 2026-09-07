@@ -12,11 +12,11 @@ export function ComingSoon({ label }: { label: PageId }) {
         <Icon size={30} />
       </div>
       <div className="mb-2 text-[22px] font-bold">{labelText}</div>
-      <p className="mb-[18px] max-w-[360px] text-sm leading-relaxed text-muted-foreground">
+      <p className="mb-[18px] max-w-[360px] text-sm text-muted-foreground">
         Mục này đang nằm trong kế hoạch phát triển. Cấu trúc dữ liệu đã sẵn
         sàng — chỉ là giao diện chưa được xây.
       </p>
-      <div className="rounded-full bg-primary/10 px-[13px] py-[5px] text-[11.5px] font-bold uppercase tracking-[0.4px] text-primary">
+      <div className="rounded-full bg-primary/10 px-3 py-1 text-[11.5px] font-bold uppercase tracking-wide text-primary">
         Sắp ra mắt
       </div>
     </div>

@@ -24,14 +24,14 @@ import {
   energyData, moodData, sleepData, prodData, weekData, calWeeks, quality,
 } from "./data";
 
-const card = "rounded-2xl border border-border bg-card p-[18px]";
+const card = "rounded-2xl border border-border bg-card p-5";
 
 /* ---------- stat cards ---------- */
 function StatIcon({ icon: Icon, color }: { icon: LucideIcon; color: string }) {
   return (
     <span
       className="grid h-[26px] w-[26px] place-items-center rounded-lg"
-      style={{ color, background: color + "1f" }}
+      style={{ color, background: `color-mix(in srgb, ${color} 12.1568627451%, transparent)` }}
     >
       <Icon size={15} />
     </span>
@@ -48,60 +48,60 @@ function StatCards() {
         </div>
         <Gauge value={84} />
         <div className="mt-auto">
-          <Delta dir="up" value="8.6% so với tuần trước" color="#10b981" />
+          <Delta dir="up" value="8.6% so với tuần trước" color="var(--primary)" />
         </div>
       </div>
 
       {/* Energy */}
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
-          <StatIcon icon={Zap} color="#10b981" />
+          <StatIcon icon={Zap} color="var(--primary)" />
           <span className="text-[13.5px] font-semibold text-muted-foreground">Năng lượng</span>
         </div>
-        <div className="text-[26px] font-bold tracking-tight">
-          82 <span className="text-sm font-medium text-faint">/100</span>
+        <div className="text-stat font-bold tracking-tight">
+          82 <span className="text-[12.5px] font-medium text-faint">/100</span>
         </div>
         <div className="mt-0.5 text-[12.5px] font-semibold text-primary">Tốt</div>
-        <Spark data={energyData} color="#10b981" />
+        <Spark data={energyData} color="var(--primary)" />
       </div>
 
       {/* Mood */}
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
-          <StatIcon icon={Smile} color="#8b5cf6" />
+          <StatIcon icon={Smile} color="var(--metric-mood)" />
           <span className="text-[13.5px] font-semibold text-muted-foreground">Tâm trạng</span>
         </div>
-        <div className="text-[26px] font-bold tracking-tight">Tốt</div>
+        <div className="text-stat font-bold tracking-tight">Tốt</div>
         <div className="mt-0.5 text-[12.5px] font-semibold text-muted-foreground">4.2 / 5</div>
-        <Spark data={moodData} color="#8b5cf6" />
+        <Spark data={moodData} color="var(--metric-mood)" />
       </div>
 
       {/* Sleep */}
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
-          <StatIcon icon={Moon} color="#3b82f6" />
+          <StatIcon icon={Moon} color="var(--metric-sleep)" />
           <span className="text-[13.5px] font-semibold text-muted-foreground">Giấc ngủ</span>
         </div>
-        <div className="text-[26px] font-bold tracking-tight">7h 12m</div>
+        <div className="text-stat font-bold tracking-tight">7h 12m</div>
         <div className="mt-0.5">
-          <Delta dir="up" value="24m so với hôm qua" color="#3b82f6" />
+          <Delta dir="up" value="24m so với hôm qua" color="var(--metric-sleep)" />
         </div>
-        <Spark data={sleepData} color="#3b82f6" />
+        <Spark data={sleepData} color="var(--metric-sleep)" />
       </div>
 
       {/* Productivity */}
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
-          <StatIcon icon={Target} color="#f59e0b" />
+          <StatIcon icon={Target} color="var(--metric-productivity)" />
           <span className="text-[13.5px] font-semibold text-muted-foreground">Năng suất</span>
         </div>
-        <div className="text-[26px] font-bold tracking-tight">
-          76 <span className="text-sm font-medium text-faint">/100</span>
+        <div className="text-stat font-bold tracking-tight">
+          76 <span className="text-[12.5px] font-medium text-faint">/100</span>
         </div>
         <div className="mt-0.5">
-          <Delta dir="up" value="5.1% so với tuần trước" color="#f59e0b" />
+          <Delta dir="up" value="5.1% so với tuần trước" color="var(--metric-productivity)" />
         </div>
-        <Spark data={prodData} color="#f59e0b" />
+        <Spark data={prodData} color="var(--metric-productivity)" />
       </div>
     </div>
   );
@@ -112,7 +112,7 @@ function ChartTooltip({ active, payload }: { active?: boolean; payload?: any[] }
   if (active && payload && payload.length) {
     const p = payload[0].payload;
     return (
-      <div className="rounded-[9px] border border-[#2a3752] bg-card px-[11px] py-[7px] shadow-[0_6px_20px_rgba(0,0,0,0.4)]">
+      <div className="rounded-[9px] border border-border-hover bg-card px-[11px] py-[7px] shadow-[0_6px_20px_var(--shadow-color-40)]">
         <div className="mb-0.5 text-[11.5px] text-muted-foreground">{p.date}</div>
         <div className="text-base font-bold">{p.v}</div>
       </div>
@@ -125,7 +125,7 @@ function ScoreChart() {
   return (
     <div className={card + " flex flex-col"}>
       <div className="mb-3.5 flex items-center justify-between">
-        <span className="text-[15px] font-semibold tracking-tight">Điểm sống — Tuần này</span>
+        <span className="text-heading tracking-tight">Điểm sống — Tuần này</span>
         <div className="rounded-lg border border-border px-2.5 py-[5px] text-[12.5px] font-semibold text-muted-foreground">
           Tuần này ▾
         </div>
@@ -133,11 +133,11 @@ function ScoreChart() {
       <div className="-mx-1.5 h-[214px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={weekData} margin={{ top: 16, right: 8, left: -18, bottom: 0 }}>
-            <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fill: "#5c6b85", fontSize: 12 }} dy={6} />
-            <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickLine={false} axisLine={false} tick={{ fill: "#5c6b85", fontSize: 12 }} width={40} />
-            <Tooltip content={<ChartTooltip />} cursor={{ stroke: "#2a3752", strokeDasharray: "4 4" }} />
-            <Line type="monotone" dataKey="v" stroke="#3b82f6" strokeWidth={2.6}
-              dot={{ r: 3.5, fill: "#0f1626", stroke: "#3b82f6", strokeWidth: 2 }} activeDot={{ r: 5 }} />
+            <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fill: "var(--faint)", fontSize: 11 }} dy={6} />
+            <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickLine={false} axisLine={false} tick={{ fill: "var(--faint)", fontSize: 11 }} width={40} />
+            <Tooltip content={<ChartTooltip />} cursor={{ stroke: "var(--border-hover)", strokeDasharray: "4 4" }} />
+            <Line type="monotone" dataKey="v" stroke="var(--metric-sleep)" strokeWidth={2.6}
+              dot={{ r: 3.5, fill: "var(--card)", stroke: "var(--metric-sleep)", strokeWidth: 2 }} activeDot={{ r: 5 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -157,7 +157,7 @@ function Calendar() {
   return (
     <div className={card}>
       <div className="mb-3.5 flex items-center justify-between">
-        <span className="text-[15px] font-semibold tracking-tight">Tháng 8/2026</span>
+        <span className="text-heading tracking-tight">Tháng 8/2026</span>
         <div className="flex gap-0.5">
           <button className="rounded-md p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"><ChevronLeft size={16} /></button>
           <button className="rounded-md p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"><ChevronRight size={16} /></button>
@@ -222,10 +222,10 @@ function OverviewCard({
   return (
     <div className={card}>
       <div className="mb-3.5 flex items-center gap-[9px]">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg" style={{ color: iconColor, background: iconColor + "20" }}>
+        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg" style={{ color: iconColor, background: `color-mix(in srgb, ${iconColor} 12.5490196078%, transparent)` }}>
           <Icon size={15} />
         </span>
-        <span className="text-[15px] font-semibold tracking-tight">{title}</span>
+        <span className="text-heading tracking-tight">{title}</span>
       </div>
       <div className="flex flex-col">
         {rows.map((r) => {
@@ -255,7 +255,7 @@ function InsightsPreview() {
   return (
     <div className={card + " flex flex-col"}>
       <div className="mb-3.5 flex items-center justify-between">
-        <span className="text-[15px] font-semibold tracking-tight">Phân tích nổi bật</span>
+        <span className="text-heading tracking-tight">Phân tích nổi bật</span>
         <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">Xem tất cả</button>
       </div>
       {insightItems.map((it) => {
@@ -267,7 +267,7 @@ function InsightsPreview() {
             </span>
             <div className="min-w-0 flex-1">
               <div className="mb-0.5 text-[13px] font-bold">{it.title}</div>
-              <div className="text-xs leading-snug text-muted-foreground">{it.text}</div>
+              <div className="text-xs text-muted-foreground">{it.text}</div>
             </div>
             <MiniTrend color={it.color} />
           </div>
@@ -302,7 +302,7 @@ export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: Dashbo
       waterDelta = {
         dir: diff > 0 ? "up" : "down",
         value: `${Math.abs(diff).toFixed(2)} L`,
-        color: diff > 0 ? "#10b981" : "#ef4444",
+        color: diff > 0 ? "var(--primary)" : "var(--destructive)",
       };
     }
   }
@@ -320,31 +320,31 @@ export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: Dashbo
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <OverviewCard
-              icon={Heart} iconColor="#ef4444" title="Tổng quan sức khoẻ" link="Xem tất cả chỉ số sức khoẻ"
+              icon={Heart} iconColor="var(--destructive)" title="Tổng quan sức khoẻ" link="Xem tất cả chỉ số sức khoẻ"
               onLinkClick={() => navigate("/health")}
               rows={[
-                { ricon: Moon, label: "Giấc ngủ", value: "7h 08m", delta: { dir: "up", value: "12m", color: "#10b981" } },
-                { ricon: Dumbbell, label: "Vận động", value: "4 / 7 ngày", delta: { dir: "up", value: "1 ngày", color: "#10b981" } },
-                { ricon: Scale, label: "Cân nặng", value: "68.4 kg", delta: { dir: "down", value: "0.3 kg", color: "#10b981" } },
+                { ricon: Moon, label: "Giấc ngủ", value: "7h 08m", delta: { dir: "up", value: "12m", color: "var(--primary)" } },
+                { ricon: Dumbbell, label: "Vận động", value: "4 / 7 ngày", delta: { dir: "up", value: "1 ngày", color: "var(--primary)" } },
+                { ricon: Scale, label: "Cân nặng", value: "68.4 kg", delta: { dir: "down", value: "0.3 kg", color: "var(--primary)" } },
                 { ricon: Droplets, label: "Nước", value: `${waterLiters.toFixed(2)} L`, delta: waterDelta },
                 { ricon: Coffee, label: "Cà phê", value: `${coffeeCups} cốc` },
               ]}
             />
             <OverviewCard
-              icon={Activity} iconColor="#8b5cf6" title="Tổng quan năng suất" link="Xem tất cả chỉ số năng suất"
+              icon={Activity} iconColor="var(--metric-mood)" title="Tổng quan năng suất" link="Xem tất cả chỉ số năng suất"
               onLinkClick={() => navigate("/productivity")}
               rows={[
-                { ricon: Target, label: "Tập trung sâu", value: "4h 12m", delta: { dir: "up", value: "22m", color: "#10b981" } },
-                { ricon: Clock, label: "Giờ làm việc", value: "7h 38m", delta: { dir: "down", value: "1h 02m", color: "#ef4444" } },
-                { ricon: Brain, label: "Học tập", value: "1h 45m", delta: { dir: "up", value: "30m", color: "#10b981" } },
-                { ricon: Monitor, label: "Thời gian màn hình", value: "6h 20m", delta: { dir: "down", value: "45m", color: "#10b981" } },
+                { ricon: Target, label: "Tập trung sâu", value: "4h 12m", delta: { dir: "up", value: "22m", color: "var(--primary)" } },
+                { ricon: Clock, label: "Giờ làm việc", value: "7h 38m", delta: { dir: "down", value: "1h 02m", color: "var(--destructive)" } },
+                { ricon: Brain, label: "Học tập", value: "1h 45m", delta: { dir: "up", value: "30m", color: "var(--primary)" } },
+                { ricon: Monitor, label: "Thời gian màn hình", value: "6h 20m", delta: { dir: "down", value: "45m", color: "var(--primary)" } },
               ]}
             />
           </div>
 
           <div className={card}>
             <div className="mb-2.5 flex items-center justify-between">
-              <span className="flex items-center gap-2 text-[15px] font-semibold tracking-tight">
+              <span className="flex items-center gap-2 text-heading tracking-tight">
                 <BookMarked size={16} className="text-muted-foreground" /> Ghi chú nhật ký gần nhất
               </span>
               <div className="flex items-center gap-3.5">

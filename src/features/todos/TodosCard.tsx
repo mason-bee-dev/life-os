@@ -66,8 +66,8 @@ export function TodosCard({
   ];
 
   return (
-    <div className="flex flex-col rounded-2xl border border-border bg-card p-[18px]">
-      <div className="mb-3.5 flex items-center justify-between">
+    <div className="flex flex-col rounded-2xl border border-border bg-card p-5">
+      <div className="mb-4 flex items-center justify-between">
         <span className="text-[15px] font-semibold tracking-tight">
           {compact ? "Công việc hôm nay" : "Danh sách công việc"}
         </span>
@@ -85,7 +85,7 @@ export function TodosCard({
       </div>
 
       {!compact && (
-        <div className="mb-3.5 flex gap-1.5">
+        <div className="mb-4 flex gap-1.5">
           {tabs.map((tab) => (
             <Button
               key={tab.id}
@@ -100,7 +100,7 @@ export function TodosCard({
         </div>
       )}
 
-      <div className="flex flex-col">
+      <div className="flex flex-col space-y-3">
         {visible.length === 0 ? (
           <p className="py-4 text-center text-[13px] text-muted-foreground">
             Không có công việc nào.
@@ -111,7 +111,7 @@ export function TodosCard({
             return (
               <div
                 key={todo.id}
-                className="flex items-center gap-3 border-b border-border py-2.5 last:border-b-0"
+                className="flex items-center gap-3 border-b border-border pb-3 last:border-b-0 last:pb-0"
               >
                 <Checkbox
                   checked={todo.done}
@@ -140,7 +140,7 @@ export function TodosCard({
                       <span
                         className={cn(
                           "text-[11.5px] font-medium",
-                          overdue ? "text-red-400" : "text-muted-foreground",
+                          overdue ? "text-red-400" : "text-faint",
                         )}
                       >
                         {dayjs(todo.dueDate).format("DD/MM/YYYY")}
