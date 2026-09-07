@@ -7,6 +7,9 @@ import { ToastProvider } from "@/components/ui/toast";
 import { usePersistentState } from "@/hooks/usePersistentState";
 import { DEMO_TODAY, shiftDate } from "@/lib/calendar";
 import { pageIdFromPath } from "@/lib/routes";
+import { AuthProvider, useAuth } from "@/features/auth/AuthProvider";
+import { Login } from "@/features/auth/Login";
+import { RequireAuth } from "@/features/auth/RequireAuth";
 import { Dashboard } from "@/features/dashboard/Dashboard";
 import { Today } from "@/features/today/Today";
 import { Journal } from "@/features/journal/Journal";
@@ -14,6 +17,7 @@ import { Insights } from "@/features/insights/Insights";
 import { Health } from "@/features/health/Health";
 import { Todos } from "@/features/todos/Todos";
 import { useTodos } from "@/features/todos/useTodos";
+import { MigrateLocalData } from "@/features/settings-temp/MigrateLocalData";
 import { defaultHabits } from "@/features/habits/data";
 import { defaultJournal } from "@/features/journal/data";
 import type { Habit } from "@/features/habits/types";
@@ -48,10 +52,12 @@ function AppInner() {
   const shift = (n: number) => setDate((d) => shiftDate(d, n));
 
   const h =
-    headers[active] ?? {
-      title: active === "Health" ? "Sức khoẻ" : active === "Productivity" ? "Năng suất" : active,
-      sub: active === "Health" ? "Theo dõi nước, cà phê và thói quen cá nhân." : "Sắp ra mắt",
-    };
+    pathname === "/migrate-local-data"
+      ? { title: "Migrate dữ liệu", sub: "Chuyển DailyRecords từ localStorage sang Supabase." }
+      : headers[active] ?? {
+          title: active === "Health" ? "Sức khoẻ" : active === "Productivity" ? "Năng suất" : active,
+          sub: active === "Health" ? "Theo dõi nước, cà phê và thói quen cá nhân." : "Sắp ra mắt",
+        };
 
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
@@ -88,6 +94,7 @@ function AppInner() {
           <Route path="/health" element={<Health />} />
           <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/migrate-local-data" element={<MigrateLocalData />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -95,10 +102,30 @@ function AppInner() {
   );
 }
 
+function PublicLoginRoute() {
+  const { session, loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="grid h-screen place-items-center bg-background text-sm text-muted-foreground">
+        Đang tải…
+      </div>
+    );
+  }
+  if (session) return <Navigate to="/" replace />;
+  return <Login />;
+}
+
 export default function App() {
   return (
     <ToastProvider>
-      <AppInner />
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<PublicLoginRoute />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/*" element={<AppInner />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </ToastProvider>
   );
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -6,10 +7,12 @@ import {
   Heart,
   Activity,
   Lightbulb,
-  ChevronRight,
+  Loader2,
+  LogOut,
   type LucideIcon,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { getSessionUserDisplay, useAuth } from "@/features/auth";
 import { PAGE_PATHS } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import type { PageId } from "@/types";
@@ -33,6 +36,19 @@ export const allNav = [...navMain, ...navAnalytics, ...navInsights];
 
 export function Sidebar() {
   const { pathname } = useLocation();
+  const { session, signOut } = useAuth();
+  const { displayName, email, initials } = getSessionUserDisplay(session);
+  const [signingOut, setSigningOut] = useState(false);
+
+  const handleSignOut = async () => {
+    if (signingOut) return;
+    setSigningOut(true);
+    try {
+      await signOut();
+    } finally {
+      setSigningOut(false);
+    }
+  };
 
   const Item = ({ icon: Icon, labelVi, path }: NavItem) => (
     <Link
@@ -77,13 +93,25 @@ export function Sidebar() {
 
       <div className="mt-2 flex items-center gap-2.5 border-t border-white/[0.06] px-2 pb-1 pt-[11px]">
         <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-xs font-semibold text-white">
-          AN
+          {initials}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-[13px] font-semibold text-slate-200">Alex Nguyen</div>
-          <div className="truncate text-[11px] text-slate-500">alex@example.com</div>
+          <div className="truncate text-[13px] font-semibold text-slate-200">{displayName}</div>
+          <div className="truncate text-[11px] text-slate-500">{email}</div>
         </div>
-        <ChevronRight size={16} className="shrink-0 text-slate-600" />
+        <button
+          type="button"
+          onClick={handleSignOut}
+          disabled={signingOut}
+          aria-label="Đăng xuất"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-slate-500 transition-colors hover:bg-white/5 hover:text-slate-200 disabled:opacity-60"
+        >
+          {signingOut ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <LogOut size={16} />
+          )}
+        </button>
       </div>
     </aside>
   );
