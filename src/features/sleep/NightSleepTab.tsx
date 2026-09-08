@@ -149,6 +149,10 @@ export function NightSleepTab({
               ? `Giờ TB: ${stats.typicalWakingLabel}`
               : null,
           },
+          {
+            label: "Ngủ sớm / muộn nhất",
+            value: stats.bedtimeRangeLabel,
+          },
           { label: "Đã ghi nhận", value: stats.loggedLabel },
         ]}
       />

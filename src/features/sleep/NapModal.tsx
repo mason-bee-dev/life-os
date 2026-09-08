@@ -83,7 +83,6 @@ export function NapModal({
 
         <div className="space-y-5 py-1">
           <div className="space-y-1.5">
-            <Label>Ngày</Label>
             <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -143,7 +142,8 @@ export function NapModal({
 
         <DialogFooter className="gap-2 sm:justify-between">
           <div>
-            {editing && onDelete &&
+            {editing &&
+              onDelete &&
               (confirmDelete ? (
                 <div className="flex items-center gap-2">
                   <Button

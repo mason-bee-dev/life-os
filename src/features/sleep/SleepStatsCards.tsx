@@ -10,7 +10,7 @@ type Props = {
 
 export function SleepStatsCards({ cards }: Props) {
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5 md:gap-4">
       {cards.map((card) => (
         <div
           key={card.label}

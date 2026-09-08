@@ -32,6 +32,7 @@ export function TimeField({ value, onChange, label, className, id }: Props) {
           variant="outline"
           size="icon"
           className="shrink-0"
+          tabIndex={-1}
           title="Bây giờ"
           aria-label="Bây giờ"
           onClick={setNow}

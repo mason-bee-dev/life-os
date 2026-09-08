@@ -47,17 +47,48 @@ export function formatMinutesOnly(mins: number): string {
   return `${Math.round(mins)} phút`;
 }
 
-export function avgTimeOfDay(times: string[]): string | null {
-  if (times.length === 0) return null;
-  const shifted = times.map((t) => {
-    const m = timeToMinutes(t);
-    return m < 12 * 60 ? m + 1440 : m;
-  });
-  const avg = shifted.reduce((a, b) => a + b, 0) / shifted.length;
-  const normalized = Math.round(avg) % 1440;
+/** Shift morning times (+24h) so evening bedtimes sort before after-midnight ones. */
+function bedtimeSortMinutes(t: string): number {
+  const m = timeToMinutes(t);
+  return m < 12 * 60 ? m + 1440 : m;
+}
+
+function minutesToHhMm(total: number): string {
+  const normalized = ((total % 1440) + 1440) % 1440;
   const h = Math.floor(normalized / 60);
   const m = normalized % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+
+export function avgTimeOfDay(times: string[]): string | null {
+  if (times.length === 0) return null;
+  const shifted = times.map(bedtimeSortMinutes);
+  const avg = shifted.reduce((a, b) => a + b, 0) / shifted.length;
+  return minutesToHhMm(Math.round(avg));
+}
+
+/** Earliest / latest bedtime in evening sense (21:00 earlier than 00:30). */
+export function bedtimeExtremes(
+  times: string[],
+): { earliest: string; latest: string } | null {
+  if (!times.length) return null;
+  let earliest = times[0];
+  let latest = times[0];
+  let earliestKey = bedtimeSortMinutes(earliest);
+  let latestKey = earliestKey;
+  for (let i = 1; i < times.length; i++) {
+    const t = times[i];
+    const key = bedtimeSortMinutes(t);
+    if (key < earliestKey) {
+      earliest = t;
+      earliestKey = key;
+    }
+    if (key > latestKey) {
+      latest = t;
+      latestKey = key;
+    }
+  }
+  return { earliest, latest };
 }
 
 export function periodBounds(
@@ -145,6 +176,7 @@ export type NightStats = {
   avgBedWakeLabel: string;
   avgWakingsLabel: string;
   typicalWakingLabel: string | null;
+  bedtimeRangeLabel: string;
   loggedLabel: string;
 };
 
@@ -167,6 +199,7 @@ export function computeNightStats(
   const avgWake = avgTimeOfDay(wakeTimes);
   const wakings = avgNightWakings(night);
   const typicalWaking = typicalNightWakingTime(night);
+  const extremes = bedtimeExtremes(bedtimes);
 
   return {
     avgDurationLabel:
@@ -176,6 +209,9 @@ export function computeNightStats(
     avgWakingsLabel:
       wakings != null ? `${wakings.toFixed(1)} lần` : "—",
     typicalWakingLabel: typicalWaking,
+    bedtimeRangeLabel: extremes
+      ? `${extremes.earliest} / ${extremes.latest}`
+      : "—",
     loggedLabel: `${night.length} / ${totalDays} đêm`,
   };
 }

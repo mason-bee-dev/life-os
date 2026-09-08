@@ -3,8 +3,9 @@ import {
   useId,
   useRef,
   useState,
-  type KeyboardEvent,
   type ClipboardEvent,
+  type FocusEvent,
+  type KeyboardEvent,
 } from "react";
 import { cn } from "@/lib/utils";
 
@@ -46,19 +47,20 @@ function splitValue(value: string | null | undefined): {
   return { hours: h.slice(0, 2), minutes: m.slice(0, 2) };
 }
 
+type Parts = { hours: string; minutes: string };
+
 type Props = {
   value: string | null;
   onChange: (v: string) => void;
   id?: string;
   className?: string;
   disabled?: boolean;
-  /** Called when both hour and minute fields blur (useful for forms). */
   onBlurComplete?: () => void;
 };
 
 /**
  * Reusable HH:mm input with a fixed `:` separator.
- * Typing 2 hour digits auto-advances the caret into minutes.
+ * One tab stop (hours); minutes are reached by typing or arrows.
  */
 export function TimeInput({
   value,
@@ -71,29 +73,48 @@ export function TimeInput({
   const autoId = useId();
   const hourId = id ?? `${autoId}-hour`;
   const minuteId = `${autoId}-minute`;
+
+  const containerRef = useRef<HTMLDivElement>(null);
   const hourRef = useRef<HTMLInputElement>(null);
   const minuteRef = useRef<HTMLInputElement>(null);
-  const [{ hours, minutes }, setParts] = useState(() => splitValue(value));
+  const partsRef = useRef<Parts>(splitValue(value));
+
+  const [parts, setPartsState] = useState<Parts>(() => splitValue(value));
+
+  const setParts = (next: Parts) => {
+    partsRef.current = next;
+    setPartsState(next);
+  };
 
   useEffect(() => {
-    setParts(splitValue(value));
+    const next = splitValue(value);
+    partsRef.current = next;
+    setPartsState(next);
   }, [value]);
 
-  const commit = (nextHours: string, nextMinutes: string) => {
-    const normalizedH =
-      nextHours.length === 2 ? clampHour(nextHours) : nextHours;
-    const normalizedM =
-      nextMinutes.length === 2 ? clampMinute(nextMinutes) : nextMinutes;
-    setParts({ hours: normalizedH, minutes: normalizedM });
-    const hhmm = toHhMm(normalizedH, normalizedM);
+  const emit = (hours: string, minutes: string) => {
+    const hhmm = toHhMm(hours, minutes);
     if (hhmm) onChange(hhmm);
   };
 
-  const focusMinutes = (select = true) => {
+  const commit = (nextHours: string, nextMinutes: string) => {
+    const hours =
+      nextHours.length === 2 ? clampHour(nextHours) : nextHours;
+    const minutes =
+      nextMinutes.length === 2 ? clampMinute(nextMinutes) : nextMinutes;
+    setParts({ hours, minutes });
+    emit(hours, minutes);
+    return { hours, minutes };
+  };
+
+  const focusMinutes = () => {
     const el = minuteRef.current;
     if (!el) return;
-    el.focus();
-    if (select) el.select();
+    // Defer so React can flush the hour digit before blur/focus churn.
+    requestAnimationFrame(() => {
+      el.focus();
+      el.select();
+    });
   };
 
   const focusHours = (select = true) => {
@@ -125,7 +146,7 @@ export function TimeInput({
   };
 
   const onHourChange = (raw: string) => {
-    // Colon / separator typed → jump to minutes
+    const { minutes } = partsRef.current;
     if (raw.includes(":") || raw.includes(".")) {
       const d = digitsOnly(raw, 2);
       commit(d.length === 1 ? d.padStart(2, "0") : clampHour(d), minutes);
@@ -133,10 +154,8 @@ export function TimeInput({
       return;
     }
     const d = digitsOnly(raw, 2);
-    // First digit 3–9 → treat as single-digit hour, pad & advance
     if (d.length === 1 && Number(d) >= 3) {
-      const padded = d.padStart(2, "0");
-      commit(padded, minutes);
+      commit(d.padStart(2, "0"), minutes);
       focusMinutes();
       return;
     }
@@ -145,6 +164,7 @@ export function TimeInput({
   };
 
   const onMinuteChange = (raw: string) => {
+    const { hours } = partsRef.current;
     const d = digitsOnly(raw, 2);
     if (d.length === 1 && Number(d) >= 6) {
       commit(hours, d.padStart(2, "0"));
@@ -161,6 +181,7 @@ export function TimeInput({
         input.selectionStart === input.value.length
       ) {
         e.preventDefault();
+        const { hours, minutes } = partsRef.current;
         if (hours.length === 1) commit(hours.padStart(2, "0"), minutes);
         focusMinutes();
       }
@@ -168,9 +189,14 @@ export function TimeInput({
   };
 
   const onMinuteKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !minutes) {
+    if (e.key === "Backspace" && !partsRef.current.minutes) {
       e.preventDefault();
       focusHours(false);
+      const el = hourRef.current;
+      if (el) {
+        const len = el.value.length;
+        requestAnimationFrame(() => el.setSelectionRange(len, len));
+      }
       return;
     }
     if (e.key === "ArrowLeft") {
@@ -181,7 +207,7 @@ export function TimeInput({
         const el = hourRef.current;
         if (el) {
           const len = el.value.length;
-          el.setSelectionRange(len, len);
+          requestAnimationFrame(() => el.setSelectionRange(len, len));
         }
       }
     }
@@ -194,14 +220,17 @@ export function TimeInput({
     applyParsed(text);
   };
 
-  const normalizeOnBlur = () => {
-    let h = hours;
-    let m = minutes;
-    if (h.length === 1) h = h.padStart(2, "0");
-    if (m.length === 1) m = m.padStart(2, "0");
-    h = h ? clampHour(h) : h;
-    m = m ? clampMinute(m) : m;
-    commit(h, m);
+  /** Normalize only when focus leaves the whole control (not hour ↔ minute). */
+  const onSegmentBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const next = e.relatedTarget as Node | null;
+    if (next && containerRef.current?.contains(next)) return;
+
+    let { hours, minutes } = partsRef.current;
+    if (hours.length === 1) hours = hours.padStart(2, "0");
+    if (minutes.length === 1) minutes = minutes.padStart(2, "0");
+    hours = hours ? clampHour(hours) : hours;
+    minutes = minutes ? clampMinute(minutes) : minutes;
+    commit(hours, minutes);
     onBlurComplete?.();
   };
 
@@ -213,6 +242,7 @@ export function TimeInput({
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         "inline-flex h-9 items-center rounded-md border border-input bg-transparent px-2 shadow-sm transition-colors",
         "focus-within:ring-1 focus-within:ring-ring",
@@ -231,11 +261,11 @@ export function TimeInput({
         aria-label="Giờ"
         placeholder="HH"
         maxLength={2}
-        value={hours}
+        value={parts.hours}
         onChange={(e) => onHourChange(e.target.value)}
         onKeyDown={onHourKeyDown}
         onPaste={onPaste}
-        onBlur={normalizeOnBlur}
+        onBlur={onSegmentBlur}
         className={segmentClass}
       />
       <span
@@ -255,11 +285,12 @@ export function TimeInput({
         aria-label="Phút"
         placeholder="mm"
         maxLength={2}
-        value={minutes}
+        tabIndex={-1}
+        value={parts.minutes}
         onChange={(e) => onMinuteChange(e.target.value)}
         onKeyDown={onMinuteKeyDown}
         onPaste={onPaste}
-        onBlur={normalizeOnBlur}
+        onBlur={onSegmentBlur}
         className={segmentClass}
       />
     </div>
