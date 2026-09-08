@@ -68,7 +68,7 @@ function AppInner() {
             active === "Health"
               ? "Theo dõi nước, cà phê và thói quen cá nhân."
               : active === "Sleep"
-                ? "Ghi nhận đêm ngủ, ngủ trưa và xu hướng theo kỳ."
+                ? "Giấc ngủ đêm và ngủ trưa — thống kê theo kỳ."
                 : "Sắp ra mắt",
         };
 
@@ -105,10 +105,7 @@ function AppInner() {
           />
           <Route path="/journal" element={<Journal journal={journal} addEntry={addEntry} />} />
           <Route path="/health" element={<Health />} />
-          <Route
-            path="/sleep"
-            element={<Sleep date={date} onDateChange={setDate} />}
-          />
+          <Route path="/sleep" element={<Sleep />} />
           <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/migrate-local-data" element={<MigrateLocalData />} />

@@ -1,5 +1,6 @@
 export type SleepQuality = "kho_ngu" | "binh_thuong" | "ngu_ngon";
 
+/** One daily row in Supabase — night + nap fields share the same date key. */
 export type SleepRecord = {
   id: string;
   date: string;
@@ -12,6 +13,22 @@ export type SleepRecord = {
   napEnd: string | null;
 };
 
+export type NightSleepInput = {
+  date: string;
+  bedtime: string;
+  wakeTime: string;
+  nightWakingTimes: string[];
+  quality?: SleepQuality | null;
+  note?: string | null;
+};
+
+export type NapInput = {
+  date: string;
+  startTime: string;
+  endTime: string;
+  note?: string | null;
+};
+
 export const qualityLabels: Record<SleepQuality, string> = {
   kho_ngu: "Khó ngủ",
   binh_thuong: "Bình thường",
@@ -19,9 +36,13 @@ export const qualityLabels: Record<SleepQuality, string> = {
 };
 
 export const qualityEmojis: Record<SleepQuality, string> = {
-  kho_ngu: "😖",
+  kho_ngu: "😴",
   binh_thuong: "😐",
-  ngu_ngon: "😴",
+  ngu_ngon: "😊",
 };
 
-export type Period = "day" | "week" | "month" | "year";
+export type Period = "day" | "week" | "month";
+
+export type SleepTab = "night" | "nap";
+
+export const PAGE_SIZE = 7;

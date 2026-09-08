@@ -26,13 +26,25 @@ export function napDuration(r: SleepRecord): number | null {
   return durationMinutes(r.napStart, r.napEnd);
 }
 
-/** Format minutes as "7h15p" / "45 phút" / "7h". */
+export function hasNightSleep(r: SleepRecord): boolean {
+  return Boolean(r.bedtime && r.wakeTime);
+}
+
+export function hasNap(r: SleepRecord): boolean {
+  return Boolean(r.napStart && r.napEnd);
+}
+
+/** Format minutes as "7h 15p" / "45 phút" / "7h". */
 export function formatDuration(mins: number): string {
   const h = Math.floor(mins / 60);
   const m = Math.round(mins % 60);
   if (h <= 0) return `${m} phút`;
   if (m === 0) return `${h}h`;
-  return `${h}h${String(m).padStart(2, "0")}p`;
+  return `${h}h ${m}p`;
+}
+
+export function formatMinutesOnly(mins: number): string {
+  return `${Math.round(mins)} phút`;
 }
 
 export function avgTimeOfDay(times: string[]): string | null {
@@ -48,26 +60,21 @@ export function avgTimeOfDay(times: string[]): string | null {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-export function periodBounds(refDate: string, period: Period): { from: string; to: string } {
+export function periodBounds(
+  refDate: string,
+  period: Period,
+): { from: string; to: string } {
   const ref = dayjs(refDate);
-  const unit = period === "day" ? "day" : period === "week" ? "isoWeek" : period;
+  const unit = period === "day" ? "day" : period === "week" ? "isoWeek" : "month";
   return {
     from: ref.startOf(unit).format("YYYY-MM-DD"),
     to: ref.endOf(unit).format("YYYY-MM-DD"),
   };
 }
 
-export function previousPeriodBounds(refDate: string, period: Period): { from: string; to: string } {
-  const ref = dayjs(refDate);
-  const shifted =
-    period === "day"
-      ? ref.subtract(1, "day")
-      : period === "week"
-        ? ref.subtract(1, "week")
-        : period === "month"
-          ? ref.subtract(1, "month")
-          : ref.subtract(1, "year");
-  return periodBounds(shifted.format("YYYY-MM-DD"), period);
+export function periodDayCount(refDate: string, period: Period): number {
+  const { from, to } = periodBounds(refDate, period);
+  return dayjs(to).diff(dayjs(from), "day") + 1;
 }
 
 export function recordsInPeriod(
@@ -79,8 +86,24 @@ export function recordsInPeriod(
   return records.filter((r) => r.date >= from && r.date <= to);
 }
 
+export function nightRecordsInPeriod(
+  records: SleepRecord[],
+  period: Period,
+  refDate: string,
+): SleepRecord[] {
+  return recordsInPeriod(records, period, refDate).filter(hasNightSleep);
+}
+
+export function napRecordsInPeriod(
+  records: SleepRecord[],
+  period: Period,
+  refDate: string,
+): SleepRecord[] {
+  return recordsInPeriod(records, period, refDate).filter(hasNap);
+}
+
 export function avgNightWakings(records: SleepRecord[]): number | null {
-  const withNight = records.filter((r) => r.bedtime && r.wakeTime);
+  const withNight = records.filter(hasNightSleep);
   if (!withNight.length) return null;
   return (
     withNight.reduce((s, r) => s + r.nightWakingTimes.length, 0) /
@@ -88,29 +111,17 @@ export function avgNightWakings(records: SleepRecord[]): number | null {
   );
 }
 
-/** Typical night-waking clock time across the period (circular mean). */
 export function typicalNightWakingTime(records: SleepRecord[]): string | null {
   const all = records.flatMap((r) => r.nightWakingTimes);
   return avgTimeOfDay(all);
 }
 
-/** Count of night wakings per hour-of-day (0–23). */
-export function nightWakingHourDistribution(records: SleepRecord[]): number[] {
-  const hours = Array.from({ length: 24 }, () => 0);
-  for (const r of records) {
-    for (const t of r.nightWakingTimes) {
-      const h = Number(t.slice(0, 2));
-      if (h >= 0 && h < 24) hours[h] += 1;
-    }
-  }
-  return hours;
-}
-
-/** % of days in the list that have a nap logged. */
-export function napFrequency(records: SleepRecord[]): number | null {
-  if (!records.length) return null;
-  const withNap = records.filter((r) => r.napStart && r.napEnd).length;
-  return (withNap / records.length) * 100;
+export function napFrequencyPct(
+  napCount: number,
+  totalDays: number,
+): number | null {
+  if (totalDays <= 0) return null;
+  return (napCount / totalDays) * 100;
 }
 
 export function avgNightSleepDuration(records: SleepRecord[]): number | null {
@@ -129,6 +140,65 @@ export function avgNapDuration(records: SleepRecord[]): number | null {
   return durations.reduce((a, b) => a + b, 0) / durations.length;
 }
 
+export type NightStats = {
+  avgDurationLabel: string;
+  avgBedWakeLabel: string;
+  avgWakingsLabel: string;
+  typicalWakingLabel: string | null;
+  loggedLabel: string;
+};
+
+export type NapStats = {
+  avgDurationLabel: string;
+  frequencyLabel: string;
+  avgStartLabel: string;
+  loggedLabel: string;
+};
+
+export function computeNightStats(
+  records: SleepRecord[],
+  totalDays: number,
+): NightStats {
+  const night = records.filter(hasNightSleep);
+  const avgDur = avgNightSleepDuration(night);
+  const bedtimes = night.map((r) => r.bedtime!).filter(Boolean);
+  const wakeTimes = night.map((r) => r.wakeTime!).filter(Boolean);
+  const avgBed = avgTimeOfDay(bedtimes);
+  const avgWake = avgTimeOfDay(wakeTimes);
+  const wakings = avgNightWakings(night);
+  const typicalWaking = typicalNightWakingTime(night);
+
+  return {
+    avgDurationLabel:
+      avgDur != null ? formatDuration(Math.round(avgDur)) : "—",
+    avgBedWakeLabel:
+      avgBed && avgWake ? `${avgBed} → ${avgWake}` : "—",
+    avgWakingsLabel:
+      wakings != null ? `${wakings.toFixed(1)} lần` : "—",
+    typicalWakingLabel: typicalWaking,
+    loggedLabel: `${night.length} / ${totalDays} đêm`,
+  };
+}
+
+export function computeNapStats(
+  records: SleepRecord[],
+  totalDays: number,
+): NapStats {
+  const naps = records.filter(hasNap);
+  const avgDur = avgNapDuration(naps);
+  const freq = napFrequencyPct(naps.length, totalDays);
+  const starts = naps.map((r) => r.napStart!).filter(Boolean);
+  const avgStart = avgTimeOfDay(starts);
+
+  return {
+    avgDurationLabel:
+      avgDur != null ? formatMinutesOnly(avgDur) : "—",
+    frequencyLabel: freq != null ? `${Math.round(freq)}%` : "—",
+    avgStartLabel: avgStart ?? "—",
+    loggedLabel: `${naps.length} lần`,
+  };
+}
+
 export function qualityDistribution(
   records: SleepRecord[],
 ): Record<SleepQuality, number> {
@@ -141,40 +211,4 @@ export function qualityDistribution(
     if (r.quality) out[r.quality] += 1;
   }
   return out;
-}
-
-export type TrendPoint = {
-  date: string;
-  dateKey: string;
-  durationHours: number | null;
-  bedtimeMinutes: number | null;
-  wakeMinutes: number | null;
-};
-
-export function toTrendSeries(records: SleepRecord[]): TrendPoint[] {
-  return [...records]
-    .sort((a, b) => a.date.localeCompare(b.date))
-    .map((r) => {
-      const night = nightSleepDuration(r);
-      return {
-        date: dayjs(r.date).format("DD/MM"),
-        dateKey: r.date,
-        durationHours: night != null ? Math.round((night / 60) * 10) / 10 : null,
-        bedtimeMinutes: r.bedtime ? timeToMinutes(r.bedtime) : null,
-        wakeMinutes: r.wakeTime ? timeToMinutes(r.wakeTime) : null,
-      };
-    });
-}
-
-export function deltaPct(current: number | null, previous: number | null): {
-  dir: "up" | "down";
-  value: string;
-} | null {
-  if (current == null || previous == null || previous === 0) return null;
-  const pct = ((current - previous) / Math.abs(previous)) * 100;
-  if (Math.abs(pct) < 0.5) return null;
-  return {
-    dir: pct >= 0 ? "up" : "down",
-    value: `${Math.abs(pct).toFixed(1)}% so với kỳ trước`,
-  };
 }
