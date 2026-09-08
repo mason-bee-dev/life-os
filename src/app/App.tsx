@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { ComingSoon } from "@/components/ComingSoon";
 import { ToastProvider } from "@/components/ui/toast";
 import { usePersistentState } from "@/hooks/usePersistentState";
-import { shiftDate } from "@/lib/calendar";
 import { pageIdFromPath } from "@/lib/routes";
 import { AuthProvider, useAuth } from "@/features/auth/AuthProvider";
 import { Login } from "@/features/auth/Login";
@@ -36,7 +34,6 @@ const headers: Record<string, { title: string; sub: string }> = {
 function AppInner() {
   const { pathname } = useLocation();
   const active: PageId = pageIdFromPath(pathname);
-  const [date, setDate] = useState<Date>(() => new Date());
   const [habits, setHabits] = usePersistentState<Habit[]>("habits", defaultHabits);
   const [journal, setJournal] = usePersistentState<JournalEntry[]>("journal", defaultJournal);
   const { todos, addTodo, updateTodo, deleteTodo, toggleTodo } = useTodos();
@@ -49,8 +46,6 @@ function AppInner() {
       { id: Date.now(), date: "31/08/2026", mood, tags, text, sleep: "7h 12m", exercise: "5.2 km" },
       ...j,
     ]);
-
-  const shift = (n: number) => setDate((d) => shiftDate(d, n));
 
   const h =
     pathname === "/migrate-local-data"
@@ -76,7 +71,7 @@ function AppInner() {
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
       <Sidebar />
       <main className="flex-1 overflow-y-auto px-[30px] pb-[60px] pt-[26px]">
-        <Header title={h.title} subtitle={h.sub} date={date} onShift={shift} />
+        <Header title={h.title} subtitle={h.sub} />
         <Routes>
           <Route
             path="/"
