@@ -8,34 +8,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PAGE_SIZE } from "./types";
+
+export const DEFAULT_PAGE_SIZE = 7;
+
+type Column = {
+  key: string;
+  header: string;
+  className?: string;
+};
 
 type Props<T> = {
   rows: T[];
   rowKey: (row: T) => string;
-  columns: { key: string; header: string; className?: string }[];
+  columns: Column[];
   renderRow: (row: T) => ReactNode;
   empty: ReactNode;
+  pageSize?: number;
 };
 
-export function SleepDataTable<T>({
+/** Paginated data table shell for tracker list views. */
+export function DataTable<T>({
   rows,
   rowKey,
   columns,
   renderRow,
   empty,
+  pageSize = DEFAULT_PAGE_SIZE,
 }: Props<T>) {
   const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
 
   useEffect(() => {
     setPage((p) => Math.min(p, totalPages));
   }, [totalPages]);
 
   const pageRows = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    return rows.slice(start, start + PAGE_SIZE);
-  }, [rows, page]);
+    const start = (page - 1) * pageSize;
+    return rows.slice(start, start + pageSize);
+  }, [rows, page, pageSize]);
 
   if (!rows.length) return <>{empty}</>;
 
@@ -51,9 +61,11 @@ export function SleepDataTable<T>({
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>{pageRows.map((row) => (
-          <TableRow key={rowKey(row)}>{renderRow(row)}</TableRow>
-        ))}</TableBody>
+        <TableBody>
+          {pageRows.map((row) => (
+            <TableRow key={rowKey(row)}>{renderRow(row)}</TableRow>
+          ))}
+        </TableBody>
       </Table>
 
       {totalPages > 1 && (

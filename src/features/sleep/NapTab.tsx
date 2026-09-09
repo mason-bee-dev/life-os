@@ -11,21 +11,24 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NapModal } from "./NapModal";
+import { SleepChart } from "./SleepChart";
 import { SleepDateCell } from "./SleepDateCell";
-import { SleepDataTable } from "./SleepDataTable";
 import { SleepEvaluationBox } from "./SleepEvaluationBox";
-import { SleepPeriodFilter } from "./SleepPeriodFilter";
-import { SleepStatsCards } from "./SleepStatsCards";
 import { evaluateNapSleep } from "./sleepEvaluation";
 import {
   computeNapStats,
   formatMinutesOnly,
   napDuration,
+  napDurationSeries,
   napRecordsInPeriod,
   periodBounds,
   periodDayCount,
 } from "./sleepStats";
+import { PERIOD_OPTIONS } from "./types";
 import type { NapInput, Period, SleepRecord } from "./types";
+import { DataTable } from "@/components/DataTable";
+import { PeriodFilter } from "@/components/PeriodFilter";
+import { StatsCards } from "@/components/StatsCards";
 
 type Props = {
   period: Period;
@@ -78,6 +81,10 @@ export function NapTab({
     () => evaluateNapSleep(napRows, totalDays, period),
     [napRows, totalDays, period],
   );
+  const chartData = useMemo(() => {
+    if (period !== "week" && period !== "month") return null;
+    return napDurationSeries(napRows, bounds.from, bounds.to, period);
+  }, [napRows, bounds.from, bounds.to, period]);
 
   const editRecord = editDate ? getRecord(editDate) : undefined;
 
@@ -130,7 +137,11 @@ export function NapTab({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <SleepPeriodFilter value={period} onChange={onPeriodChange} />
+        <PeriodFilter
+          value={period}
+          onChange={onPeriodChange}
+          options={PERIOD_OPTIONS}
+        />
         <Button type="button" onClick={openCreate}>
           <Plus className="size-4" />
           Thêm giấc ngủ
@@ -149,7 +160,7 @@ export function NapTab({
         />
       ) : null}
 
-      <SleepStatsCards
+      <StatsCards
         cards={[
           { label: "Ngủ trưa TB", value: stats.avgDurationLabel },
           { label: "Tỷ lệ ngủ trưa", value: stats.frequencyLabel },
@@ -158,7 +169,18 @@ export function NapTab({
         ]}
       />
 
-      <SleepDataTable
+      {chartData ? (
+        <SleepChart
+          title="Thời lượng ngủ trưa theo ngày"
+          data={chartData}
+          unit="minutes"
+          referenceValue={30}
+          referenceLabel="30 phút"
+          color="var(--metric-productivity)"
+        />
+      ) : null}
+
+      <DataTable
         key={`nap-${period}`}
         rows={napRows}
         rowKey={(r) => r.id || r.date}

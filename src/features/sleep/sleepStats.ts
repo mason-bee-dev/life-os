@@ -259,3 +259,87 @@ export function qualityDistribution(
   }
   return out;
 }
+
+export type SleepChartPoint = {
+  dateKey: string;
+  /** Axis tick: weekday for week, day-of-month for month. */
+  label: string;
+  /** Full date for tooltip. */
+  dateLabel: string;
+  /** Chart value: hours (night) or minutes (nap). */
+  value: number;
+  /** Raw duration minutes when logged; 0 if missing. */
+  mins: number;
+  hasData: boolean;
+};
+
+const WEEKDAY_LABELS = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+
+function eachDateKey(from: string, to: string): string[] {
+  const keys: string[] = [];
+  let d = dayjs(from);
+  const end = dayjs(to);
+  while (!d.isAfter(end, "day")) {
+    keys.push(d.format("YYYY-MM-DD"));
+    d = d.add(1, "day");
+  }
+  return keys;
+}
+
+function axisLabel(dateKey: string, period: Period): string {
+  const d = dayjs(dateKey);
+  if (period === "week") return WEEKDAY_LABELS[d.day()];
+  return d.format("D");
+}
+
+/** Daily night duration series for week/month charts (hours on Y). */
+export function nightDurationSeries(
+  records: SleepRecord[],
+  from: string,
+  to: string,
+  period: Period,
+): SleepChartPoint[] {
+  const byDate = new Map(
+    records.filter(hasNightSleep).map((r) => [r.date, r] as const),
+  );
+  return eachDateKey(from, to).map((dateKey) => {
+    const r = byDate.get(dateKey);
+    const mins = r ? nightSleepDuration(r) : null;
+    const hasData = mins != null;
+    const safeMins = mins ?? 0;
+    return {
+      dateKey,
+      label: axisLabel(dateKey, period),
+      dateLabel: dayjs(dateKey).format("DD/MM/YYYY"),
+      value: hasData ? Math.round((safeMins / 60) * 10) / 10 : 0,
+      mins: safeMins,
+      hasData,
+    };
+  });
+}
+
+/** Daily nap duration series for week/month charts (minutes on Y). */
+export function napDurationSeries(
+  records: SleepRecord[],
+  from: string,
+  to: string,
+  period: Period,
+): SleepChartPoint[] {
+  const byDate = new Map(
+    records.filter(hasNap).map((r) => [r.date, r] as const),
+  );
+  return eachDateKey(from, to).map((dateKey) => {
+    const r = byDate.get(dateKey);
+    const mins = r ? napDuration(r) : null;
+    const hasData = mins != null;
+    const safeMins = mins ?? 0;
+    return {
+      dateKey,
+      label: axisLabel(dateKey, period),
+      dateLabel: dayjs(dateKey).format("DD/MM/YYYY"),
+      value: hasData ? Math.round(safeMins) : 0,
+      mins: safeMins,
+      hasData,
+    };
+  });
+}

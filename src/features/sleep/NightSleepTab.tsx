@@ -11,22 +11,24 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NightSleepModal } from "./NightSleepModal";
+import { SleepChart } from "./SleepChart";
 import { SleepDateCell } from "./SleepDateCell";
-import { SleepDataTable } from "./SleepDataTable";
 import { SleepEvaluationBox } from "./SleepEvaluationBox";
-import { SleepPeriodFilter } from "./SleepPeriodFilter";
-import { SleepStatsCards } from "./SleepStatsCards";
 import { evaluateNightSleep } from "./sleepEvaluation";
 import {
   computeNightStats,
   formatDuration,
+  nightDurationSeries,
   nightRecordsInPeriod,
   nightSleepDuration,
   periodBounds,
   periodDayCount,
 } from "./sleepStats";
+import { PERIOD_OPTIONS, qualityEmojis, qualityLabels } from "./types";
 import type { NightSleepInput, Period, SleepRecord } from "./types";
-import { qualityEmojis, qualityLabels } from "./types";
+import { DataTable } from "@/components/DataTable";
+import { PeriodFilter } from "@/components/PeriodFilter";
+import { StatsCards } from "@/components/StatsCards";
 
 type Props = {
   period: Period;
@@ -81,6 +83,10 @@ export function NightSleepTab({
     () => evaluateNightSleep(nightRows, totalDays, period),
     [nightRows, totalDays, period],
   );
+  const chartData = useMemo(() => {
+    if (period !== "week" && period !== "month") return null;
+    return nightDurationSeries(nightRows, bounds.from, bounds.to, period);
+  }, [nightRows, bounds.from, bounds.to, period]);
 
   const editRecord = editDate ? getRecord(editDate) : undefined;
 
@@ -133,7 +139,11 @@ export function NightSleepTab({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <SleepPeriodFilter value={period} onChange={onPeriodChange} />
+        <PeriodFilter
+          value={period}
+          onChange={onPeriodChange}
+          options={PERIOD_OPTIONS}
+        />
         <Button type="button" onClick={openCreate}>
           <Plus className="size-4" />
           Thêm giấc ngủ
@@ -152,7 +162,7 @@ export function NightSleepTab({
         />
       ) : null}
 
-      <SleepStatsCards
+      <StatsCards
         cards={[
           { label: "Ngủ đêm TB", value: stats.avgDurationLabel },
           { label: "Giờ ngủ / dậy TB", value: stats.avgBedWakeLabel },
@@ -171,7 +181,18 @@ export function NightSleepTab({
         ]}
       />
 
-      <SleepDataTable
+      {chartData ? (
+        <SleepChart
+          title="Thời lượng ngủ đêm theo ngày"
+          data={chartData}
+          unit="hours"
+          referenceValue={7}
+          referenceLabel="7h"
+          color="var(--metric-sleep)"
+        />
+      ) : null}
+
+      <DataTable
         key={`night-${period}`}
         rows={nightRows}
         rowKey={(r) => r.id || r.date}

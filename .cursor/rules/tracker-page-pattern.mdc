@@ -1,0 +1,24 @@
+---
+description: Tracker/habits page UI pattern — toolbar, stats, table, modal. Follow when building or changing feature pages.
+globs: src/features/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Tracker page pattern
+
+When adding or changing a tracker / habits / logging feature page, follow:
+
+**[docs/tracker-page-pattern.md](../../docs/tracker-page-pattern.md)**
+
+Canonical reference implementation: `src/features/sleep`.
+
+## Must keep
+
+1. **Order:** Toolbar (filters left, primary CTA right) → date caption → optional insight → stats cards → optional chart (week/month) → paginated table → modal for create/edit.
+2. **Primary CTA:** one `Button` + `Plus` icon; opens modal (not a long inline form), except tiny quick-log UIs.
+3. **Period chips:** Ngày / Tuần / Tháng style matching Sleep/Health (`border-primary bg-primary/10` when active).
+4. **Stats:** `rounded-2xl border bg-card`, label muted / value `tabular-nums` semibold; compute in a pure `*Stats` module.
+5. **Table:** shared pagination pattern (`PAGE_SIZE` 7 unless justified), empty state with CTA, sort before page slice if sorting exists.
+6. **Prefer** `@/components/PeriodFilter`, `StatsCards`, `DataTable` over feature-local copies.
+
+Do not invent a different page skeleton without documenting why in the PR.

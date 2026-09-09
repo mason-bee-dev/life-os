@@ -2,9 +2,10 @@ import { useState } from "react";
 import { EyeOff, Eye, Minus, Plus } from "lucide-react";
 import dayjs from "dayjs";
 import { useDailyRecords } from "./useDailyRecords";
-import { PeriodTabs } from "./PeriodTabs";
+import { PeriodFilter } from "@/components/PeriodFilter";
 import { recordsInPeriod, sumMasturbation, countPornDays } from "./stats";
 import type { Period } from "./types";
+import { PERIOD_OPTIONS } from "./types";
 
 function calcStreak(
   records: ReturnType<typeof useDailyRecords>["records"],
@@ -110,7 +111,11 @@ export function PersonalHabits() {
               <span className="text-[12.5px] font-semibold text-muted-foreground">
                 Thống kê
               </span>
-              <PeriodTabs value={period} onChange={setPeriod} />
+              <PeriodFilter
+                value={period}
+                onChange={setPeriod}
+                options={PERIOD_OPTIONS}
+              />
             </div>
             <div className="flex flex-col space-y-3 text-[13px]">
               <span>

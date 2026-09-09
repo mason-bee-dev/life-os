@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { GlassWater } from "lucide-react";
 import { useDailyRecords } from "./useDailyRecords";
-import { PeriodTabs } from "./PeriodTabs";
+import { PeriodFilter } from "@/components/PeriodFilter";
 import { StatBar } from "./StatBar";
 import {
   recordsInPeriod,
@@ -10,6 +10,7 @@ import {
   toDailySeries,
 } from "./stats";
 import type { Period } from "./types";
+import { PERIOD_OPTIONS } from "./types";
 
 export function WaterTracker() {
   const { records, todayKey, getRecord, updateRecord } = useDailyRecords();
@@ -68,7 +69,11 @@ export function WaterTracker() {
           <span className="text-[13px] font-semibold text-muted-foreground">
             Thống kê
           </span>
-          <PeriodTabs value={period} onChange={setPeriod} />
+          <PeriodFilter
+            value={period}
+            onChange={setPeriod}
+            options={PERIOD_OPTIONS}
+          />
         </div>
         <div className="mb-3 flex gap-6 text-[13px]">
           <span>
