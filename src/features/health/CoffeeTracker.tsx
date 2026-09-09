@@ -4,12 +4,23 @@ import { useDailyRecords } from "./useDailyRecords";
 import { PeriodTabs } from "./PeriodTabs";
 import { StatBar } from "./StatBar";
 import {
-  recordsInPeriod, sumCoffeeCups, mostCommonCoffeeType, toDailySeries,
+  recordsInPeriod,
+  sumCoffeeCups,
+  mostCommonCoffeeType,
+  toDailySeries,
 } from "./stats";
 import type { CoffeeType, CoffeeLog, Period } from "./types";
 
 const PRESETS: CoffeeType[] = [
-  "Đen", "Sữa", "Espresso", "Cappuccino", "Latte", "Americano", "Bạc xỉu", "Cà phê muối", "Khác",
+  "Đen",
+  "Sữa",
+  "Espresso",
+  "Cappuccino",
+  "Latte",
+  "Americano",
+  "Bạc xỉu",
+  "Cà phê muối",
+  "Khác",
 ];
 
 export function CoffeeTracker() {
@@ -49,7 +60,10 @@ export function CoffeeTracker() {
     <div>
       {/* Header */}
       <div className="mb-4 flex items-center gap-2">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-amber-400" style={{ background: "var(--metric-productivity-soft)" }}>
+        <span
+          className="grid h-[26px] w-[26px] place-items-center rounded-lg text-amber-400"
+          style={{ background: "var(--metric-productivity-soft)" }}
+        >
           <Coffee size={15} />
         </span>
         <span className="text-heading tracking-tight">Cà phê</span>
@@ -112,11 +126,18 @@ export function CoffeeTracker() {
       {coffeeList.length > 0 && (
         <div className="mb-4 flex flex-col space-y-3">
           {coffeeList.map((c) => (
-            <div key={c.id} className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[13px]">
+            <div
+              key={c.id}
+              className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-[13px]"
+            >
               <span className="flex-1">
-                {c.type === "Khác" ? (c.customType || "Khác") : c.type} · {c.cups} cốc
+                {c.type === "Khác" ? c.customType || "Khác" : c.type} · {c.cups}{" "}
+                cốc
               </span>
-              <button onClick={() => removeLog(c.id)} className="text-faint hover:text-red-400">
+              <button
+                onClick={() => removeLog(c.id)}
+                className="text-faint hover:text-red-400"
+              >
                 <X size={14} />
               </button>
             </div>
@@ -127,12 +148,24 @@ export function CoffeeTracker() {
       {/* Stats */}
       <div className="border-t border-border pt-4">
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-[13px] font-semibold text-muted-foreground">Thống kê</span>
+          <span className="text-[13px] font-semibold text-muted-foreground">
+            Thống kê
+          </span>
           <PeriodTabs value={period} onChange={setPeriod} />
         </div>
         <div className="mb-3 flex gap-6 text-[13px]">
-          <span>Tổng: <span className="text-[13px] font-bold">{totalCups} <span className="text-[12.5px] text-faint">cốc</span></span></span>
-          {topType && <span>Hay uống nhất: <span className="text-[13px] font-bold">{topType}</span></span>}
+          <span>
+            Tổng:{" "}
+            <span className="text-[13px] font-bold">
+              {totalCups} <span className="text-[12.5px] text-faint">cốc</span>
+            </span>
+          </span>
+          {topType && (
+            <span>
+              Hay uống nhất:{" "}
+              <span className="text-[13px] font-bold">{topType}</span>
+            </span>
+          )}
         </div>
         <StatBar data={series} color="var(--metric-productivity)" />
       </div>

@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Loader2,
-  LogOut,
-  Menu,
-  type LucideIcon,
-} from "lucide-react";
+import { Loader2, LogOut, Menu, type LucideIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { getSessionUserDisplay, useAuth } from "@/features/auth";
 import { navAnalytics, navInsights, navMain } from "@/components/Sidebar";
@@ -17,7 +12,12 @@ import {
 import { cn } from "@/lib/utils";
 import type { PageId } from "@/types";
 
-type NavItem = { icon: LucideIcon; label: PageId; labelVi: string; path: string };
+type NavItem = {
+  icon: LucideIcon;
+  label: PageId;
+  labelVi: string;
+  path: string;
+};
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -44,7 +44,7 @@ export function MobileNav() {
         "flex min-h-11 items-center gap-[11px] rounded-[9px] px-[11px] py-[9px] text-left text-[13.5px] font-medium transition-colors",
         pathname === path
           ? "bg-primary/15 text-emerald-300"
-          : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+          : "text-slate-400 hover:bg-white/5 hover:text-slate-200",
       )}
     >
       <Icon size={18} strokeWidth={2} />

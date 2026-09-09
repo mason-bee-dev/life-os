@@ -35,8 +35,12 @@ export function Journal({ journal, addEntry }: JournalProps) {
       {/* Composer */}
       <div className={card}>
         <div className="mb-2.5 flex items-center justify-between">
-          <span className="text-[15px] font-semibold tracking-tight">Ghi chú mới</span>
-          <span className="text-[12.5px] text-muted-foreground">31/08/2026</span>
+          <span className="text-[15px] font-semibold tracking-tight">
+            Ghi chú mới
+          </span>
+          <span className="text-[12.5px] text-muted-foreground">
+            31/08/2026
+          </span>
         </div>
         <textarea
           value={text}
@@ -51,7 +55,9 @@ export function Journal({ journal, addEntry }: JournalProps) {
               onClick={() => setMood((i + 1) as Mood)}
               className={
                 "h-9 w-9 rounded-[10px] border-[1.5px] text-lg transition-colors " +
-                (mood === i + 1 ? "border-violet-500 bg-violet-500/10" : "border-border grayscale-[0.5]")
+                (mood === i + 1
+                  ? "border-violet-500 bg-violet-500/10"
+                  : "border-border grayscale-[0.5]")
               }
             >
               {f}
@@ -74,7 +80,9 @@ export function Journal({ journal, addEntry }: JournalProps) {
             </button>
           ))}
         </div>
-        <Button size="sm" onClick={publish}><Plus size={16} /> Thêm ghi chú</Button>
+        <Button size="sm" onClick={publish}>
+          <Plus size={16} /> Thêm ghi chú
+        </Button>
       </div>
 
       {/* Entries */}
@@ -92,7 +100,10 @@ export function Journal({ journal, addEntry }: JournalProps) {
             {e.tags.length > 0 && (
               <div className="mb-3 flex flex-wrap gap-[7px]">
                 {e.tags.map((t) => (
-                  <span key={t} className="inline-flex items-center gap-1 rounded-full border border-border bg-accent px-[9px] py-1 text-[11.5px] font-semibold text-muted-foreground">
+                  <span
+                    key={t}
+                    className="inline-flex items-center gap-1 rounded-full border border-border bg-accent px-[9px] py-1 text-[11.5px] font-semibold text-muted-foreground"
+                  >
                     <Tag size={11} /> {t}
                   </span>
                 ))}
@@ -100,8 +111,16 @@ export function Journal({ journal, addEntry }: JournalProps) {
             )}
             {(e.sleep || e.exercise) && (
               <div className="flex gap-4 border-t border-border pt-3">
-                {e.sleep && <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><Moon size={13} /> {e.sleep}</span>}
-                {e.exercise && <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><Dumbbell size={13} /> {e.exercise}</span>}
+                {e.sleep && (
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                    <Moon size={13} /> {e.sleep}
+                  </span>
+                )}
+                {e.exercise && (
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                    <Dumbbell size={13} /> {e.exercise}
+                  </span>
+                )}
               </div>
             )}
           </div>

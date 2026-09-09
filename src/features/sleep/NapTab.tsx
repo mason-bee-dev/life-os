@@ -11,9 +11,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NapModal } from "./NapModal";
+import { SleepDateCell } from "./SleepDateCell";
 import { SleepDataTable } from "./SleepDataTable";
+import { SleepEvaluationBox } from "./SleepEvaluationBox";
 import { SleepPeriodFilter } from "./SleepPeriodFilter";
 import { SleepStatsCards } from "./SleepStatsCards";
+import { evaluateNapSleep } from "./sleepEvaluation";
 import {
   computeNapStats,
   formatMinutesOnly,
@@ -71,6 +74,10 @@ export function NapTab({
   const bounds = periodBounds(refDate, period);
   const totalDays = periodDayCount(refDate, period);
   const stats = computeNapStats(napRows, totalDays);
+  const evaluation = useMemo(
+    () => evaluateNapSleep(napRows, totalDays, period),
+    [napRows, totalDays, period],
+  );
 
   const editRecord = editDate ? getRecord(editDate) : undefined;
 
@@ -135,6 +142,13 @@ export function NapTab({
         {dayjs(bounds.to).format("DD/MM/YYYY")}
       </div>
 
+      {evaluation ? (
+        <SleepEvaluationBox
+          evaluation={evaluation}
+          title="Đánh giá giấc ngủ trưa"
+        />
+      ) : null}
+
       <SleepStatsCards
         cards={[
           { label: "Ngủ trưa TB", value: stats.avgDurationLabel },
@@ -170,7 +184,7 @@ export function NapTab({
           return (
             <>
               <TableCell className="tabular-nums">
-                {dayjs(r.date).format("DD/MM/YYYY")}
+                <SleepDateCell date={r.date} todayKey={todayKey} />
               </TableCell>
               <TableCell className="tabular-nums text-muted-foreground">
                 {r.napStart} → {r.napEnd}

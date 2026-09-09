@@ -18,21 +18,61 @@ import { PAGE_PATHS } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import type { PageId } from "@/types";
 
-type NavItem = { icon: LucideIcon; label: PageId; labelVi: string; path: string };
+type NavItem = {
+  icon: LucideIcon;
+  label: PageId;
+  labelVi: string;
+  path: string;
+};
 
 export const navMain: NavItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", labelVi: "Tổng quan", path: PAGE_PATHS.Dashboard },
-  { icon: CalendarDays, label: "Today", labelVi: "Hôm nay", path: PAGE_PATHS.Today },
-  { icon: CheckSquare, label: "Todos", labelVi: "Công việc", path: PAGE_PATHS.Todos },
-  { icon: BookOpen, label: "Journal", labelVi: "Nhật ký", path: PAGE_PATHS.Journal },
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    labelVi: "Tổng quan",
+    path: PAGE_PATHS.Dashboard,
+  },
+  {
+    icon: CalendarDays,
+    label: "Today",
+    labelVi: "Hôm nay",
+    path: PAGE_PATHS.Today,
+  },
+  {
+    icon: CheckSquare,
+    label: "Todos",
+    labelVi: "Công việc",
+    path: PAGE_PATHS.Todos,
+  },
+  {
+    icon: BookOpen,
+    label: "Journal",
+    labelVi: "Nhật ký",
+    path: PAGE_PATHS.Journal,
+  },
 ];
 export const navAnalytics: NavItem[] = [
-  { icon: Heart, label: "Health", labelVi: "Sức khoẻ", path: PAGE_PATHS.Health },
+  {
+    icon: Heart,
+    label: "Health",
+    labelVi: "Sức khoẻ",
+    path: PAGE_PATHS.Health,
+  },
   { icon: Moon, label: "Sleep", labelVi: "Giấc ngủ", path: PAGE_PATHS.Sleep },
-  { icon: Activity, label: "Productivity", labelVi: "Năng suất", path: PAGE_PATHS.Productivity },
+  {
+    icon: Activity,
+    label: "Productivity",
+    labelVi: "Năng suất",
+    path: PAGE_PATHS.Productivity,
+  },
 ];
 export const navInsights: NavItem[] = [
-  { icon: Lightbulb, label: "Insights", labelVi: "Phân tích", path: PAGE_PATHS.Insights },
+  {
+    icon: Lightbulb,
+    label: "Insights",
+    labelVi: "Phân tích",
+    path: PAGE_PATHS.Insights,
+  },
 ];
 export const allNav = [...navMain, ...navAnalytics, ...navInsights];
 
@@ -59,7 +99,7 @@ export function Sidebar() {
         "flex items-center gap-[11px] rounded-[9px] px-[11px] py-[9px] text-left text-[13.5px] font-medium transition-colors",
         pathname === path
           ? "bg-primary/15 text-emerald-300"
-          : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+          : "text-slate-400 hover:bg-white/5 hover:text-slate-200",
       )}
     >
       <Icon size={18} strokeWidth={2} />
@@ -72,25 +112,39 @@ export function Sidebar() {
       <div className="flex items-center gap-[11px] px-2 pb-[22px] pt-1.5">
         <div className="grid h-[34px] w-[34px] place-items-center rounded-[9px] bg-gradient-to-br from-teal-400 to-emerald-500">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="var(--primary-foreground)" fillOpacity="0.95" />
+            <path
+              d="M12 2 L22 12 L12 22 L2 12 Z"
+              fill="var(--primary-foreground)"
+              fillOpacity="0.95"
+            />
           </svg>
         </div>
         <div>
-          <div className="text-base font-bold tracking-tight text-white">Life OS</div>
-          <div className="mt-px text-[11px] text-slate-500">Phân tích đời sống cá nhân</div>
+          <div className="text-base font-bold tracking-tight text-white">
+            Life OS
+          </div>
+          <div className="mt-px text-[11px] text-slate-500">
+            Phân tích đời sống cá nhân
+          </div>
         </div>
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto">
-        {navMain.map((n) => <Item key={n.label} {...n} />)}
+        {navMain.map((n) => (
+          <Item key={n.label} {...n} />
+        ))}
         <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-slate-600">
           Phân tích
         </div>
-        {navAnalytics.map((n) => <Item key={n.label} {...n} />)}
+        {navAnalytics.map((n) => (
+          <Item key={n.label} {...n} />
+        ))}
         <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-slate-600">
           Phân tích
         </div>
-        {navInsights.map((n) => <Item key={n.label} {...n} />)}
+        {navInsights.map((n) => (
+          <Item key={n.label} {...n} />
+        ))}
       </nav>
 
       <div className="mt-2 flex items-center gap-2.5 border-t border-white/[0.06] px-2 pb-1 pt-[11px]">
@@ -98,7 +152,9 @@ export function Sidebar() {
           {initials}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[13px] font-semibold text-slate-200">{displayName}</div>
+          <div className="truncate text-[13px] font-semibold text-slate-200">
+            {displayName}
+          </div>
           <div className="truncate text-[11px] text-slate-500">{email}</div>
         </div>
         <button

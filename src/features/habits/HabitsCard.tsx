@@ -13,7 +13,9 @@ export function HabitsCard({ habits, toggle }: HabitsCardProps) {
   return (
     <div className="flex flex-col rounded-2xl border border-border bg-card p-[18px]">
       <div className="mb-3.5 flex items-center justify-between">
-        <span className="text-[15px] font-semibold tracking-tight">Thói quen hôm nay</span>
+        <span className="text-[15px] font-semibold tracking-tight">
+          Thói quen hôm nay
+        </span>
         <span className="text-[12.5px] text-muted-foreground">
           {done} / {habits.length} hoàn thành
         </span>
@@ -34,7 +36,9 @@ export function HabitsCard({ habits, toggle }: HabitsCardProps) {
           >
             <span className="w-5 text-center text-base">{h.icon}</span>
             <span className="flex-1 text-[13.5px] font-medium">{h.name}</span>
-            <span className="mr-1 text-[12.5px] text-muted-foreground">{h.meta}</span>
+            <span className="mr-1 text-[12.5px] text-muted-foreground">
+              {h.meta}
+            </span>
             <button
               onClick={() => toggle(i)}
               className={

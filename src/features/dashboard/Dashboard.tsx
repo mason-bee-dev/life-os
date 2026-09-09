@@ -1,10 +1,30 @@
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 import dayjs from "dayjs";
 import {
-  Zap, Smile, Moon, Target, ChevronLeft, ChevronRight, Heart, Activity,
-  Dumbbell, Scale, Droplets, Coffee, Brain, Monitor, Clock, BookMarked, type LucideIcon,
+  Zap,
+  Smile,
+  Moon,
+  Target,
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  Activity,
+  Dumbbell,
+  Scale,
+  Droplets,
+  Coffee,
+  Brain,
+  Monitor,
+  Clock,
+  BookMarked,
+  type LucideIcon,
 } from "lucide-react";
 import { Gauge } from "@/components/charts/Gauge";
 import { Spark } from "@/components/charts/Spark";
@@ -21,7 +41,13 @@ import type { Habit } from "@/features/habits/types";
 import type { JournalEntry } from "@/features/journal/types";
 import type { Todo } from "@/features/todos/types";
 import {
-  energyData, moodData, sleepData, prodData, weekData, calWeeks, quality,
+  energyData,
+  moodData,
+  sleepData,
+  prodData,
+  weekData,
+  calWeeks,
+  quality,
 } from "./data";
 
 const card = "rounded-2xl border border-border bg-card p-5";
@@ -31,7 +57,10 @@ function StatIcon({ icon: Icon, color }: { icon: LucideIcon; color: string }) {
   return (
     <span
       className="grid h-[26px] w-[26px] place-items-center rounded-lg"
-      style={{ color, background: `color-mix(in srgb, ${color} 12.1568627451%, transparent)` }}
+      style={{
+        color,
+        background: `color-mix(in srgb, ${color} 12.1568627451%, transparent)`,
+      }}
     >
       <Icon size={15} />
     </span>
@@ -44,11 +73,17 @@ function StatCards() {
       {/* Life Score */}
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
-          <span className="text-[13.5px] font-semibold text-muted-foreground">Điểm sống</span>
+          <span className="text-[13.5px] font-semibold text-muted-foreground">
+            Điểm sống
+          </span>
         </div>
         <Gauge value={84} />
         <div className="mt-auto">
-          <Delta dir="up" value="8.6% so với tuần trước" color="var(--primary)" />
+          <Delta
+            dir="up"
+            value="8.6% so với tuần trước"
+            color="var(--primary)"
+          />
         </div>
       </div>
 
@@ -56,12 +91,16 @@ function StatCards() {
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
           <StatIcon icon={Zap} color="var(--primary)" />
-          <span className="text-[13.5px] font-semibold text-muted-foreground">Năng lượng</span>
+          <span className="text-[13.5px] font-semibold text-muted-foreground">
+            Năng lượng
+          </span>
         </div>
         <div className="text-stat font-bold tracking-tight">
           82 <span className="text-[12.5px] font-medium text-faint">/100</span>
         </div>
-        <div className="mt-0.5 text-[12.5px] font-semibold text-primary">Tốt</div>
+        <div className="mt-0.5 text-[12.5px] font-semibold text-primary">
+          Tốt
+        </div>
         <Spark data={energyData} color="var(--primary)" />
       </div>
 
@@ -69,10 +108,14 @@ function StatCards() {
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
           <StatIcon icon={Smile} color="var(--metric-mood)" />
-          <span className="text-[13.5px] font-semibold text-muted-foreground">Tâm trạng</span>
+          <span className="text-[13.5px] font-semibold text-muted-foreground">
+            Tâm trạng
+          </span>
         </div>
         <div className="text-stat font-bold tracking-tight">Tốt</div>
-        <div className="mt-0.5 text-[12.5px] font-semibold text-muted-foreground">4.2 / 5</div>
+        <div className="mt-0.5 text-[12.5px] font-semibold text-muted-foreground">
+          4.2 / 5
+        </div>
         <Spark data={moodData} color="var(--metric-mood)" />
       </div>
 
@@ -80,11 +123,17 @@ function StatCards() {
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
           <StatIcon icon={Moon} color="var(--metric-sleep)" />
-          <span className="text-[13.5px] font-semibold text-muted-foreground">Giấc ngủ</span>
+          <span className="text-[13.5px] font-semibold text-muted-foreground">
+            Giấc ngủ
+          </span>
         </div>
         <div className="text-stat font-bold tracking-tight">7h 12m</div>
         <div className="mt-0.5">
-          <Delta dir="up" value="24m so với hôm qua" color="var(--metric-sleep)" />
+          <Delta
+            dir="up"
+            value="24m so với hôm qua"
+            color="var(--metric-sleep)"
+          />
         </div>
         <Spark data={sleepData} color="var(--metric-sleep)" />
       </div>
@@ -93,13 +142,19 @@ function StatCards() {
       <div className={card + " flex min-h-[196px] flex-col"}>
         <div className="mb-2.5 flex items-center gap-2">
           <StatIcon icon={Target} color="var(--metric-productivity)" />
-          <span className="text-[13.5px] font-semibold text-muted-foreground">Năng suất</span>
+          <span className="text-[13.5px] font-semibold text-muted-foreground">
+            Năng suất
+          </span>
         </div>
         <div className="text-stat font-bold tracking-tight">
           76 <span className="text-[12.5px] font-medium text-faint">/100</span>
         </div>
         <div className="mt-0.5">
-          <Delta dir="up" value="5.1% so với tuần trước" color="var(--metric-productivity)" />
+          <Delta
+            dir="up"
+            value="5.1% so với tuần trước"
+            color="var(--metric-productivity)"
+          />
         </div>
         <Spark data={prodData} color="var(--metric-productivity)" />
       </div>
@@ -108,12 +163,20 @@ function StatCards() {
 }
 
 /* ---------- score chart ---------- */
-function ChartTooltip({ active, payload }: { active?: boolean; payload?: any[] }) {
+function ChartTooltip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: any[];
+}) {
   if (active && payload && payload.length) {
     const p = payload[0].payload;
     return (
       <div className="rounded-[9px] border border-border-hover bg-card px-[11px] py-[7px] shadow-[0_6px_20px_var(--shadow-color-40)]">
-        <div className="mb-0.5 text-[11.5px] text-muted-foreground">{p.date}</div>
+        <div className="mb-0.5 text-[11.5px] text-muted-foreground">
+          {p.date}
+        </div>
         <div className="text-base font-bold">{p.v}</div>
       </div>
     );
@@ -125,27 +188,81 @@ function ScoreChart() {
   return (
     <div className={card + " flex flex-col"}>
       <div className="mb-3.5 flex items-center justify-between">
-        <span className="text-heading tracking-tight">Điểm sống — Tuần này</span>
+        <span className="text-heading tracking-tight">
+          Điểm sống — Tuần này
+        </span>
         <div className="rounded-lg border border-border px-2.5 py-[5px] text-[12.5px] font-semibold text-muted-foreground">
           Tuần này ▾
         </div>
       </div>
       <div className="-mx-1.5 h-[214px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={weekData} margin={{ top: 16, right: 8, left: -18, bottom: 0 }}>
-            <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fill: "var(--faint)", fontSize: 11 }} dy={6} />
-            <YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} tickLine={false} axisLine={false} tick={{ fill: "var(--faint)", fontSize: 11 }} width={40} />
-            <Tooltip content={<ChartTooltip />} cursor={{ stroke: "var(--border-hover)", strokeDasharray: "4 4" }} />
-            <Line type="monotone" dataKey="v" stroke="var(--metric-sleep)" strokeWidth={2.6}
-              dot={{ r: 3.5, fill: "var(--card)", stroke: "var(--metric-sleep)", strokeWidth: 2 }} activeDot={{ r: 5 }} />
+          <LineChart
+            data={weekData}
+            margin={{ top: 16, right: 8, left: -18, bottom: 0 }}
+          >
+            <XAxis
+              dataKey="day"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "var(--faint)", fontSize: 11 }}
+              dy={6}
+            />
+            <YAxis
+              domain={[0, 100]}
+              ticks={[0, 25, 50, 75, 100]}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "var(--faint)", fontSize: 11 }}
+              width={40}
+            />
+            <Tooltip
+              content={<ChartTooltip />}
+              cursor={{ stroke: "var(--border-hover)", strokeDasharray: "4 4" }}
+            />
+            <Line
+              type="monotone"
+              dataKey="v"
+              stroke="var(--metric-sleep)"
+              strokeWidth={2.6}
+              dot={{
+                r: 3.5,
+                fill: "var(--card)",
+                stroke: "var(--metric-sleep)",
+                strokeWidth: 2,
+              }}
+              activeDot={{ r: 5 }}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
       <div className="mt-3 grid grid-cols-4 gap-2 border-t border-border pt-3.5 text-center">
-        <div><div className="text-[17px] font-bold tracking-tight">74</div><div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">ĐIỂM TB</div></div>
-        <div><div className="text-[17px] font-bold tracking-tight text-primary">↑8.6%</div><div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">SO VỚI TUẦN TRƯỚC</div></div>
-        <div><div className="text-[17px] font-bold tracking-tight">5</div><div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">CHUỖI DÀI NHẤT</div></div>
-        <div><div className="text-[17px] font-bold tracking-tight">2</div><div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">NGÀY THẤP ĐIỂM</div></div>
+        <div>
+          <div className="text-[17px] font-bold tracking-tight">74</div>
+          <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+            ĐIỂM TB
+          </div>
+        </div>
+        <div>
+          <div className="text-[17px] font-bold tracking-tight text-primary">
+            ↑8.6%
+          </div>
+          <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+            SO VỚI TUẦN TRƯỚC
+          </div>
+        </div>
+        <div>
+          <div className="text-[17px] font-bold tracking-tight">5</div>
+          <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+            CHUỖI DÀI NHẤT
+          </div>
+        </div>
+        <div>
+          <div className="text-[17px] font-bold tracking-tight">2</div>
+          <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-faint">
+            NGÀY THẤP ĐIỂM
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -159,12 +276,23 @@ function Calendar() {
       <div className="mb-3.5 flex items-center justify-between">
         <span className="text-heading tracking-tight">Tháng 8/2026</span>
         <div className="flex gap-0.5">
-          <button className="rounded-md p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"><ChevronLeft size={16} /></button>
-          <button className="rounded-md p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"><ChevronRight size={16} /></button>
+          <button className="rounded-md p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground">
+            <ChevronLeft size={16} />
+          </button>
+          <button className="rounded-md p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground">
+            <ChevronRight size={16} />
+          </button>
         </div>
       </div>
       <div className="mb-1.5 grid grid-cols-7 gap-0.5">
-        {dow.map((d) => <span key={d} className="text-center text-[11px] font-semibold text-faint">{d}</span>)}
+        {dow.map((d) => (
+          <span
+            key={d}
+            className="text-center text-[11px] font-semibold text-faint"
+          >
+            {d}
+          </span>
+        ))}
       </div>
       <div className="grid grid-cols-7 gap-0.5">
         {calWeeks.map((week, wi) =>
@@ -183,18 +311,31 @@ function Calendar() {
               >
                 <span>{day}</span>
                 {q && !isToday && (
-                  <i className="absolute bottom-[5px] h-[5px] w-[5px] rounded-full" style={{ background: qColor[q] }} />
+                  <i
+                    className="absolute bottom-[5px] h-[5px] w-[5px] rounded-full"
+                    style={{ background: qColor[q] }}
+                  />
                 )}
               </div>
             );
-          })
+          }),
         )}
       </div>
       <div className="mt-3.5 flex flex-wrap gap-x-3.5 gap-y-2.5 border-t border-border pt-3.5">
         {(["low", "avg", "good", "exc"] as const).map((k) => (
-          <span key={k} className="flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
-            <i className="h-2 w-2 rounded-full" style={{ background: qColor[k] }} />
-            {{ low: "Thấp", avg: "Trung bình", good: "Tốt", exc: "Xuất sắc" }[k]}
+          <span
+            key={k}
+            className="flex items-center gap-1.5 text-[11.5px] text-muted-foreground"
+          >
+            <i
+              className="h-2 w-2 rounded-full"
+              style={{ background: qColor[k] }}
+            />
+            {
+              { low: "Thấp", avg: "Trung bình", good: "Tốt", exc: "Xuất sắc" }[
+                k
+              ]
+            }
           </span>
         ))}
       </div>
@@ -210,7 +351,12 @@ type OverviewRow = {
   delta?: { dir: "up" | "down"; value: string; color: string };
 };
 function OverviewCard({
-  icon: Icon, iconColor, title, rows, link, onLinkClick,
+  icon: Icon,
+  iconColor,
+  title,
+  rows,
+  link,
+  onLinkClick,
 }: {
   icon: LucideIcon;
   iconColor: string;
@@ -222,7 +368,13 @@ function OverviewCard({
   return (
     <div className={card}>
       <div className="mb-3.5 flex items-center gap-[9px]">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg" style={{ color: iconColor, background: `color-mix(in srgb, ${iconColor} 12.5490196078%, transparent)` }}>
+        <span
+          className="grid h-[26px] w-[26px] place-items-center rounded-lg"
+          style={{
+            color: iconColor,
+            background: `color-mix(in srgb, ${iconColor} 12.5490196078%, transparent)`,
+          }}
+        >
           <Icon size={15} />
         </span>
         <span className="text-heading tracking-tight">{title}</span>
@@ -231,9 +383,16 @@ function OverviewCard({
         {rows.map((r) => {
           const RIcon = r.ricon;
           return (
-            <div key={r.label} className="flex items-center gap-[9px] border-b border-border py-2 last:border-b-0">
-              <span className="grid place-items-center text-faint"><RIcon size={14} /></span>
-              <span className="flex-1 text-[13px] text-muted-foreground">{r.label}</span>
+            <div
+              key={r.label}
+              className="flex items-center gap-[9px] border-b border-border py-2 last:border-b-0"
+            >
+              <span className="grid place-items-center text-faint">
+                <RIcon size={14} />
+              </span>
+              <span className="flex-1 text-[13px] text-muted-foreground">
+                {r.label}
+              </span>
               <span className="text-[13px] font-semibold">{r.value}</span>
               {r.delta && <Delta {...r.delta} />}
             </div>
@@ -256,13 +415,22 @@ function InsightsPreview() {
     <div className={card + " flex flex-col"}>
       <div className="mb-3.5 flex items-center justify-between">
         <span className="text-heading tracking-tight">Phân tích nổi bật</span>
-        <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">Xem tất cả</button>
+        <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">
+          Xem tất cả
+        </button>
       </div>
       {insightItems.map((it) => {
         const Icon = it.icon;
         return (
-          <div key={it.title} className="mb-[11px] flex items-center gap-[11px] rounded-xl p-[13px] last:mb-0" style={{ background: it.bg }}>
-            <span className="grid h-[26px] w-[26px] place-items-center rounded-lg bg-card" style={{ color: it.color }}>
+          <div
+            key={it.title}
+            className="mb-[11px] flex items-center gap-[11px] rounded-xl p-[13px] last:mb-0"
+            style={{ background: it.bg }}
+          >
+            <span
+              className="grid h-[26px] w-[26px] place-items-center rounded-lg bg-card"
+              style={{ color: it.color }}
+            >
               <Icon size={15} />
             </span>
             <div className="min-w-0 flex-1">
@@ -286,7 +454,13 @@ type DashboardProps = {
   toggleTodo: (id: number) => void;
 };
 
-export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: DashboardProps) {
+export function Dashboard({
+  habits,
+  toggle,
+  journal,
+  todos,
+  toggleTodo,
+}: DashboardProps) {
   const navigate = useNavigate();
   const { todayKey, getRecord } = useDailyRecords();
   const yesterdayKey = dayjs(todayKey).subtract(1, "day").format("YYYY-MM-DD");
@@ -320,24 +494,82 @@ export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: Dashbo
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
             <OverviewCard
-              icon={Heart} iconColor="var(--destructive)" title="Tổng quan sức khoẻ" link="Xem tất cả chỉ số sức khoẻ"
+              icon={Heart}
+              iconColor="var(--destructive)"
+              title="Tổng quan sức khoẻ"
+              link="Xem tất cả chỉ số sức khoẻ"
               onLinkClick={() => navigate("/health")}
               rows={[
-                { ricon: Moon, label: "Giấc ngủ", value: "7h 08m", delta: { dir: "up", value: "12m", color: "var(--primary)" } },
-                { ricon: Dumbbell, label: "Vận động", value: "4 / 7 ngày", delta: { dir: "up", value: "1 ngày", color: "var(--primary)" } },
-                { ricon: Scale, label: "Cân nặng", value: "68.4 kg", delta: { dir: "down", value: "0.3 kg", color: "var(--primary)" } },
-                { ricon: Droplets, label: "Nước", value: `${waterLiters.toFixed(2)} L`, delta: waterDelta },
+                {
+                  ricon: Moon,
+                  label: "Giấc ngủ",
+                  value: "7h 08m",
+                  delta: { dir: "up", value: "12m", color: "var(--primary)" },
+                },
+                {
+                  ricon: Dumbbell,
+                  label: "Vận động",
+                  value: "4 / 7 ngày",
+                  delta: {
+                    dir: "up",
+                    value: "1 ngày",
+                    color: "var(--primary)",
+                  },
+                },
+                {
+                  ricon: Scale,
+                  label: "Cân nặng",
+                  value: "68.4 kg",
+                  delta: {
+                    dir: "down",
+                    value: "0.3 kg",
+                    color: "var(--primary)",
+                  },
+                },
+                {
+                  ricon: Droplets,
+                  label: "Nước",
+                  value: `${waterLiters.toFixed(2)} L`,
+                  delta: waterDelta,
+                },
                 { ricon: Coffee, label: "Cà phê", value: `${coffeeCups} cốc` },
               ]}
             />
             <OverviewCard
-              icon={Activity} iconColor="var(--metric-mood)" title="Tổng quan năng suất" link="Xem tất cả chỉ số năng suất"
+              icon={Activity}
+              iconColor="var(--metric-mood)"
+              title="Tổng quan năng suất"
+              link="Xem tất cả chỉ số năng suất"
               onLinkClick={() => navigate("/productivity")}
               rows={[
-                { ricon: Target, label: "Tập trung sâu", value: "4h 12m", delta: { dir: "up", value: "22m", color: "var(--primary)" } },
-                { ricon: Clock, label: "Giờ làm việc", value: "7h 38m", delta: { dir: "down", value: "1h 02m", color: "var(--destructive)" } },
-                { ricon: Brain, label: "Học tập", value: "1h 45m", delta: { dir: "up", value: "30m", color: "var(--primary)" } },
-                { ricon: Monitor, label: "Thời gian màn hình", value: "6h 20m", delta: { dir: "down", value: "45m", color: "var(--primary)" } },
+                {
+                  ricon: Target,
+                  label: "Tập trung sâu",
+                  value: "4h 12m",
+                  delta: { dir: "up", value: "22m", color: "var(--primary)" },
+                },
+                {
+                  ricon: Clock,
+                  label: "Giờ làm việc",
+                  value: "7h 38m",
+                  delta: {
+                    dir: "down",
+                    value: "1h 02m",
+                    color: "var(--destructive)",
+                  },
+                },
+                {
+                  ricon: Brain,
+                  label: "Học tập",
+                  value: "1h 45m",
+                  delta: { dir: "up", value: "30m", color: "var(--primary)" },
+                },
+                {
+                  ricon: Monitor,
+                  label: "Thời gian màn hình",
+                  value: "6h 20m",
+                  delta: { dir: "down", value: "45m", color: "var(--primary)" },
+                },
               ]}
             />
           </div>
@@ -345,14 +577,21 @@ export function Dashboard({ habits, toggle, journal, todos, toggleTodo }: Dashbo
           <div className={card}>
             <div className="mb-2.5 flex items-center justify-between">
               <span className="flex items-center gap-2 text-heading tracking-tight">
-                <BookMarked size={16} className="text-muted-foreground" /> Ghi chú nhật ký gần nhất
+                <BookMarked size={16} className="text-muted-foreground" /> Ghi
+                chú nhật ký gần nhất
               </span>
               <div className="flex items-center gap-3.5">
-                <span className="text-[12.5px] text-muted-foreground">{latest?.date}</span>
-                <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">Xem tất cả →</button>
+                <span className="text-[12.5px] text-muted-foreground">
+                  {latest?.date}
+                </span>
+                <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">
+                  Xem tất cả →
+                </button>
               </div>
             </div>
-            <p className="m-0 text-[13.5px] leading-relaxed text-muted-foreground">{latest?.text}</p>
+            <p className="m-0 text-[13.5px] leading-relaxed text-muted-foreground">
+              {latest?.text}
+            </p>
           </div>
         </div>
 

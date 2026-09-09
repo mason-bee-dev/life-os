@@ -4,7 +4,10 @@ import { useDailyRecords } from "./useDailyRecords";
 import { PeriodTabs } from "./PeriodTabs";
 import { StatBar } from "./StatBar";
 import {
-  recordsInPeriod, sumWaterLiters, avgWaterLiters, toDailySeries,
+  recordsInPeriod,
+  sumWaterLiters,
+  avgWaterLiters,
+  toDailySeries,
 } from "./stats";
 import type { Period } from "./types";
 
@@ -22,11 +25,16 @@ export function WaterTracker() {
     <div>
       {/* Header */}
       <div className="mb-4 flex items-center gap-2">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-cyan-400" style={{ background: "var(--metric-water-soft)" }}>
+        <span
+          className="grid h-[26px] w-[26px] place-items-center rounded-lg text-cyan-400"
+          style={{ background: "var(--metric-water-soft)" }}
+        >
           <GlassWater size={15} />
         </span>
         <span className="text-heading tracking-tight">Uống nước</span>
-        <span className="ml-auto text-[15px] font-bold">{(glasses * 0.25).toFixed(2)} L</span>
+        <span className="ml-auto text-[15px] font-bold">
+          {(glasses * 0.25).toFixed(2)} L
+        </span>
       </div>
 
       {/* Grid 8 glasses */}
@@ -34,10 +42,16 @@ export function WaterTracker() {
         {Array.from({ length: 8 }).map((_, i) => (
           <button
             key={i}
-            onClick={() => updateRecord(todayKey, { waterGlasses: i + 1 === glasses ? i : i + 1 })}
+            onClick={() =>
+              updateRecord(todayKey, {
+                waterGlasses: i + 1 === glasses ? i : i + 1,
+              })
+            }
             className={
               "grid h-10 w-10 place-items-center rounded-[10px] border-[1.5px] transition-colors " +
-              (i < glasses ? "border-cyan-500 bg-cyan-500/10 text-cyan-400" : "border-border text-faint hover:border-cyan-500")
+              (i < glasses
+                ? "border-cyan-500 bg-cyan-500/10 text-cyan-400"
+                : "border-border text-faint hover:border-cyan-500")
             }
           >
             <GlassWater size={20} />
@@ -51,12 +65,26 @@ export function WaterTracker() {
       {/* Stats */}
       <div className="mt-5 border-t border-border pt-4">
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-[13px] font-semibold text-muted-foreground">Thống kê</span>
+          <span className="text-[13px] font-semibold text-muted-foreground">
+            Thống kê
+          </span>
           <PeriodTabs value={period} onChange={setPeriod} />
         </div>
         <div className="mb-3 flex gap-6 text-[13px]">
-          <span>Tổng: <span className="text-body">{total.toFixed(2)} <span className="text-[12.5px] text-faint">L</span></span></span>
-          <span>Trung bình: <span className="text-body">{avg.toFixed(2)} <span className="text-[12.5px] text-faint">L/ngày</span></span></span>
+          <span>
+            Tổng:{" "}
+            <span className="text-body">
+              {total.toFixed(2)}{" "}
+              <span className="text-[12.5px] text-faint">L</span>
+            </span>
+          </span>
+          <span>
+            Trung bình:{" "}
+            <span className="text-body">
+              {avg.toFixed(2)}{" "}
+              <span className="text-[12.5px] text-faint">L/ngày</span>
+            </span>
+          </span>
         </div>
         <StatBar data={series} color="var(--metric-water)" />
       </div>

@@ -9,9 +9,21 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 const highlights = [
-  { icon: Heart, label: "Theo dõi sức khoẻ", desc: "Nước, cà phê và thói quen cá nhân mỗi ngày." },
-  { icon: BookOpen, label: "Nhật ký & suy ngẫm", desc: "Ghi lại tâm trạng và những khoảnh khắc đáng nhớ." },
-  { icon: Activity, label: "Phân tích xu hướng", desc: "Nhìn lại cuộc sống qua số liệu và insight." },
+  {
+    icon: Heart,
+    label: "Theo dõi sức khoẻ",
+    desc: "Nước, cà phê và thói quen cá nhân mỗi ngày.",
+  },
+  {
+    icon: BookOpen,
+    label: "Nhật ký & suy ngẫm",
+    desc: "Ghi lại tâm trạng và những khoảnh khắc đáng nhớ.",
+  },
+  {
+    icon: Activity,
+    label: "Phân tích xu hướng",
+    desc: "Nhìn lại cuộc sống qua số liệu và insight.",
+  },
 ];
 
 function BrandLogo({ compact = false }: { compact?: boolean }) {
@@ -23,16 +35,32 @@ function BrandLogo({ compact = false }: { compact?: boolean }) {
           (compact ? "h-9 w-9" : "h-11 w-11")
         }
       >
-        <svg width={compact ? 18 : 22} height={compact ? 18 : 22} viewBox="0 0 24 24" fill="none">
-          <path d="M12 2 L22 12 L12 22 L2 12 Z" fill="var(--primary-foreground)" fillOpacity="0.95" />
+        <svg
+          width={compact ? 18 : 22}
+          height={compact ? 18 : 22}
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M12 2 L22 12 L12 22 L2 12 Z"
+            fill="var(--primary-foreground)"
+            fillOpacity="0.95"
+          />
         </svg>
       </div>
       <div>
-        <div className={"font-bold tracking-tight text-white " + (compact ? "text-lg" : "text-2xl")}>
+        <div
+          className={
+            "font-bold tracking-tight text-white " +
+            (compact ? "text-lg" : "text-2xl")
+          }
+        >
           Life OS
         </div>
         {!compact && (
-          <div className="mt-0.5 text-sm text-slate-400">Phân tích đời sống cá nhân</div>
+          <div className="mt-0.5 text-sm text-slate-400">
+            Phân tích đời sống cá nhân
+          </div>
         )}
       </div>
     </div>
@@ -48,7 +76,9 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginInput, string>>>({});
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<keyof LoginInput, string>>
+  >({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -73,7 +103,9 @@ export function Login() {
 
     setFieldErrors({});
     setSubmitting(true);
-    const { error: authError } = await supabase.auth.signInWithPassword(parsed.data);
+    const { error: authError } = await supabase.auth.signInWithPassword(
+      parsed.data,
+    );
     setSubmitting(false);
     if (authError) {
       setFormError(
@@ -96,11 +128,17 @@ export function Login() {
       <div className="relative hidden overflow-hidden bg-sidebar px-10 py-12 lg:flex lg:flex-col lg:justify-between">
         <div
           className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--primary) 0%, transparent 70%)" }}
+          style={{
+            background:
+              "radial-gradient(circle, var(--primary) 0%, transparent 70%)",
+          }}
         />
         <div
           className="pointer-events-none absolute -bottom-32 -right-16 h-80 w-80 rounded-full opacity-20 blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--login-orb) 0%, transparent 70%)" }}
+          style={{
+            background:
+              "radial-gradient(circle, var(--login-orb) 0%, transparent 70%)",
+          }}
         />
 
         <BrandLogo />
@@ -114,7 +152,8 @@ export function Login() {
             Một nơi để theo dõi, ghi chép và hiểu rõ bản thân hơn.
           </h1>
           <p className="mt-4 text-xs text-slate-400">
-            Life OS giúp bạn đồng bộ dữ liệu sức khoẻ, thói quen và nhật ký — mọi lúc, mọi thiết bị.
+            Life OS giúp bạn đồng bộ dữ liệu sức khoẻ, thói quen và nhật ký —
+            mọi lúc, mọi thiết bị.
           </p>
 
           <ul className="mt-10 flex flex-col gap-5">
@@ -124,7 +163,9 @@ export function Login() {
                   <Icon size={18} />
                 </span>
                 <div>
-                  <div className="text-sm font-semibold text-slate-200">{label}</div>
+                  <div className="text-sm font-semibold text-slate-200">
+                    {label}
+                  </div>
                   <div className="mt-0.5 text-sm text-slate-500">{desc}</div>
                 </div>
               </li>
@@ -144,12 +185,18 @@ export function Login() {
         </div>
 
         <div className="mx-auto w-full max-w-[400px]">
-          <h2 className="m-0 text-[26px] font-bold tracking-tight">Đăng nhập</h2>
+          <h2 className="m-0 text-[26px] font-bold tracking-tight">
+            Đăng nhập
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Chào mừng trở lại. Nhập thông tin tài khoản để tiếp tục.
           </p>
 
-          <form noValidate onSubmit={onSubmit} className="mt-8 flex flex-col gap-5">
+          <form
+            noValidate
+            onSubmit={onSubmit}
+            className="mt-8 flex flex-col gap-5"
+          >
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -202,7 +249,12 @@ export function Login() {
               </div>
             )}
 
-            <Button type="submit" size="lg" className="mt-1 w-full" disabled={submitting}>
+            <Button
+              type="submit"
+              size="lg"
+              className="mt-1 w-full"
+              disabled={submitting}
+            >
               {submitting ? "Đang đăng nhập…" : "Đăng nhập"}
             </Button>
           </form>

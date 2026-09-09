@@ -116,7 +116,9 @@ export function TodosCard({
                 <Checkbox
                   checked={todo.done}
                   onCheckedChange={() => onToggle(todo.id)}
-                  aria-label={todo.done ? "Đánh dấu chưa xong" : "Đánh dấu xong"}
+                  aria-label={
+                    todo.done ? "Đánh dấu chưa xong" : "Đánh dấu xong"
+                  }
                 />
 
                 <div className="min-w-0 flex-1">

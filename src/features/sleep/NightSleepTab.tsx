@@ -11,9 +11,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { NightSleepModal } from "./NightSleepModal";
+import { SleepDateCell } from "./SleepDateCell";
 import { SleepDataTable } from "./SleepDataTable";
+import { SleepEvaluationBox } from "./SleepEvaluationBox";
 import { SleepPeriodFilter } from "./SleepPeriodFilter";
 import { SleepStatsCards } from "./SleepStatsCards";
+import { evaluateNightSleep } from "./sleepEvaluation";
 import {
   computeNightStats,
   formatDuration,
@@ -74,6 +77,10 @@ export function NightSleepTab({
   const bounds = periodBounds(refDate, period);
   const totalDays = periodDayCount(refDate, period);
   const stats = computeNightStats(nightRows, totalDays);
+  const evaluation = useMemo(
+    () => evaluateNightSleep(nightRows, totalDays, period),
+    [nightRows, totalDays, period],
+  );
 
   const editRecord = editDate ? getRecord(editDate) : undefined;
 
@@ -138,6 +145,13 @@ export function NightSleepTab({
         {dayjs(bounds.to).format("DD/MM/YYYY")}
       </div>
 
+      {evaluation ? (
+        <SleepEvaluationBox
+          evaluation={evaluation}
+          title="Đánh giá giấc ngủ đêm"
+        />
+      ) : null}
+
       <SleepStatsCards
         cards={[
           { label: "Ngủ đêm TB", value: stats.avgDurationLabel },
@@ -183,7 +197,7 @@ export function NightSleepTab({
           return (
             <>
               <TableCell className="tabular-nums">
-                {dayjs(r.date).format("DD/MM/YYYY")}
+                <SleepDateCell date={r.date} todayKey={todayKey} />
               </TableCell>
               <TableCell className="tabular-nums text-muted-foreground">
                 {r.bedtime} → {r.wakeTime}

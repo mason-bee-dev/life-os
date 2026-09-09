@@ -91,6 +91,17 @@ export function bedtimeExtremes(
   return { earliest, latest };
 }
 
+/** Minutes between earliest and latest bedtime (evening-aware). */
+export function bedtimeSpreadMinutes(times: string[]): number | null {
+  if (times.length < 2) return null;
+  const extremes = bedtimeExtremes(times);
+  if (!extremes) return null;
+  return (
+    bedtimeSortMinutes(extremes.latest) -
+    bedtimeSortMinutes(extremes.earliest)
+  );
+}
+
 export function periodBounds(
   refDate: string,
   period: Period,

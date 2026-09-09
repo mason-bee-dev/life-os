@@ -3,12 +3,13 @@ import { EyeOff, Eye, Minus, Plus } from "lucide-react";
 import dayjs from "dayjs";
 import { useDailyRecords } from "./useDailyRecords";
 import { PeriodTabs } from "./PeriodTabs";
-import {
-  recordsInPeriod, sumMasturbation, countPornDays,
-} from "./stats";
+import { recordsInPeriod, sumMasturbation, countPornDays } from "./stats";
 import type { Period } from "./types";
 
-function calcStreak(records: ReturnType<typeof useDailyRecords>["records"], todayKey: string): number {
+function calcStreak(
+  records: ReturnType<typeof useDailyRecords>["records"],
+  todayKey: string,
+): number {
   let streak = 0;
   let d = dayjs(todayKey);
   while (true) {
@@ -40,7 +41,10 @@ export function PersonalHabits() {
     <div>
       {/* Header — always visible */}
       <div className="flex items-center gap-2">
-        <span className="grid h-[26px] w-[26px] place-items-center rounded-lg text-slate-400" style={{ background: "var(--icon-muted-soft)" }}>
+        <span
+          className="grid h-[26px] w-[26px] place-items-center rounded-lg text-slate-400"
+          style={{ background: "var(--icon-muted-soft)" }}
+        >
           {open ? <Eye size={15} /> : <EyeOff size={15} />}
         </span>
         <span className="text-heading tracking-tight">Thói quen cá nhân</span>
@@ -56,17 +60,25 @@ export function PersonalHabits() {
         <div className="mt-4 flex flex-col gap-5">
           {/* Masturbation stepper */}
           <div>
-            <div className="mb-2 text-[13px] text-muted-foreground">Số lần thủ dâm hôm nay</div>
+            <div className="mb-2 text-[13px] text-muted-foreground">
+              Số lần thủ dâm hôm nay
+            </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => updateRecord(todayKey, { masturbationCount: Math.max(0, count - 1) })}
+                onClick={() =>
+                  updateRecord(todayKey, {
+                    masturbationCount: Math.max(0, count - 1),
+                  })
+                }
                 className="grid h-[36px] w-[36px] place-items-center rounded-xl border-[1.5px] border-border hover:border-primary hover:text-primary"
               >
                 <Minus size={14} />
               </button>
               <span className="min-w-[40px] text-center text-lg">{count}</span>
               <button
-                onClick={() => updateRecord(todayKey, { masturbationCount: count + 1 })}
+                onClick={() =>
+                  updateRecord(todayKey, { masturbationCount: count + 1 })
+                }
                 className="grid h-[36px] w-[36px] place-items-center rounded-xl border-[1.5px] border-border hover:border-primary hover:text-primary"
               >
                 <Plus size={14} />
@@ -76,7 +88,9 @@ export function PersonalHabits() {
 
           {/* Porn toggle */}
           <div>
-            <div className="mb-2 text-[13px] text-muted-foreground">Có xem nội dung người lớn hôm nay</div>
+            <div className="mb-2 text-[13px] text-muted-foreground">
+              Có xem nội dung người lớn hôm nay
+            </div>
             <button
               onClick={() => updateRecord(todayKey, { watchedPorn: !watched })}
               className={
@@ -93,13 +107,25 @@ export function PersonalHabits() {
           {/* Stats */}
           <div className="border-t border-border pt-4">
             <div className="mb-3 flex items-center justify-between">
-              <span className="text-[12.5px] font-semibold text-muted-foreground">Thống kê</span>
+              <span className="text-[12.5px] font-semibold text-muted-foreground">
+                Thống kê
+              </span>
               <PeriodTabs value={period} onChange={setPeriod} />
             </div>
             <div className="flex flex-col space-y-3 text-[13px]">
-              <span>Tổng số lần: <span>{totalM}</span></span>
-              <span>Số ngày có xem nội dung người lớn: <span>{pornDays}</span></span>
-              <span>Chuỗi ngày sạch gần nhất: <span>{streak} <span className="text-[12.5px] text-faint">ngày</span></span></span>
+              <span>
+                Tổng số lần: <span>{totalM}</span>
+              </span>
+              <span>
+                Số ngày có xem nội dung người lớn: <span>{pornDays}</span>
+              </span>
+              <span>
+                Chuỗi ngày sạch gần nhất:{" "}
+                <span>
+                  {streak}{" "}
+                  <span className="text-[12.5px] text-faint">ngày</span>
+                </span>
+              </span>
             </div>
           </div>
         </div>

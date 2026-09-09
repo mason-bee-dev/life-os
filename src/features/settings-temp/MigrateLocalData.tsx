@@ -8,7 +8,12 @@ import type { DailyRecords } from "@/features/health/types";
 const STORAGE_KEY = "lifeos:dailyRecords";
 
 function errorMessage(err: unknown): string {
-  if (err && typeof err === "object" && "message" in err && typeof err.message === "string") {
+  if (
+    err &&
+    typeof err === "object" &&
+    "message" in err &&
+    typeof err.message === "string"
+  ) {
     return err.message;
   }
   return String(err);
@@ -43,7 +48,11 @@ export function MigrateLocalData() {
       return;
     }
 
-    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    if (
+      typeof parsed !== "object" ||
+      parsed === null ||
+      Array.isArray(parsed)
+    ) {
       setErrors(["Dữ liệu localStorage không đúng định dạng DailyRecords."]);
       setRunning(false);
       return;
@@ -62,16 +71,21 @@ export function MigrateLocalData() {
     for (const date of dates) {
       const record = parsed[date];
       try {
-        const { error: upsertError } = await supabase.from("daily_records").upsert({
-          date,
-          water_glasses: record.waterGlasses ?? null,
-          masturbation_count: record.masturbationCount ?? null,
-          watched_porn: record.watchedPorn ?? null,
-          updated_at: new Date().toISOString(),
-        });
+        const { error: upsertError } = await supabase
+          .from("daily_records")
+          .upsert({
+            date,
+            water_glasses: record.waterGlasses ?? null,
+            masturbation_count: record.masturbationCount ?? null,
+            watched_porn: record.watchedPorn ?? null,
+            updated_at: new Date().toISOString(),
+          });
         if (upsertError) throw upsertError;
 
-        const { error: delError } = await supabase.from("coffee_logs").delete().eq("date", date);
+        const { error: delError } = await supabase
+          .from("coffee_logs")
+          .delete()
+          .eq("date", date);
         if (delError) throw delError;
 
         const coffee = record.coffee ?? [];
@@ -103,9 +117,9 @@ export function MigrateLocalData() {
     <div className="max-w-xl rounded-2xl border border-border bg-card p-5">
       <h2 className="m-0 text-heading tracking-tight">Migrate dữ liệu local</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Đọc <code className="text-foreground">lifeos:dailyRecords</code> từ localStorage và ghi vào
-        Supabase. Chạy một lần sau khi schema đã được tạo. Trang này sẽ được xoá sau khi xác nhận
-        dữ liệu đúng.
+        Đọc <code className="text-foreground">lifeos:dailyRecords</code> từ
+        localStorage và ghi vào Supabase. Chạy một lần sau khi schema đã được
+        tạo. Trang này sẽ được xoá sau khi xác nhận dữ liệu đúng.
       </p>
 
       <Button className="mt-5" onClick={run} disabled={running}>
@@ -120,7 +134,8 @@ export function MigrateLocalData() {
 
       {okCount !== null && (
         <p className="mt-4 text-sm">
-          Đã migrate thành công <span className="text-body">{okCount}</span> ngày.
+          Đã migrate thành công <span className="text-body">{okCount}</span>{" "}
+          ngày.
         </p>
       )}
 
