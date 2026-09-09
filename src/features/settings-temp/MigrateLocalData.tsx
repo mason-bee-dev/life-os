@@ -78,6 +78,7 @@ export function MigrateLocalData() {
             water_glasses: record.waterGlasses ?? null,
             masturbation_count: record.masturbationCount ?? null,
             watched_porn: record.watchedPorn ?? null,
+            wp_note: record.wpNote ?? null,
             updated_at: new Date().toISOString(),
           });
         if (upsertError) throw upsertError;
@@ -88,14 +89,17 @@ export function MigrateLocalData() {
           .eq("date", date);
         if (delError) throw delError;
 
-        const coffee = record.coffee ?? [];
-        if (coffee.length > 0) {
+        const drinks = record.drinks ?? record.coffee ?? [];
+        if (drinks.length > 0) {
           const { error: insError } = await supabase.from("coffee_logs").insert(
-            coffee.map((c) => ({
+            drinks.map((c) => ({
               date,
               type: c.type,
               custom_type: c.customType ?? null,
               cups: c.cups,
+              category: c.category ?? "cafe",
+              amount: c.amount ?? 0,
+              note: c.note?.trim() ? c.note.trim() : null,
             })),
           );
           if (insError) throw insError;

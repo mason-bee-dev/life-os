@@ -18,7 +18,8 @@ Canonical reference implementation: `src/features/sleep`.
 2. **Primary CTA:** one `Button` + `Plus` icon; opens modal (not a long inline form), except tiny quick-log UIs.
 3. **Period chips:** Ngày / Tuần / Tháng style matching Sleep/Health (`border-primary bg-primary/10` when active).
 4. **Stats:** `rounded-2xl border bg-card`, label muted / value `tabular-nums` semibold; compute in a pure `*Stats` module.
-5. **Table:** shared pagination pattern (`PAGE_SIZE` 7 unless justified), empty state with CTA, sort before page slice if sorting exists.
-6. **Prefer** `@/components/PeriodFilter`, `StatsCards`, `DataTable` over feature-local copies.
+5. **Table:** shared pagination (`DEFAULT_PAGE_SIZE` 7), empty state with CTA, sort before page slice if sorting exists. Actions column right-aligned; delete = red icon + confirm. Notes column via `NoteCell` when domain has notes.
+6. **Modal notes:** create/edit modals should include optional Ghi chú; persist on the entity (log-level or day-level).
+7. **Prefer** `@/components/PeriodFilter`, `StatsCards`, `DataTable`, `TableActionsCell`, `NoteCell` over feature-local copies.
 
 Do not invent a different page skeleton without documenting why in the PR.

@@ -8,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ACTIONS_COLUMN_CLASS } from "@/components/TableActionsCell";
+import { cn } from "@/lib/utils";
 
 export const DEFAULT_PAGE_SIZE = 7;
 
@@ -51,22 +53,30 @@ export function DataTable<T>({
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4 md:p-5">
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            {columns.map((col) => (
-              <TableHead key={col.key} className={col.className}>
-                {col.header}
-              </TableHead>
+      <div className="-mx-1 overflow-x-auto sm:mx-0">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              {columns.map((col) => (
+                <TableHead
+                  key={col.key}
+                  className={cn(
+                    col.key === "actions" && ACTIONS_COLUMN_CLASS,
+                    col.className,
+                  )}
+                >
+                  {col.header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {pageRows.map((row) => (
+              <TableRow key={rowKey(row)}>{renderRow(row)}</TableRow>
             ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {pageRows.map((row) => (
-            <TableRow key={rowKey(row)}>{renderRow(row)}</TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      </div>
 
       {totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between gap-3">

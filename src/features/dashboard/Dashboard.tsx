@@ -532,7 +532,7 @@ export function Dashboard({
                   value: `${waterLiters.toFixed(2)} L`,
                   delta: waterDelta,
                 },
-                { ricon: Coffee, label: "Cà phê", value: `${coffeeCups} cốc` },
+                { ricon: Coffee, label: "Đồ uống", value: `${coffeeCups} cốc` },
               ]}
             />
             <OverviewCard

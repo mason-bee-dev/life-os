@@ -182,9 +182,9 @@ const columns = [
 ```
 
 - Cột số / giờ: `tabular-nums` trên `TableCell`.
-- Cột ngày: relative label nếu có (`Hôm nay` / `Hôm qua`) — xem `SleepDateCell`.
-- Cột ghi chú dài: truncate + `Tooltip`.
-- Cột actions: luôn cuối; edit / delete (confirm inline hoặc dialog).
+- Cột ngày: dùng `@/components/RelativeDateCell` — format `T2 - 09/09/26`, thêm ` - (Hôm nay)` / ` - (Hôm qua)` khi đúng hôm nay/hôm qua.
+- Cột ghi chú dài: dùng `NoteCell` (truncate + `Tooltip`); đặt **trước** cột Thao tác.
+- Cột actions: luôn cuối, căn phải — `TableActionsCell` + `key: "actions"` trên `DataTable`.
 
 ### Pagination
 
@@ -227,9 +227,21 @@ Button size="sm" → cùng CTA “Thêm …”
 - `Dialog` / modal riêng (`*Modal.tsx`).
 - Props tối thiểu: `open`, `onOpenChange`, `onSave`, `isSaving`, `record?` (edit), `defaultDate`.
 - Create vs edit: cùng modal; `record` null = create.
+- **Ghi chú (note):** mặc định mọi modal thêm/sửa tracker nên có field `Ghi chú` (textarea, optional). Persist theo entity:
+  - Log từng dòng (vd. đồ uống / sleep): `note` trên từng log.
+  - Bản ghi theo ngày (vd. WP): `wpNote` (hoặc field note riêng của domain) trên daily row.
+- Bảng list: cột **Ghi chú** trước **Thao tác**; truncate + tooltip — dùng `@/components/NoteCell`.
 - Conflict cùng ngày (nếu domain 1 record/ngày): `window.confirm` hoặc dialog xác nhận ghi đè.
 - Toast success/error qua `useToast` — không silent fail.
 - Disable submit khi `isSaving`.
+
+### Health tabs (reference)
+
+| Tab | Modal | Note field |
+|-----|-------|------------|
+| Uống nước | `WaterModal` | *(chưa có — thêm khi cần)* |
+| Đồ uống | `DrinkModal` | `DrinkLog.note` → `coffee_logs.note` |
+| WP | `WpModal` | `DailyRecord.wpNote` → `daily_records.wp_note` |
 
 ---
 
@@ -275,8 +287,11 @@ Shared components (extracted from Sleep):
 | Period filter chips | `src/components/PeriodFilter.tsx` |
 | Stats grid | `src/components/StatsCards.tsx` |
 | Paginated table | `src/components/DataTable.tsx` (`DEFAULT_PAGE_SIZE = 7`) |
-| Date cell w/ Hôm nay/qua | `src/features/sleep/SleepDateCell.tsx` → promote to `RelativeDateCell` when reused |
+| Date cell | `src/components/RelativeDateCell.tsx` — `T2 - 09/09/26` (+ Hôm nay/Hôm qua) |
+| Note cell (truncate + tooltip) | `src/components/NoteCell.tsx` |
+| Row actions (edit + confirm delete) | `src/components/TableActionsCell.tsx` |
 | Evaluation box | `SleepEvaluationBox` — feature-specific; optional generic `InsightBox` later |
+| Health chart | `src/features/health/HealthChart.tsx` |
 
 Period options live per-feature (`PERIOD_OPTIONS` in `types.ts`) vì Sleep = 3 kỳ, Health = 4 kỳ (có Năm).
 

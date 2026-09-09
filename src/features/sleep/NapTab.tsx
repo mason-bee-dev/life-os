@@ -1,7 +1,10 @@
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
-import { Pencil, Plus, Sun, Trash2 } from "lucide-react";
-import { useToast } from "@/components/ui/toast";
+import { Plus, Sun } from "lucide-react";
+import { DataTable } from "@/components/DataTable";
+import { PeriodFilter } from "@/components/PeriodFilter";
+import { StatsCards } from "@/components/StatsCards";
+import { TableActionsCell } from "@/components/TableActionsCell";
 import { Button } from "@/components/ui/button";
 import { TableCell } from "@/components/ui/table";
 import {
@@ -10,6 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/toast";
 import { NapModal } from "./NapModal";
 import { SleepChart } from "./SleepChart";
 import { SleepDateCell } from "./SleepDateCell";
@@ -26,9 +30,6 @@ import {
 } from "./sleepStats";
 import { PERIOD_OPTIONS } from "./types";
 import type { NapInput, Period, SleepRecord } from "./types";
-import { DataTable } from "@/components/DataTable";
-import { PeriodFilter } from "@/components/PeriodFilter";
-import { StatsCards } from "@/components/StatsCards";
 
 type Props = {
   period: Period;
@@ -226,50 +227,15 @@ export function NapTab({
                   </Tooltip>
                 </TooltipProvider>
               </TableCell>
-              <TableCell>
-                {confirming ? (
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="destructive"
-                      disabled={isDeleting}
-                      onClick={() => handleClear(r)}
-                    >
-                      Xác nhận
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setConfirmId(null)}
-                    >
-                      Huỷ
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => openEdit(r.date)}
-                    >
-                      <Pencil className="size-3.5" />
-                      Sửa
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      className="text-destructive hover:text-destructive"
-                      onClick={() => setConfirmId(r.id)}
-                    >
-                      <Trash2 className="size-3.5" />
-                    </Button>
-                  </div>
-                )}
-              </TableCell>
+              <TableActionsCell
+                confirming={confirming}
+                editLabel
+                isDeleting={isDeleting}
+                onEdit={() => openEdit(r.date)}
+                onAskDelete={() => setConfirmId(r.id)}
+                onConfirmDelete={() => handleClear(r)}
+                onCancelDelete={() => setConfirmId(null)}
+              />
             </>
           );
         }}
