@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Loader2, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getSessionUserDisplay, useAuth } from "@/features/auth";
-import { LogoMark } from "@/components/LogoMark";
+import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PAGE_PATHS } from "@/lib/routes";
 
@@ -23,19 +23,8 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-40 hidden shrink-0 items-center justify-between border-b border-border bg-background px-4 py-2.5 lg:flex lg:px-5">
-      <Link
-        to={PAGE_PATHS.Dashboard}
-        className="flex min-w-0 items-center gap-[11px]"
-      >
-        <LogoMark size={34} />
-        <div className="min-w-0">
-          <div className="text-base font-bold tracking-tight text-foreground">
-            Life OS
-          </div>
-          <div className="mt-px text-[11px] text-muted-foreground">
-            Enjoy your life
-          </div>
-        </div>
+      <Link to={PAGE_PATHS.Dashboard} className="min-w-0">
+        <BrandLogo size={34} />
       </Link>
 
       <div className="flex items-center gap-2.5">

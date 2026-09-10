@@ -3,7 +3,7 @@ import {
   CalendarDays,
   CheckSquare,
   BookOpen,
-  Heart,
+  Repeat,
   Moon,
   Activity,
   Lightbulb,
@@ -21,7 +21,7 @@ type NavItem = {
   path: string;
 };
 
-export const navMain: NavItem[] = [
+export const allNav: NavItem[] = [
   {
     icon: LayoutDashboard,
     label: "Dashboard",
@@ -35,6 +35,13 @@ export const navMain: NavItem[] = [
     path: PAGE_PATHS.Today,
   },
   {
+    icon: Repeat,
+    label: "Health",
+    labelVi: "Thói quen",
+    path: PAGE_PATHS.Health,
+  },
+  { icon: Moon, label: "Sleep", labelVi: "Giấc ngủ", path: PAGE_PATHS.Sleep },
+  {
     icon: CheckSquare,
     label: "Todos",
     labelVi: "Công việc",
@@ -46,23 +53,12 @@ export const navMain: NavItem[] = [
     labelVi: "Nhật ký",
     path: PAGE_PATHS.Journal,
   },
-];
-export const navAnalytics: NavItem[] = [
-  {
-    icon: Heart,
-    label: "Health",
-    labelVi: "Sức khoẻ",
-    path: PAGE_PATHS.Health,
-  },
-  { icon: Moon, label: "Sleep", labelVi: "Giấc ngủ", path: PAGE_PATHS.Sleep },
   {
     icon: Activity,
     label: "Productivity",
     labelVi: "Năng suất",
     path: PAGE_PATHS.Productivity,
   },
-];
-export const navInsights: NavItem[] = [
   {
     icon: Lightbulb,
     label: "Insights",
@@ -70,7 +66,6 @@ export const navInsights: NavItem[] = [
     path: PAGE_PATHS.Insights,
   },
 ];
-export const allNav = [...navMain, ...navAnalytics, ...navInsights];
 
 export function Sidebar() {
   const { pathname } = useLocation();
@@ -93,19 +88,7 @@ export function Sidebar() {
   return (
     <aside className="hidden w-[236px] shrink-0 flex-col bg-sidebar px-[14px] py-5 lg:flex">
       <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto">
-        {navMain.map((n) => (
-          <Item key={n.label} {...n} />
-        ))}
-        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-faint">
-          Phân tích
-        </div>
-        {navAnalytics.map((n) => (
-          <Item key={n.label} {...n} />
-        ))}
-        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-faint">
-          Phân tích
-        </div>
-        {navInsights.map((n) => (
+        {allNav.map((n) => (
           <Item key={n.label} {...n} />
         ))}
       </nav>

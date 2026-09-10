@@ -36,9 +36,9 @@ export const qualityLabels: Record<SleepQuality, string> = {
 };
 
 export const qualityEmojis: Record<SleepQuality, string> = {
-  kho_ngu: "😴",
-  binh_thuong: "😐",
-  ngu_ngon: "😊",
+  kho_ngu: "😣",
+  binh_thuong: "😌",
+  ngu_ngon: "😴",
 };
 
 export type Period = "day" | "week" | "month";

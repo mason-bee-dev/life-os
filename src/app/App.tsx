@@ -26,36 +26,67 @@ import type { JournalEntry, Mood } from "@/features/journal/types";
 import type { PageId } from "@/types";
 
 const headers: Record<string, { title: string; sub: string }> = {
-  Dashboard: { title: "Chào buổi sáng, Alex 👋", sub: "Đây là tình hình cuộc sống của bạn hôm nay." },
-  Today: { title: "Hôm nay", sub: "Ghi lại một ngày của bạn — chỉ mất một phút." },
-  Todos: { title: "Công việc", sub: "Danh sách việc cần làm — ưu tiên và hoàn thành." },
+  Dashboard: {
+    title: "Chào buổi sáng, Alex 👋",
+    sub: "Đây là tình hình cuộc sống của bạn hôm nay.",
+  },
+  Today: {
+    title: "Hôm nay",
+    sub: "Ghi lại một ngày của bạn — chỉ mất một phút.",
+  },
+  Todos: {
+    title: "Công việc",
+    sub: "Danh sách việc cần làm — ưu tiên và hoàn thành.",
+  },
   Journal: { title: "Nhật ký", sub: "Những suy nghĩ của bạn, từng ngày." },
-  Insights: { title: "Phân tích", sub: "Những xu hướng mà số liệu đang cho thấy." },
+  Insights: {
+    title: "Phân tích",
+    sub: "Những xu hướng mà số liệu đang cho thấy.",
+  },
 };
 
 function AppInner() {
   const { pathname } = useLocation();
   const active: PageId = pageIdFromPath(pathname);
-  const [habits, setHabits] = usePersistentState<Habit[]>("habits", defaultHabits);
-  const [journal, setJournal] = usePersistentState<JournalEntry[]>("journal", defaultJournal);
+  const [habits, setHabits] = usePersistentState<Habit[]>(
+    "habits",
+    defaultHabits,
+  );
+  const [journal, setJournal] = usePersistentState<JournalEntry[]>(
+    "journal",
+    defaultJournal,
+  );
   const { todos, addTodo, updateTodo, deleteTodo, toggleTodo } = useTodos();
 
   const toggle = (i: number) =>
-    setHabits((hs) => hs.map((h, idx) => (idx === i ? { ...h, done: !h.done } : h)));
+    setHabits((hs) =>
+      hs.map((h, idx) => (idx === i ? { ...h, done: !h.done } : h)),
+    );
 
   const addEntry = (text: string, mood: Mood, tags: string[] = []) =>
     setJournal((j) => [
-      { id: Date.now(), date: "31/08/2026", mood, tags, text, sleep: "7h 12m", exercise: "5.2 km" },
+      {
+        id: Date.now(),
+        date: "31/08/2026",
+        mood,
+        tags,
+        text,
+        sleep: "7h 12m",
+        exercise: "5.2 km",
+      },
       ...j,
     ]);
 
   const h =
     pathname === "/migrate-local-data"
-      ? { title: "Migrate dữ liệu", sub: "Chuyển DailyRecords từ localStorage sang Supabase." }
-      : headers[active] ?? {
+      ? {
+          title: "Migrate dữ liệu",
+          sub: "Chuyển DailyRecords từ localStorage sang Supabase.",
+        }
+      : (headers[active] ?? {
           title:
             active === "Health"
-              ? "Sức khoẻ"
+              ? "Thói quen"
               : active === "Sleep"
                 ? "Giấc ngủ"
                 : active === "Productivity"
@@ -63,11 +94,11 @@ function AppInner() {
                   : active,
           sub:
             active === "Health"
-              ? "Theo dõi nước, cà phê và thói quen cá nhân."
+              ? "Theo dõi thói quen cá nhân."
               : active === "Sleep"
                 ? "Giấc ngủ đêm và ngủ trưa — thống kê theo kỳ."
                 : "Sắp ra mắt",
-        };
+        });
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
@@ -91,7 +122,12 @@ function AppInner() {
                   />
                 }
               />
-              <Route path="/today" element={<Today habits={habits} toggle={toggle} addEntry={addEntry} />} />
+              <Route
+                path="/today"
+                element={
+                  <Today habits={habits} toggle={toggle} addEntry={addEntry} />
+                }
+              />
               <Route
                 path="/todos"
                 element={
@@ -104,12 +140,21 @@ function AppInner() {
                   />
                 }
               />
-              <Route path="/journal" element={<Journal journal={journal} addEntry={addEntry} />} />
+              <Route
+                path="/journal"
+                element={<Journal journal={journal} addEntry={addEntry} />}
+              />
               <Route path="/health" element={<Health />} />
               <Route path="/sleep" element={<Sleep />} />
-              <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
+              <Route
+                path="/productivity"
+                element={<ComingSoon label="Productivity" />}
+              />
               <Route path="/insights" element={<Insights />} />
-              <Route path="/migrate-local-data" element={<MigrateLocalData />} />
+              <Route
+                path="/migrate-local-data"
+                element={<MigrateLocalData />}
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

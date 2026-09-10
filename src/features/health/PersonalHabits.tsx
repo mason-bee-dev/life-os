@@ -133,9 +133,8 @@ export function PersonalHabits() {
         cards={[
           { label: "Tổng WP", value: String(totalWp) },
           {
-            label: "Chuỗi sạch",
+            label: "Streak",
             value: `${streak}`,
-            sub: "ngày liên tiếp",
           },
           {
             label: "Có hoạt động",

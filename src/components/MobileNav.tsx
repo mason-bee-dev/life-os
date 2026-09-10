@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Loader2, LogOut, Menu, type LucideIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { getSessionUserDisplay, useAuth } from "@/features/auth";
-import { LogoMark } from "@/components/LogoMark";
-import { navAnalytics, navInsights, navMain } from "@/components/Sidebar";
+import { BrandLogo } from "@/components/BrandLogo";
+import { allNav } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Sheet,
@@ -56,22 +56,19 @@ export function MobileNav() {
 
   return (
     <div className="sticky top-0 z-40 border-b border-border bg-background lg:hidden">
-      <div className="flex h-14 items-center justify-between px-4 sm:px-6">
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Mở menu"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
-        >
-          <Menu size={22} />
-        </button>
-        <div className="flex min-w-0 flex-1 items-center justify-center gap-2.5 px-2">
-          <LogoMark size={28} className="rounded-lg" />
-          <div className="truncate text-base font-bold tracking-tight text-foreground">
-            Life OS
-          </div>
+      <div className="flex h-14 items-center justify-between gap-2 px-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Mở menu"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground"
+          >
+            <Menu size={22} />
+          </button>
+          <BrandLogo size={28} />
         </div>
-        <ThemeToggle className="h-11 w-11 hover:bg-accent" />
+        <ThemeToggle className="h-11 w-11 shrink-0 hover:bg-accent" />
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
@@ -80,33 +77,12 @@ export function MobileNav() {
           className="flex w-[280px] flex-col border-border bg-sidebar p-0 text-foreground sm:max-w-[280px]"
         >
           <SheetHeader className="space-y-0 border-b border-border px-4 py-5 text-left">
-            <div className="flex items-center gap-[11px]">
-              <LogoMark size={34} />
-              <div>
-                <SheetTitle className="text-base font-bold tracking-tight text-foreground">
-                  Life OS
-                </SheetTitle>
-                <div className="mt-px text-[11px] text-muted-foreground">
-                  Enjoy your life
-                </div>
-              </div>
-            </div>
+            <SheetTitle className="sr-only">Life OS</SheetTitle>
+            <BrandLogo size={34} />
           </SheetHeader>
 
           <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-[14px] py-3">
-            {navMain.map((n) => (
-              <Item key={n.label} {...n} />
-            ))}
-            <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-faint">
-              Phân tích
-            </div>
-            {navAnalytics.map((n) => (
-              <Item key={n.label} {...n} />
-            ))}
-            <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-faint">
-              Phân tích
-            </div>
-            {navInsights.map((n) => (
+            {allNav.map((n) => (
               <Item key={n.label} {...n} />
             ))}
           </nav>

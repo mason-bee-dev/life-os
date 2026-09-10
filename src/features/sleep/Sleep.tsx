@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsContent } from "@/components/ui/tabs";
+import { UrlTabs } from "@/components/UrlTabs";
 import { NightSleepTab } from "./NightSleepTab";
 import { NapTab } from "./NapTab";
 import { useSleepData } from "./useSleepData";
 import type { Period } from "./types";
+
+const SLEEP_TABS = [
+  { value: "night", label: "Giấc ngủ đêm" },
+  { value: "nap", label: "Giấc ngủ trưa" },
+] as const;
 
 export function Sleep() {
   const [nightPeriod, setNightPeriod] = useState<Period>("week");
@@ -26,12 +32,7 @@ export function Sleep() {
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4 px-0 py-1">
-      <Tabs defaultValue="night">
-        <TabsList>
-          <TabsTrigger value="night">Giấc ngủ đêm</TabsTrigger>
-          <TabsTrigger value="nap">Giấc ngủ trưa</TabsTrigger>
-        </TabsList>
-
+      <UrlTabs items={[...SLEEP_TABS]} defaultValue="night">
         {isLoading && (
           <div className="text-[13px] text-muted-foreground">Đang tải…</div>
         )}
@@ -71,7 +72,7 @@ export function Sleep() {
             onClear={clearNap}
           />
         </TabsContent>
-      </Tabs>
+      </UrlTabs>
     </div>
   );
 }

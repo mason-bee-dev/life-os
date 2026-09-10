@@ -56,7 +56,7 @@ export function NightSleepModal({
   const [bedtime, setBedtime] = useState<string | null>(null);
   const [wakeTime, setWakeTime] = useState<string | null>(null);
   const [nightWakingTimes, setNightWakingTimes] = useState<string[]>([]);
-  const [quality, setQuality] = useState<SleepQuality | null>(null);
+  const [quality, setQuality] = useState<SleepQuality | null>("binh_thuong");
   const [note, setNote] = useState("");
   const [manualTime, setManualTime] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -70,7 +70,7 @@ export function NightSleepModal({
     setBedtime(record?.bedtime ?? null);
     setWakeTime(record?.wakeTime ?? null);
     setNightWakingTimes(record?.nightWakingTimes ?? []);
-    setQuality(record?.quality ?? null);
+    setQuality(record?.quality ?? "binh_thuong");
     setNote(record?.note ?? "");
     setManualTime(null);
     setConfirmDelete(false);
