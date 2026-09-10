@@ -146,8 +146,8 @@ export function DrinkModal({
                   className={
                     "rounded-lg border px-2.5 py-1 text-[12.5px] font-semibold transition-colors " +
                     (category === c
-                      ? "border-amber-500 bg-amber-500/10 text-amber-400"
-                      : "border-border text-muted-foreground hover:border-amber-500")
+                      ? "border-metric-productivity bg-metric-productivity/10 text-metric-productivity"
+                      : "border-border text-muted-foreground hover:border-metric-productivity")
                   }
                 >
                   {DRINK_CATEGORY_LABELS[c]}

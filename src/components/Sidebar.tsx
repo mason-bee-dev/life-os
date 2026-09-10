@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { getSessionUserDisplay, useAuth } from "@/features/auth";
+import { LogoMark } from "@/components/LogoMark";
 import { PAGE_PATHS } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import type { PageId } from "@/types";
@@ -98,8 +99,8 @@ export function Sidebar() {
       className={cn(
         "flex items-center gap-[11px] rounded-[9px] px-[11px] py-[9px] text-left text-[13.5px] font-medium transition-colors",
         pathname === path
-          ? "bg-primary/15 text-emerald-300"
-          : "text-slate-400 hover:bg-white/5 hover:text-slate-200",
+          ? "bg-primary/15 text-primary"
+          : "text-muted-foreground hover:bg-accent hover:text-foreground",
       )}
     >
       <Icon size={18} strokeWidth={2} />
@@ -110,20 +111,12 @@ export function Sidebar() {
   return (
     <aside className="hidden w-[236px] shrink-0 flex-col bg-sidebar px-[14px] py-5 lg:flex">
       <div className="flex items-center gap-[11px] px-2 pb-[22px] pt-1.5">
-        <div className="grid h-[34px] w-[34px] place-items-center rounded-[9px] bg-gradient-to-br from-teal-400 to-emerald-500">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 2 L22 12 L12 22 L2 12 Z"
-              fill="var(--primary-foreground)"
-              fillOpacity="0.95"
-            />
-          </svg>
-        </div>
+        <LogoMark size={34} />
         <div>
-          <div className="text-base font-bold tracking-tight text-white">
+          <div className="text-base font-bold tracking-tight text-foreground">
             Life OS
           </div>
-          <div className="mt-px text-[11px] text-slate-500">
+          <div className="mt-px text-[11px] text-muted-foreground">
             Phân tích đời sống cá nhân
           </div>
         </div>
@@ -133,13 +126,13 @@ export function Sidebar() {
         {navMain.map((n) => (
           <Item key={n.label} {...n} />
         ))}
-        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-slate-600">
+        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-faint">
           Phân tích
         </div>
         {navAnalytics.map((n) => (
           <Item key={n.label} {...n} />
         ))}
-        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-slate-600">
+        <div className="px-[11px] pb-1.5 pt-4 text-xs font-semibold uppercase tracking-[0.7px] text-faint">
           Phân tích
         </div>
         {navInsights.map((n) => (
@@ -147,22 +140,24 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="mt-2 flex items-center gap-2.5 border-t border-white/[0.06] px-2 pb-1 pt-[11px]">
-        <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-xs font-semibold text-white">
+      <div className="mt-2 flex items-center gap-2.5 border-t border-border px-2 pb-1 pt-[11px]">
+        <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-login-orb text-xs font-semibold text-primary-foreground">
           {initials}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[13px] font-semibold text-slate-200">
+          <div className="truncate text-[13px] font-semibold text-foreground">
             {displayName}
           </div>
-          <div className="truncate text-[11px] text-slate-500">{email}</div>
+          <div className="truncate text-[11px] text-muted-foreground">
+            {email}
+          </div>
         </div>
         <button
           type="button"
           onClick={handleSignOut}
           disabled={signingOut}
           aria-label="Đăng xuất"
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-slate-500 transition-colors hover:bg-white/5 hover:text-slate-200 disabled:opacity-60"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-60"
         >
           {signingOut ? (
             <Loader2 size={16} className="animate-spin" />

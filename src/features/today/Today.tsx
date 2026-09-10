@@ -104,7 +104,7 @@ export function Today({ habits, toggle, addEntry }: TodayProps) {
                 className={
                   "flex flex-col items-center gap-1.5 rounded-xl border px-1 py-3 transition-colors " +
                   (mood === i + 1
-                    ? "border-violet-500 bg-violet-500/10"
+                    ? "border-metric-mood bg-metric-mood/10"
                     : "border-border hover:border-border-hover")
                 }
               >
@@ -119,7 +119,7 @@ export function Today({ habits, toggle, addEntry }: TodayProps) {
                 <small
                   className={
                     "text-[11px] " +
-                    (mood === i + 1 ? "text-violet-400" : "text-faint")
+                    (mood === i + 1 ? "text-metric-mood" : "text-faint")
                   }
                 >
                   {moodLabels[i]}
@@ -222,8 +222,8 @@ export function Today({ habits, toggle, addEntry }: TodayProps) {
                 className={
                   "grid h-10 w-10 place-items-center rounded-lg border transition-colors " +
                   (i < glasses
-                    ? "border-cyan-500 bg-cyan-500/10 text-cyan-400"
-                    : "border-border text-faint hover:border-cyan-500")
+                    ? "border-metric-water bg-metric-water/10 text-metric-water"
+                    : "border-border text-faint hover:border-metric-water")
                 }
               >
                 <GlassWater size={20} />

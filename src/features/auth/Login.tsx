@@ -3,6 +3,7 @@ import { Activity, BookOpen, Eye, EyeOff, Heart, Sparkles } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { validateForm } from "@/lib/validation/form";
 import { loginSchema, type LoginInput } from "@/features/auth/schemas";
+import { LogoMark } from "@/components/LogoMark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,36 +30,18 @@ const highlights = [
 function BrandLogo({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex items-center gap-3">
-      <div
-        className={
-          "grid place-items-center rounded-[10px] bg-gradient-to-br from-teal-400 to-emerald-500 " +
-          (compact ? "h-9 w-9" : "h-11 w-11")
-        }
-      >
-        <svg
-          width={compact ? 18 : 22}
-          height={compact ? 18 : 22}
-          viewBox="0 0 24 24"
-          fill="none"
-        >
-          <path
-            d="M12 2 L22 12 L12 22 L2 12 Z"
-            fill="var(--primary-foreground)"
-            fillOpacity="0.95"
-          />
-        </svg>
-      </div>
+      <LogoMark size={compact ? 36 : 44} className="rounded-[10px]" />
       <div>
         <div
           className={
-            "font-bold tracking-tight text-white " +
+            "font-bold tracking-tight text-foreground " +
             (compact ? "text-lg" : "text-2xl")
           }
         >
           Life OS
         </div>
         {!compact && (
-          <div className="mt-0.5 text-sm text-slate-400">
+          <div className="mt-0.5 text-sm text-muted-foreground">
             Phân tích đời sống cá nhân
           </div>
         )}
@@ -69,7 +52,7 @@ function BrandLogo({ compact = false }: { compact?: boolean }) {
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="text-sm text-red-400">{message}</p>;
+  return <p className="text-sm text-destructive">{message}</p>;
 }
 
 export function Login() {
@@ -119,7 +102,7 @@ export function Login() {
   const inputClass = (field: keyof LoginInput) =>
     cn(
       "h-11 rounded-xl border-border bg-card",
-      fieldErrors[field] && "border-red-500/50 focus-visible:ring-red-500/30",
+      fieldErrors[field] && "border-destructive/50 focus-visible:ring-destructive/30",
     );
 
   return (
@@ -144,14 +127,14 @@ export function Login() {
         <BrandLogo />
 
         <div className="relative z-10 max-w-md">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-emerald-300">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-accent px-3 py-1 text-xs font-semibold text-primary">
             <Sparkles size={13} />
             Hệ điều hành cho cuộc sống của bạn
           </div>
-          <h1 className="m-0 text-[2rem] font-bold leading-tight tracking-tight text-white">
+          <h1 className="m-0 text-[2rem] font-bold leading-tight tracking-tight text-foreground">
             Một nơi để theo dõi, ghi chép và hiểu rõ bản thân hơn.
           </h1>
-          <p className="mt-4 text-xs text-slate-400">
+          <p className="mt-4 text-xs text-muted-foreground">
             Life OS giúp bạn đồng bộ dữ liệu sức khoẻ, thói quen và nhật ký —
             mọi lúc, mọi thiết bị.
           </p>
@@ -159,21 +142,23 @@ export function Login() {
           <ul className="mt-10 flex flex-col gap-5">
             {highlights.map(({ icon: Icon, label, desc }) => (
               <li key={label} className="flex gap-3.5">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/5 text-emerald-400">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-border bg-accent text-primary">
                   <Icon size={18} />
                 </span>
                 <div>
-                  <div className="text-sm font-semibold text-slate-200">
+                  <div className="text-sm font-semibold text-foreground">
                     {label}
                   </div>
-                  <div className="mt-0.5 text-sm text-slate-500">{desc}</div>
+                  <div className="mt-0.5 text-sm text-muted-foreground">
+                    {desc}
+                  </div>
                 </div>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative z-10 text-xs text-slate-600">
+        <p className="relative z-10 text-xs text-faint">
           © {new Date().getFullYear()} Life OS · Dành riêng cho bạn
         </p>
       </div>
@@ -244,7 +229,7 @@ export function Login() {
             </div>
 
             {formError && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3.5 py-2.5 text-sm text-red-400">
+              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-sm text-destructive">
                 {formError}
               </div>
             )}

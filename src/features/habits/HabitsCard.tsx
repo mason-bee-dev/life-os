@@ -23,7 +23,7 @@ export function HabitsCard({ habits, toggle }: HabitsCardProps) {
 
       <div className="mb-3.5 h-[7px] overflow-hidden rounded-full bg-track">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-[width] duration-300"
+          className="h-full rounded-full bg-primary transition-[width] duration-300"
           style={{ width: pct + "%" }}
         />
       </div>
@@ -42,7 +42,7 @@ export function HabitsCard({ habits, toggle }: HabitsCardProps) {
             <button
               onClick={() => toggle(i)}
               className={
-                "grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full border-2 text-white transition-colors " +
+                "grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full border-2 text-primary-foreground transition-colors " +
                 (h.done
                   ? "border-primary bg-primary"
                   : "border-border-hover hover:border-primary")
@@ -54,7 +54,7 @@ export function HabitsCard({ habits, toggle }: HabitsCardProps) {
         ))}
       </div>
 
-      <button className="mt-3.5 flex items-center gap-1.5 text-[13px] font-semibold text-blue-500 hover:underline">
+      <button className="mt-3.5 flex items-center gap-1.5 text-[13px] font-semibold text-primary hover:underline">
         <Plus size={15} /> Thêm thói quen
       </button>
     </div>

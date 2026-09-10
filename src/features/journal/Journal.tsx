@@ -56,7 +56,7 @@ export function Journal({ journal, addEntry }: JournalProps) {
               className={
                 "h-9 w-9 rounded-[10px] border-[1.5px] text-lg transition-colors " +
                 (mood === i + 1
-                  ? "border-violet-500 bg-violet-500/10"
+                  ? "border-metric-mood bg-metric-mood/10"
                   : "border-border grayscale-[0.5]")
               }
             >

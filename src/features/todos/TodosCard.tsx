@@ -20,9 +20,9 @@ type Props = {
 };
 
 const priorityBadgeClass: Record<Priority, string> = {
-  high: "text-red-400 border-red-400/40",
-  medium: "text-amber-400 border-amber-400/40",
-  low: "text-green-400 border-green-400/40",
+  high: "text-destructive border-destructive/40",
+  medium: "text-metric-productivity border-metric-productivity/40",
+  low: "text-priority-low border-priority-low/40",
 };
 
 function isOverdue(todo: Todo): boolean {
@@ -142,7 +142,7 @@ export function TodosCard({
                       <span
                         className={cn(
                           "text-[11.5px] font-medium",
-                          overdue ? "text-red-400" : "text-faint",
+                          overdue ? "text-destructive" : "text-faint",
                         )}
                       >
                         {dayjs(todo.dueDate).format("DD/MM/YYYY")}

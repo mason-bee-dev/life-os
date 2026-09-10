@@ -305,7 +305,7 @@ function Calendar() {
                 key={wi + "-" + di}
                 className={
                   "relative grid aspect-square place-items-center rounded-[9px] text-[12.5px] font-medium " +
-                  (isToday ? "bg-blue-500 font-bold text-white " : "") +
+                  (isToday ? "bg-metric-sleep font-bold text-primary-foreground " : "") +
                   (!isAug ? "text-faint opacity-55" : "")
                 }
               >
@@ -400,7 +400,7 @@ function OverviewCard({
         })}
       </div>
       <button
-        className="mt-3.5 text-[12.5px] font-semibold text-blue-500 hover:underline"
+        className="mt-3.5 text-[12.5px] font-semibold text-primary hover:underline"
         onClick={onLinkClick}
       >
         {link} →
@@ -415,7 +415,7 @@ function InsightsPreview() {
     <div className={card + " flex flex-col"}>
       <div className="mb-3.5 flex items-center justify-between">
         <span className="text-heading tracking-tight">Phân tích nổi bật</span>
-        <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">
+        <button className="text-[12.5px] font-semibold text-primary hover:underline">
           Xem tất cả
         </button>
       </div>
@@ -584,7 +584,7 @@ export function Dashboard({
                 <span className="text-[12.5px] text-muted-foreground">
                   {latest?.date}
                 </span>
-                <button className="text-[12.5px] font-semibold text-blue-500 hover:underline">
+                <button className="text-[12.5px] font-semibold text-primary hover:underline">
                   Xem tất cả →
                 </button>
               </div>

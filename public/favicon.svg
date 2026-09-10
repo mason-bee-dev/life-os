@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <style>
+    .bg { fill: #92400e; }
+    .fg { fill: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #10b981; }
+      .fg { fill: #09090b; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="8" />
+  <path
+    class="fg"
+    fill-opacity="0.95"
+    d="M16 5.5 L26.5 16 L16 26.5 L5.5 16 Z"
+  />
+</svg>

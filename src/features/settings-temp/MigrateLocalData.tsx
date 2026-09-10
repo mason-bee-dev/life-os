@@ -145,8 +145,8 @@ export function MigrateLocalData() {
 
       {errors.length > 0 && (
         <div className="mt-4">
-          <p className="text-sm text-red-400">Lỗi ({errors.length})</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-red-400">
+          <p className="text-sm text-destructive">Lỗi ({errors.length})</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-destructive">
             {errors.map((e) => (
               <li key={e}>{e}</li>
             ))}

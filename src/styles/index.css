@@ -5,59 +5,106 @@
 @tailwind utilities;
 
 @layer base {
-  .dark {
-    /* Core (existing palette) */
-    --background: #070c16;
-    --foreground: #e8edf5;
-    --border: #1c2740;
-    --input: #1c2740;
-    --ring: #10b981;
-    --sidebar: #05080f;
-    --track: #1e293b;
-    --faint: #5c6b85;
-    --card: #0f1626;
-    --card-foreground: #e8edf5;
-    --primary: #10b981;
+  :root {
+    color-scheme: light;
+
+    /* B — Stone Warm Light */
+    --background: #f5f4f0;
+    --foreground: #1c1917;
+    --border: #e2ddd6;
+    --input: #e2ddd6;
+    --ring: #92400e;
+    --sidebar: #eceae4;
+    --track: #c7bfb2;
+    --faint: #6b6560;
+    --card: #ffffff;
+    --card-foreground: #1c1917;
+    --primary: #92400e;
     --primary-foreground: #ffffff;
-    --muted: #131d31;
-    --muted-foreground: #93a1b8;
-    --accent: #182137;
-    --accent-foreground: #e8edf5;
-    --secondary: #182137;
-    --secondary-foreground: #e8edf5;
-    --popover: #0f1626;
-    --popover-foreground: #e8edf5;
-    --destructive: #ef4444;
+    --muted: #e8e4dc;
+    --muted-foreground: #57534e;
+    --accent: #e8e4dc;
+    --accent-foreground: #1c1917;
+    --secondary: #e8e4dc;
+    --secondary-foreground: #1c1917;
+    --popover: #ffffff;
+    --popover-foreground: #1c1917;
+    --destructive: #b91c1c;
     --destructive-foreground: #ffffff;
 
-    /* Semantic extensions */
-    --border-hover: #2a3752;
-    --metric-sleep: #3b82f6;
-    --metric-productivity: #f59e0b;
-    --metric-mood: #8b5cf6;
-    --metric-water: #06b6d4;
-    --priority-low: #22c55e;
-    --score-good: #eab308;
-    --login-orb: #6366f1;
-    --toast: #0f172a;
-    --icon-muted: #64748b;
+    --border-hover: #ccc5bb;
+    --metric-sleep: #1d4ed8;
+    --metric-productivity: #b45309;
+    --metric-mood: #6d28d9;
+    --metric-water: #0369a1;
+    --priority-low: #15803d;
+    --score-good: #b45309;
+    --login-orb: #6d28d9;
+    --toast: #e8e4dc;
+    --icon-muted: #6b6560;
 
-    /* Exact alpha / tint companions (preserve prior hardcodes) */
-    --primary-muted: rgba(16, 185, 129, 0.1);
-    --metric-mood-muted: rgba(139, 92, 246, 0.1);
-    --metric-productivity-muted: rgba(245, 158, 11, 0.1);
-    --metric-water-soft: #06b6d420;
-    --metric-productivity-soft: #f59e0b20;
-    --icon-muted-soft: #64748b20;
+    --primary-muted: rgba(146, 64, 14, 0.1);
+    --metric-mood-muted: rgba(109, 40, 217, 0.1);
+    --metric-productivity-muted: rgba(180, 83, 9, 0.1);
+    --metric-water-soft: #0369a120;
+    --metric-productivity-soft: #b4530920;
+    --icon-muted-soft: #78716c20;
+    --chart-cursor: rgba(28, 25, 23, 0.04);
+    --shadow-color-40: rgba(28, 25, 23, 0.1);
+    --shadow-color-35: rgba(28, 25, 23, 0.08);
+    --shadow-color-45: rgba(28, 25, 23, 0.12);
+  }
+
+  .dark {
+    color-scheme: dark;
+
+    /* A — Zinc Dark */
+    --background: #18181b;
+    --foreground: #fafafa;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #10b981;
+    --sidebar: #09090b;
+    --track: #3f3f46;
+    --faint: #8b8b93;
+    --card: #27272a;
+    --card-foreground: #fafafa;
+    --primary: #10b981;
+    --primary-foreground: #09090b;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --accent: #3f3f46;
+    --accent-foreground: #fafafa;
+    --secondary: #3f3f46;
+    --secondary-foreground: #fafafa;
+    --popover: #27272a;
+    --popover-foreground: #fafafa;
+    --destructive: #f87171;
+    --destructive-foreground: #09090b;
+
+    --border-hover: #52525b;
+    --metric-sleep: #60a5fa;
+    --metric-productivity: #fcd34d;
+    --metric-mood: #a78bfa;
+    --metric-water: #38bdf8;
+    --priority-low: #34d399;
+    --score-good: #fcd34d;
+    --login-orb: #818cf8;
+    --toast: #27272a;
+    --icon-muted: #85858d;
+
+    --primary-muted: rgba(16, 185, 129, 0.12);
+    --metric-mood-muted: rgba(167, 139, 250, 0.12);
+    --metric-productivity-muted: rgba(252, 211, 77, 0.12);
+    --metric-water-soft: #38bdf820;
+    --metric-productivity-soft: #fcd34d20;
+    --icon-muted-soft: #71717a20;
     --chart-cursor: rgba(255, 255, 255, 0.04);
     --shadow-color-40: rgba(0, 0, 0, 0.4);
     --shadow-color-35: rgba(0, 0, 0, 0.35);
     --shadow-color-45: rgba(0, 0, 0, 0.45);
   }
 
-  html {
-    color-scheme: dark;
-  }
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family:
