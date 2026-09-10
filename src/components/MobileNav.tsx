@@ -56,7 +56,7 @@ export function MobileNav() {
 
   return (
     <div className="sticky top-0 z-40 border-b border-border bg-background lg:hidden">
-      <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6">
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -65,13 +65,13 @@ export function MobileNav() {
         >
           <Menu size={22} />
         </button>
-        <div className="flex min-w-0 flex-1 items-center gap-2.5">
+        <div className="flex min-w-0 flex-1 items-center justify-center gap-2.5 px-2">
           <LogoMark size={28} className="rounded-lg" />
           <div className="truncate text-base font-bold tracking-tight text-foreground">
             Life OS
           </div>
         </div>
-        <ThemeToggle className="h-11 w-11" />
+        <ThemeToggle className="h-11 w-11 hover:bg-accent" />
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
@@ -87,7 +87,7 @@ export function MobileNav() {
                   Life OS
                 </SheetTitle>
                 <div className="mt-px text-[11px] text-muted-foreground">
-                  Phân tích đời sống cá nhân
+                  Enjoy your life
                 </div>
               </div>
             </div>

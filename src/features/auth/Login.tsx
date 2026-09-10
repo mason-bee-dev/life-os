@@ -42,7 +42,7 @@ function BrandLogo({ compact = false }: { compact?: boolean }) {
         </div>
         {!compact && (
           <div className="mt-0.5 text-sm text-muted-foreground">
-            Phân tích đời sống cá nhân
+            Enjoy your life
           </div>
         )}
       </div>
@@ -102,7 +102,8 @@ export function Login() {
   const inputClass = (field: keyof LoginInput) =>
     cn(
       "h-11 rounded-xl border-border bg-card",
-      fieldErrors[field] && "border-destructive/50 focus-visible:ring-destructive/30",
+      fieldErrors[field] &&
+        "border-destructive/50 focus-visible:ring-destructive/30",
     );
 
   return (

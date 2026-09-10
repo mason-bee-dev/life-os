@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { AppHeader } from "@/components/AppHeader";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { Header } from "@/components/Header";
@@ -69,47 +70,50 @@ function AppInner() {
         };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-foreground">
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <MobileNav />
-        <main className="flex-1 overflow-y-auto px-4 pb-[60px] pt-4 sm:px-6 lg:px-8 lg:pt-[26px]">
-          <Header title={h.title} subtitle={h.sub} />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Dashboard
-                  habits={habits}
-                  toggle={toggle}
-                  journal={journal}
-                  todos={todos}
-                  toggleTodo={toggleTodo}
-                />
-              }
-            />
-            <Route path="/today" element={<Today habits={habits} toggle={toggle} addEntry={addEntry} />} />
-            <Route
-              path="/todos"
-              element={
-                <Todos
-                  todos={todos}
-                  addTodo={addTodo}
-                  updateTodo={updateTodo}
-                  deleteTodo={deleteTodo}
-                  toggleTodo={toggleTodo}
-                />
-              }
-            />
-            <Route path="/journal" element={<Journal journal={journal} addEntry={addEntry} />} />
-            <Route path="/health" element={<Health />} />
-            <Route path="/sleep" element={<Sleep />} />
-            <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
-            <Route path="/insights" element={<Insights />} />
-            <Route path="/migrate-local-data" element={<MigrateLocalData />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
+    <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
+      <AppHeader />
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <Sidebar />
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+          <MobileNav />
+          <main className="flex-1 overflow-y-auto px-4 pb-[60px] pt-4 sm:px-6 lg:px-8 lg:pt-[26px]">
+            <Header title={h.title} subtitle={h.sub} />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Dashboard
+                    habits={habits}
+                    toggle={toggle}
+                    journal={journal}
+                    todos={todos}
+                    toggleTodo={toggleTodo}
+                  />
+                }
+              />
+              <Route path="/today" element={<Today habits={habits} toggle={toggle} addEntry={addEntry} />} />
+              <Route
+                path="/todos"
+                element={
+                  <Todos
+                    todos={todos}
+                    addTodo={addTodo}
+                    updateTodo={updateTodo}
+                    deleteTodo={deleteTodo}
+                    toggleTodo={toggleTodo}
+                  />
+                }
+              />
+              <Route path="/journal" element={<Journal journal={journal} addEntry={addEntry} />} />
+              <Route path="/health" element={<Health />} />
+              <Route path="/sleep" element={<Sleep />} />
+              <Route path="/productivity" element={<ComingSoon label="Productivity" />} />
+              <Route path="/insights" element={<Insights />} />
+              <Route path="/migrate-local-data" element={<MigrateLocalData />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
       </div>
     </div>
   );
