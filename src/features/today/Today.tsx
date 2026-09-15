@@ -11,7 +11,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { HabitsCard } from "@/features/habits/HabitsCard";
-import { TodayWorkWidget } from "@/features/work/TodayWorkWidget";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { moodFaces, moodLabels } from "@/lib/mood";
@@ -235,10 +234,6 @@ export function Today({ habits, toggle, addEntry }: TodayProps) {
             Mục tiêu: 2.0 L · chạm vào từng ly để ghi lại
           </div>
         </Field>
-
-        <div className="md:col-span-2">
-          <TodayWorkWidget />
-        </div>
 
         <div className="md:col-span-2">
           <HabitsCard habits={habits} toggle={toggle} />

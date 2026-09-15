@@ -16,10 +16,7 @@ import { Journal } from "@/features/journal/Journal";
 import { Insights } from "@/features/insights/Insights";
 import { Health } from "@/features/health/Health";
 import { Sleep } from "@/features/sleep/Sleep";
-import { Timeline } from "@/features/timeline/Timeline";
 import { Todos } from "@/features/todos/Todos";
-import { Work } from "@/features/work/Work";
-import { Utilities } from "@/features/utilities/Utilities";
 import { useTodos } from "@/features/todos/useTodos";
 import { MigrateLocalData } from "@/features/settings-temp/MigrateLocalData";
 import { defaultHabits } from "@/features/habits/data";
@@ -38,7 +35,7 @@ const headers: Record<string, { title: string; sub: string }> = {
     sub: "Ghi lại một ngày của bạn — chỉ mất một phút.",
   },
   Todos: {
-    title: "Việc cần làm",
+    title: "Công việc",
     sub: "Danh sách việc cần làm — ưu tiên và hoàn thành.",
   },
   Journal: { title: "Nhật ký", sub: "Những suy nghĩ của bạn, từng ngày." },
@@ -86,33 +83,21 @@ function AppInner() {
           title: "Migrate dữ liệu",
           sub: "Chuyển DailyRecords từ localStorage sang Supabase.",
         }
-          : (headers[active] ?? {
+      : (headers[active] ?? {
           title:
             active === "Health"
               ? "Thói quen"
               : active === "Sleep"
                 ? "Giấc ngủ"
-                : active === "Work"
-                  ? "Công việc"
-                  : active === "Timeline"
-                    ? "Dòng thời gian"
-                    : active === "Utilities"
-                      ? "Tiện ích"
-                      : active === "Productivity"
-                        ? "Năng suất"
-                        : active,
+                : active === "Productivity"
+                  ? "Năng suất"
+                  : active,
           sub:
             active === "Health"
               ? "Theo dõi thói quen cá nhân."
               : active === "Sleep"
                 ? "Giấc ngủ đêm và ngủ trưa — thống kê theo kỳ."
-                : active === "Work"
-                  ? "Ghi nhận ngày làm và log theo dự án — xem tổng quan theo kỳ."
-                  : active === "Timeline"
-                    ? "Ghi lại hoạt động trong ngày theo khoảng giờ."
-                    : active === "Utilities"
-                      ? "QR ngân hàng và các tiện ích khác."
-                      : "Sắp ra mắt",
+                : "Sắp ra mắt",
         });
 
   return (
@@ -161,9 +146,6 @@ function AppInner() {
               />
               <Route path="/health" element={<Health />} />
               <Route path="/sleep" element={<Sleep />} />
-              <Route path="/work" element={<Work />} />
-              <Route path="/timeline" element={<Timeline />} />
-              <Route path="/utilities" element={<Utilities />} />
               <Route
                 path="/productivity"
                 element={<ComingSoon label="Productivity" />}
