@@ -5,6 +5,9 @@ import {
   BookOpen,
   Repeat,
   Moon,
+  Briefcase,
+  Clock,
+  Wrench,
   Activity,
   Lightbulb,
   type LucideIcon,
@@ -42,9 +45,27 @@ export const allNav: NavItem[] = [
   },
   { icon: Moon, label: "Sleep", labelVi: "Giấc ngủ", path: PAGE_PATHS.Sleep },
   {
+    icon: Briefcase,
+    label: "Work",
+    labelVi: "Công việc",
+    path: PAGE_PATHS.Work,
+  },
+  {
+    icon: Clock,
+    label: "Timeline",
+    labelVi: "Dòng thời gian",
+    path: PAGE_PATHS.Timeline,
+  },
+  {
+    icon: Wrench,
+    label: "Utilities",
+    labelVi: "Tiện ích",
+    path: PAGE_PATHS.Utilities,
+  },
+  {
     icon: CheckSquare,
     label: "Todos",
-    labelVi: "Công việc",
+    labelVi: "Việc cần làm",
     path: PAGE_PATHS.Todos,
   },
   {
