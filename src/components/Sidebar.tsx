@@ -5,6 +5,7 @@ import {
   BookOpen,
   Repeat,
   Moon,
+  Wrench,
   Activity,
   Lightbulb,
   type LucideIcon,
@@ -41,6 +42,12 @@ export const allNav: NavItem[] = [
     path: PAGE_PATHS.Health,
   },
   { icon: Moon, label: "Sleep", labelVi: "Giấc ngủ", path: PAGE_PATHS.Sleep },
+  {
+    icon: Wrench,
+    label: "Utilities",
+    labelVi: "Tiện ích",
+    path: PAGE_PATHS.Utilities,
+  },
   {
     icon: CheckSquare,
     label: "Todos",

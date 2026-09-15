@@ -16,6 +16,7 @@ import { Journal } from "@/features/journal/Journal";
 import { Insights } from "@/features/insights/Insights";
 import { Health } from "@/features/health/Health";
 import { Sleep } from "@/features/sleep/Sleep";
+import { Utilities } from "@/features/utilities/Utilities";
 import { Todos } from "@/features/todos/Todos";
 import { useTodos } from "@/features/todos/useTodos";
 import { MigrateLocalData } from "@/features/settings-temp/MigrateLocalData";
@@ -89,15 +90,19 @@ function AppInner() {
               ? "Thói quen"
               : active === "Sleep"
                 ? "Giấc ngủ"
-                : active === "Productivity"
-                  ? "Năng suất"
-                  : active,
+                : active === "Utilities"
+                  ? "Tiện ích"
+                  : active === "Productivity"
+                    ? "Năng suất"
+                    : active,
           sub:
             active === "Health"
               ? "Theo dõi thói quen cá nhân."
               : active === "Sleep"
                 ? "Giấc ngủ đêm và ngủ trưa — thống kê theo kỳ."
-                : "Sắp ra mắt",
+                : active === "Utilities"
+                  ? "QR ngân hàng và các tiện ích khác."
+                  : "Sắp ra mắt",
         });
 
   return (
@@ -146,6 +151,7 @@ function AppInner() {
               />
               <Route path="/health" element={<Health />} />
               <Route path="/sleep" element={<Sleep />} />
+              <Route path="/utilities" element={<Utilities />} />
               <Route
                 path="/productivity"
                 element={<ComingSoon label="Productivity" />}
