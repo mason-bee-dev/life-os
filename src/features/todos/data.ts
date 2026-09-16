@@ -7,12 +7,6 @@ export const PRIORITY_ORDER: Record<Todo["priority"], number> = {
   low: 2,
 };
 
-export const PRIORITY_COLORS: Record<Todo["priority"], string> = {
-  high: "var(--destructive)",
-  medium: "var(--metric-productivity)",
-  low: "var(--priority-low)",
-};
-
 export const PRIORITY_LABELS: Record<Todo["priority"], string> = {
   high: "Cao",
   medium: "Trung bình",

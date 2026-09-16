@@ -75,7 +75,6 @@ export function MigrateLocalData() {
           .from("daily_records")
           .upsert({
             date,
-            water_glasses: record.waterGlasses ?? null,
             masturbation_count: record.masturbationCount ?? null,
             watched_porn: record.watchedPorn ?? null,
             wp_note: record.wpNote ?? null,

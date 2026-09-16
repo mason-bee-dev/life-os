@@ -72,7 +72,7 @@ Scope names the **primary** area. Prefer life-os feature and folder language:
 | ------------ | ------------------------------------------------------------------------------- |
 | `auth`       | Login, session, guards (`src/features/auth`, Supabase auth wiring)              |
 | `dashboard`  | Dashboard feature (`src/features/dashboard`)                                    |
-| `health`     | Health tracking (`src/features/health`, daily records, water/coffee trackers)   |
+| `health`     | Health tracking (`src/features/health`, daily records, drinks/WP trackers)      |
 | `habits`     | Habits feature (`src/features/habits`)                                          |
 | `todos`      | Todos feature (`src/features/todos`)                                            |
 | `journal`    | Journal feature (`src/features/journal`)                                        |

@@ -3,7 +3,6 @@ import {
   Smile,
   Moon,
   Scale,
-  GlassWater,
   PenLine,
   Minus,
   Plus,
@@ -14,7 +13,6 @@ import { HabitsCard } from "@/features/habits/HabitsCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { moodFaces, moodLabels } from "@/lib/mood";
-import { useDailyRecords } from "@/features/health/useDailyRecords";
 import type { Habit } from "@/features/habits/types";
 import type { Mood } from "@/features/journal/types";
 
@@ -65,8 +63,6 @@ type TodayProps = {
 
 export function Today({ habits, toggle, addEntry }: TodayProps) {
   const { notify } = useToast();
-  const { todayKey, getRecord, updateRecord } = useDailyRecords();
-  const glasses = getRecord(todayKey).waterGlasses ?? 0;
   const [mood, setMood] = useState<Mood>(4);
   const [energy, setEnergy] = useState(82);
   const [sleep, setSleep] = useState(7.2);
@@ -196,42 +192,6 @@ export function Today({ habits, toggle, addEntry }: TodayProps) {
             >
               <Plus size={16} />
             </button>
-          </div>
-        </Field>
-
-        <Field
-          icon={GlassWater}
-          color="var(--metric-water)"
-          title="Nước"
-          right={
-            <span className="text-[15px] font-bold">
-              {(glasses * 0.25).toFixed(2)}{" "}
-              <span className="text-[12.5px] text-faint">L</span>
-            </span>
-          }
-        >
-          <div className="flex flex-wrap gap-2">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() =>
-                  updateRecord(todayKey, {
-                    waterGlasses: i + 1 === glasses ? i : i + 1,
-                  })
-                }
-                className={
-                  "grid h-10 w-10 place-items-center rounded-lg border transition-colors " +
-                  (i < glasses
-                    ? "border-metric-water bg-metric-water/10 text-metric-water"
-                    : "border-border text-faint hover:border-metric-water")
-                }
-              >
-                <GlassWater size={20} />
-              </button>
-            ))}
-          </div>
-          <div className="mt-2.5 text-[11px] text-faint">
-            Mục tiêu: 2.0 L · chạm vào từng ly để ghi lại
           </div>
         </Field>
 

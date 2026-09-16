@@ -61,7 +61,7 @@ function ChartTooltip({
 export function HealthChart({
   title,
   data,
-  color = "var(--metric-water)",
+  color = "var(--metric-productivity)",
   height = 200,
   unit,
   formatValue,

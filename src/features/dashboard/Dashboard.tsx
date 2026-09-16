@@ -6,7 +6,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import dayjs from "dayjs";
 import {
   Zap,
   Smile,
@@ -18,7 +17,6 @@ import {
   Activity,
   Dumbbell,
   Scale,
-  Droplets,
   Coffee,
   Brain,
   Monitor,
@@ -35,7 +33,7 @@ import { TodosCard } from "@/features/todos/TodosCard";
 import { insightItems } from "@/features/insights/data";
 import { qColor } from "@/lib/calendar";
 import { useDailyRecords } from "@/features/health/useDailyRecords";
-import { sumCoffeeCups, sumWaterLiters } from "@/features/health/stats";
+import { sumCoffeeCups } from "@/features/health/stats";
 import { useNavigate } from "react-router-dom";
 import type { Habit } from "@/features/habits/types";
 import type { JournalEntry } from "@/features/journal/types";
@@ -463,23 +461,8 @@ export function Dashboard({
 }: DashboardProps) {
   const navigate = useNavigate();
   const { todayKey, getRecord } = useDailyRecords();
-  const yesterdayKey = dayjs(todayKey).subtract(1, "day").format("YYYY-MM-DD");
   const todayRecord = getRecord(todayKey);
-  const yesterdayWater = getRecord(yesterdayKey).waterGlasses;
-  const waterLiters = sumWaterLiters([todayRecord]);
   const coffeeCups = sumCoffeeCups([todayRecord]);
-
-  let waterDelta: OverviewRow["delta"];
-  if (yesterdayWater != null) {
-    const diff = waterLiters - yesterdayWater * 0.25;
-    if (diff !== 0) {
-      waterDelta = {
-        dir: diff > 0 ? "up" : "down",
-        value: `${Math.abs(diff).toFixed(2)} L`,
-        color: diff > 0 ? "var(--primary)" : "var(--destructive)",
-      };
-    }
-  }
 
   const latest = journal[0];
   return (
@@ -525,12 +508,6 @@ export function Dashboard({
                     value: "0.3 kg",
                     color: "var(--primary)",
                   },
-                },
-                {
-                  ricon: Droplets,
-                  label: "Nước",
-                  value: `${waterLiters.toFixed(2)} L`,
-                  delta: waterDelta,
                 },
                 { ricon: Coffee, label: "Đồ uống", value: `${coffeeCups} cốc` },
               ]}

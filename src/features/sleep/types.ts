@@ -43,8 +43,6 @@ export const qualityEmojis: Record<SleepQuality, string> = {
 
 export type Period = "day" | "week" | "month";
 
-export type SleepTab = "night" | "nap";
-
 export const PERIOD_OPTIONS: { value: Period; label: string }[] = [
   { value: "day", label: "Ngày" },
   { value: "week", label: "Tuần" },

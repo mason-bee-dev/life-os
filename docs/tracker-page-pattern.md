@@ -2,7 +2,7 @@
 
 Canonical reference: `src/features/sleep` (NightSleepTab + NapTab).
 
-Mục tiêu: mọi trang theo dõi (sleep, coffee, water, habits, …) dùng **cùng bố cục và cùng ngôn ngữ UI**, để user không phải học lại layout mỗi feature, và agent/dev không invent pattern mới.
+Mục tiêu: mọi trang theo dõi (sleep, coffee, habits, …) dùng **cùng bố cục và cùng ngôn ngữ UI**, để user không phải học lại layout mỗi feature, và agent/dev không invent pattern mới.
 
 Khi implement feature mới: copy khung này trước, chỉ thay domain logic. Chỉ lệch pattern khi có lý do rõ (ghi trong PR).
 
@@ -239,7 +239,6 @@ Button size="sm" → cùng CTA “Thêm …”
 
 | Tab | Modal | Note field |
 |-----|-------|------------|
-| Uống nước | `WaterModal` | *(chưa có — thêm khi cần)* |
 | Đồ uống | `DrinkModal` | `DrinkLog.note` → `coffee_logs.note` |
 | WP | `WpModal` | `DailyRecord.wpNote` → `daily_records.wp_note` |
 

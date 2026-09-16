@@ -12,7 +12,6 @@ export const DAILY_RECORDS_QUERY_KEY = ["dailyRecords"] as const;
 
 type DailyRecordRow = {
   date: string;
-  water_glasses: number | null;
   masturbation_count: number | null;
   watched_porn: boolean | null;
   wp_note: string | null;
@@ -68,7 +67,6 @@ function joinRecords(
     const drinks = drinksByDate.get(row.date);
     records[row.date] = {
       date: row.date,
-      ...(row.water_glasses != null ? { waterGlasses: row.water_glasses } : {}),
       ...(drinks ? { drinks } : {}),
       ...(row.masturbation_count != null
         ? { masturbationCount: row.masturbation_count }
@@ -91,7 +89,7 @@ async function fetchDailyRecords(): Promise<DailyRecords> {
     supabase
       .from("daily_records")
       .select(
-        "date, water_glasses, masturbation_count, watched_porn, wp_note",
+        "date, masturbation_count, watched_porn, wp_note",
       ),
     supabase
       .from("coffee_logs")
@@ -110,7 +108,6 @@ async function fetchDailyRecords(): Promise<DailyRecords> {
 
 function toPatchJson(patch: Partial<DailyRecord>): Record<string, unknown> {
   const json: Record<string, unknown> = {};
-  if (patch.waterGlasses !== undefined) json.waterGlasses = patch.waterGlasses;
   if (patch.masturbationCount !== undefined) {
     json.masturbationCount = patch.masturbationCount;
   }

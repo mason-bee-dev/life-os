@@ -31,14 +31,8 @@ export type DrinkLog = {
   note?: string | null;
 };
 
-/** @deprecated Use DrinkLog — kept for localStorage migrate compat. */
-export type CoffeeLog = DrinkLog;
-/** @deprecated */
-export type CoffeeType = string;
-
 export type DailyRecord = {
   date: string;
-  waterGlasses?: number;
   drinks?: DrinkLog[];
   /** Legacy localStorage key — prefer drinks. */
   coffee?: DrinkLog[];

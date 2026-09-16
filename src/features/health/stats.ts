@@ -45,21 +45,6 @@ export function drinksOf(r: DailyRecord): DrinkLog[] {
   return r.drinks ?? r.coffee ?? [];
 }
 
-export function sumWaterLiters(list: DailyRecord[]): number {
-  return list.reduce((s, r) => s + (r.waterGlasses ?? 0) * 0.25, 0);
-}
-
-export function avgWaterLiters(list: DailyRecord[]): number {
-  const withData = list.filter(
-    (r) => r.waterGlasses != null && r.waterGlasses > 0,
-  );
-  return withData.length ? sumWaterLiters(withData) / withData.length : 0;
-}
-
-export function countWaterDays(list: DailyRecord[]): number {
-  return list.filter((r) => (r.waterGlasses ?? 0) > 0).length;
-}
-
 export function sumCoffeeCups(list: DailyRecord[]): number {
   return list.reduce(
     (s, r) => s + drinksOf(r).reduce((cs, c) => cs + c.cups, 0),

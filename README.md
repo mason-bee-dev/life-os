@@ -37,7 +37,7 @@ pnpm typecheck   # run TypeScript type checking
 ## What works
 
 - **Dashboard** — life score, stat cards, habits, weekly chart, calendar, overviews, insights.
-- **Today** — daily input (mood, energy, sleep, weight, water, habits, note). "Save today" turns a note into a journal entry.
+- **Today** — daily input (mood, energy, sleep, weight, habits, note). "Save today" turns a note into a journal entry.
 - **Journal** — write entries with mood + tags; list of past entries.
 - **Insights** — sleep-vs-productivity scatter, correlations, month comparison.
 - **Health / Productivity / Finance / Growth / History / Goals / Settings** — "Coming soon" placeholders.
