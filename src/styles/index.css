@@ -39,7 +39,8 @@
     --priority-low: #15803d;
     --score-good: #b45309;
     --login-orb: #6d28d9;
-    --toast: #e8e4dc;
+    --toast: #4f4a45;
+    --toast-foreground: #f5f4f0;
     --icon-muted: #6b6560;
 
     --primary-muted: rgba(146, 64, 14, 0.1);
@@ -88,6 +89,7 @@
     --score-good: #fcd34d;
     --login-orb: #818cf8;
     --toast: #27272a;
+    --toast-foreground: #fafafa;
     --icon-muted: #85858d;
 
     --primary-muted: rgba(16, 185, 129, 0.12);

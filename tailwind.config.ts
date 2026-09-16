@@ -22,7 +22,10 @@ export default {
         "priority-low": "var(--priority-low)",
         "score-good": "var(--score-good)",
         "login-orb": "var(--login-orb)",
-        toast: "var(--toast)",
+        toast: {
+          DEFAULT: "var(--toast)",
+          foreground: "var(--toast-foreground)",
+        },
         "icon-muted": "var(--icon-muted)",
         "primary-muted": "var(--primary-muted)",
         "metric-mood-muted": "var(--metric-mood-muted)",
