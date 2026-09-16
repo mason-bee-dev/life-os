@@ -11,6 +11,10 @@ type SleepRow = {
   note: string | null;
   nap_start: string | null;
   nap_end: string | null;
+  night_logged_at: string | null;
+  nap_logged_at: string | null;
+  night_updated_at: string | null;
+  nap_updated_at: string | null;
 };
 
 /** Postgres time often comes as HH:MM:SS — normalize to HH:mm. */
@@ -37,6 +41,10 @@ function fromRow(row: SleepRow): SleepRecord {
     note: row.note,
     napStart: normalizeTime(row.nap_start),
     napEnd: normalizeTime(row.nap_end),
+    nightLoggedAt: row.night_logged_at,
+    napLoggedAt: row.nap_logged_at,
+    nightUpdatedAt: row.night_updated_at,
+    napUpdatedAt: row.nap_updated_at,
   };
 }
 
@@ -51,6 +59,10 @@ function toRow(record: Partial<SleepRecord> & { date: string }, userId: string) 
     note: record.note ?? null,
     nap_start: record.napStart ?? null,
     nap_end: record.napEnd ?? null,
+    night_logged_at: record.nightLoggedAt ?? null,
+    nap_logged_at: record.napLoggedAt ?? null,
+    night_updated_at: record.nightUpdatedAt ?? null,
+    nap_updated_at: record.napUpdatedAt ?? null,
   };
 }
 

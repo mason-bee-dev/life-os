@@ -29,6 +29,10 @@ export type DrinkLog = {
   /** VND; 0 if not set. */
   amount: number;
   note?: string | null;
+  /** ISO timestamptz when this drink log was first created. */
+  createdAt?: string | null;
+  /** ISO timestamptz when this drink log was last updated. */
+  updatedAt?: string | null;
 };
 
 export type DailyRecord = {
@@ -40,6 +44,10 @@ export type DailyRecord = {
   /** Optional note attached to WP for that date. */
   wpNote?: string | null;
   watchedPorn?: boolean;
+  /** ISO timestamptz when WP fields were first logged. */
+  wpLoggedAt?: string | null;
+  /** ISO timestamptz when WP fields were last updated. */
+  wpUpdatedAt?: string | null;
 };
 
 export type DailyRecords = Record<string, DailyRecord>;

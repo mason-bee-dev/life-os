@@ -15,6 +15,8 @@ type DailyRecordRow = {
   masturbation_count: number | null;
   watched_porn: boolean | null;
   wp_note: string | null;
+  wp_logged_at: string | null;
+  wp_updated_at: string | null;
 };
 
 type DrinkLogRow = {
@@ -26,6 +28,8 @@ type DrinkLogRow = {
   category: string | null;
   amount: number | null;
   note: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 };
 
 function isDrinkCategory(v: string): v is DrinkCategory {
@@ -44,6 +48,8 @@ function toDrinkLog(row: DrinkLogRow): DrinkLog {
     cups: row.cups,
     amount: row.amount ?? 0,
     ...(row.note ? { note: row.note } : {}),
+    ...(row.created_at ? { createdAt: row.created_at } : {}),
+    ...(row.updated_at ? { updatedAt: row.updated_at } : {}),
   };
 }
 
@@ -73,6 +79,8 @@ function joinRecords(
         : {}),
       ...(row.wp_note != null ? { wpNote: row.wp_note } : {}),
       ...(row.watched_porn != null ? { watchedPorn: row.watched_porn } : {}),
+      ...(row.wp_logged_at != null ? { wpLoggedAt: row.wp_logged_at } : {}),
+      ...(row.wp_updated_at != null ? { wpUpdatedAt: row.wp_updated_at } : {}),
     };
   }
 
@@ -89,12 +97,12 @@ async function fetchDailyRecords(): Promise<DailyRecords> {
     supabase
       .from("daily_records")
       .select(
-        "date, masturbation_count, watched_porn, wp_note",
+        "date, masturbation_count, watched_porn, wp_note, wp_logged_at, wp_updated_at",
       ),
     supabase
       .from("coffee_logs")
       .select(
-        "id, date, type, custom_type, cups, category, amount, note",
+        "id, date, type, custom_type, cups, category, amount, note, created_at, updated_at",
       )
       .order("created_at"),
   ]);
@@ -123,6 +131,7 @@ function toPatchJson(patch: Partial<DailyRecord>): Record<string, unknown> {
       cups: d.cups,
       amount: d.amount ?? 0,
       note: d.note ?? null,
+      createdAt: d.createdAt ?? null,
     }));
   }
   return json;
@@ -179,6 +188,32 @@ export function useDailyRecords() {
             if (p.drinks !== undefined) {
               merged.drinks = p.drinks;
               delete merged.coffee;
+            }
+            if (
+              p.masturbationCount !== undefined ||
+              p.wpNote !== undefined ||
+              p.watchedPorn !== undefined
+            ) {
+              const count =
+                p.masturbationCount !== undefined
+                  ? p.masturbationCount
+                  : (merged.masturbationCount ?? 0);
+              const note =
+                p.wpNote !== undefined ? p.wpNote : (merged.wpNote ?? null);
+              const watched =
+                p.watchedPorn !== undefined
+                  ? p.watchedPorn
+                  : (merged.watchedPorn ?? false);
+              const active =
+                count > 0 || Boolean(note?.trim()) || watched === true;
+              const now = new Date().toISOString();
+              if (active) {
+                merged.wpLoggedAt = merged.wpLoggedAt ?? now;
+                merged.wpUpdatedAt = now;
+              } else {
+                merged.wpLoggedAt = null;
+                merged.wpUpdatedAt = null;
+              }
             }
             return { ...map, [d]: merged };
           };

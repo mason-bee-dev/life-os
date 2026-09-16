@@ -183,6 +183,8 @@ const columns = [
 
 - Cột số / giờ: `tabular-nums` trên `TableCell`.
 - Cột ngày: dùng `@/components/RelativeDateCell` — format `T2 - 09/09/26`, thêm ` - (Hôm nay)` / ` - (Hôm qua)` khi đúng hôm nay/hôm qua.
+- Cột **Giờ** (created / first logged-at): ngay sau **Ngày**; format `HH:mm` qua `formatLoggedAt` (`@/lib/datetime`). Map từ `createdAt` / `*LoggedAt`.
+- Cột **Cập nhật** (updated-at): ngay sau **Giờ**; cùng format; map từ `updatedAt` / `*UpdatedAt`. Không nhầm với giờ ngủ domain.
 - Cột ghi chú dài: dùng `NoteCell` (truncate + `Tooltip`); đặt **trước** cột Thao tác.
 - Cột actions: luôn cuối, căn phải — `TableActionsCell` + `key: "actions"` trên `DataTable`.
 
@@ -237,10 +239,12 @@ Button size="sm" → cùng CTA “Thêm …”
 
 ### Health tabs (reference)
 
-| Tab | Modal | Note field |
-|-----|-------|------------|
-| Đồ uống | `DrinkModal` | `DrinkLog.note` → `coffee_logs.note` |
-| WP | `WpModal` | `DailyRecord.wpNote` → `daily_records.wp_note` |
+| Tab | Modal | Note field | Giờ (create) | Cập nhật |
+|-----|-------|------------|--------------|----------|
+| Đồ uống | `DrinkModal` | `DrinkLog.note` → `coffee_logs.note` | `createdAt` → `created_at` | `updatedAt` → `updated_at` |
+| WP | `WpModal` | `DailyRecord.wpNote` → `daily_records.wp_note` | `wpLoggedAt` → `wp_logged_at` | `wpUpdatedAt` → `wp_updated_at` |
+| Ngủ đêm | `NightSleepModal` | shared `note` | `nightLoggedAt` → `night_logged_at` | `nightUpdatedAt` → `night_updated_at` |
+| Ngủ trưa | `NapModal` | shared `note` | `napLoggedAt` → `nap_logged_at` | `napUpdatedAt` → `nap_updated_at` |
 
 ---
 

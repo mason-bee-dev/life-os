@@ -11,6 +11,14 @@ export type SleepRecord = {
   note: string | null;
   napStart: string | null;
   napEnd: string | null;
+  /** ISO timestamptz when night sleep was first logged. */
+  nightLoggedAt?: string | null;
+  /** ISO timestamptz when night sleep was last updated. */
+  nightUpdatedAt?: string | null;
+  /** ISO timestamptz when nap was first logged. */
+  napLoggedAt?: string | null;
+  /** ISO timestamptz when nap was last updated. */
+  napUpdatedAt?: string | null;
 };
 
 export type NightSleepInput = {

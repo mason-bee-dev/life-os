@@ -10,6 +10,7 @@ import { TableActionsCell } from "@/components/TableActionsCell";
 import { Button } from "@/components/ui/button";
 import { TableCell } from "@/components/ui/table";
 import { useToast } from "@/components/ui/toast";
+import { formatLoggedAt } from "@/lib/datetime";
 import { DrinkModal } from "./DrinkModal";
 import { HealthChart } from "./HealthChart";
 import {
@@ -77,7 +78,12 @@ export function DrinkTracker() {
             date: r.date,
           })),
         )
-        .sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id),
+        .sort(
+          (a, b) =>
+            b.date.localeCompare(a.date) ||
+            (b.createdAt ?? "").localeCompare(a.createdAt ?? "") ||
+            b.id - a.id,
+        ),
     [list],
   );
 
@@ -108,6 +114,8 @@ export function DrinkTracker() {
       cups: input.cups,
       amount: input.amount,
       note: input.note || null,
+      createdAt: editRow?.createdAt ?? new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     if (editRow && editRow.date !== input.date) {
@@ -232,6 +240,8 @@ export function DrinkTracker() {
         rowKey={(r) => `${r.date}-${r.id}`}
         columns={[
           { key: "date", header: "Ngày" },
+          { key: "time", header: "Giờ" },
+          { key: "updated", header: "Cập nhật" },
           { key: "category", header: "Nhóm" },
           { key: "type", header: "Loại" },
           { key: "cups", header: "Cốc" },
@@ -253,6 +263,12 @@ export function DrinkTracker() {
           <>
             <TableCell className="whitespace-nowrap tabular-nums">
               <RelativeDateCell date={r.date} todayKey={todayKey} />
+            </TableCell>
+            <TableCell className="whitespace-nowrap tabular-nums text-muted-foreground">
+              {formatLoggedAt(r.createdAt)}
+            </TableCell>
+            <TableCell className="whitespace-nowrap tabular-nums text-muted-foreground">
+              {formatLoggedAt(r.updatedAt)}
             </TableCell>
             <TableCell className="whitespace-nowrap text-muted-foreground">
               {DRINK_CATEGORY_LABELS[r.category]}

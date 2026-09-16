@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
+import { formatLoggedAt } from "@/lib/datetime";
 import { NightSleepModal } from "./NightSleepModal";
 import { SleepChart } from "./SleepChart";
 import { SleepDateCell } from "./SleepDateCell";
@@ -52,6 +53,8 @@ type Props = {
 
 const columns = [
   { key: "date", header: "Ngày" },
+  { key: "time", header: "Giờ" },
+  { key: "updated", header: "Cập nhật" },
   { key: "range", header: "Giờ ngủ → dậy" },
   { key: "duration", header: "Thời lượng" },
   { key: "wakings", header: "Dậy đêm" },
@@ -79,8 +82,12 @@ export function NightSleepTab({
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
   const nightRows = useMemo(() => {
-    return [...nightRecordsInPeriod(records, period, refDate)].sort((a, b) =>
-      b.date.localeCompare(a.date),
+    return [...nightRecordsInPeriod(records, period, refDate)].sort(
+      (a, b) =>
+        b.date.localeCompare(a.date) ||
+        (b.nightUpdatedAt ?? b.nightLoggedAt ?? "").localeCompare(
+          a.nightUpdatedAt ?? a.nightLoggedAt ?? "",
+        ),
     );
   }, [records, period, refDate]);
 
@@ -241,6 +248,12 @@ export function NightSleepTab({
             <>
               <TableCell className="tabular-nums">
                 <SleepDateCell date={r.date} todayKey={todayKey} />
+              </TableCell>
+              <TableCell className="tabular-nums text-muted-foreground">
+                {formatLoggedAt(r.nightLoggedAt)}
+              </TableCell>
+              <TableCell className="tabular-nums text-muted-foreground">
+                {formatLoggedAt(r.nightUpdatedAt)}
               </TableCell>
               <TableCell className="tabular-nums text-muted-foreground">
                 {r.bedtime} → {r.wakeTime}

@@ -10,6 +10,7 @@ import { TableActionsCell } from "@/components/TableActionsCell";
 import { Button } from "@/components/ui/button";
 import { TableCell } from "@/components/ui/table";
 import { useToast } from "@/components/ui/toast";
+import { formatLoggedAt } from "@/lib/datetime";
 import { HealthChart } from "./HealthChart";
 import { WpModal } from "./WpModal";
 import {
@@ -27,6 +28,8 @@ type WpRow = {
   date: string;
   wp: number;
   note: string | null;
+  loggedAt: string | null;
+  updatedAt: string | null;
 };
 
 export function PersonalHabits() {
@@ -69,8 +72,16 @@ export function PersonalHabits() {
           date: r.date,
           wp: r.masturbationCount ?? 0,
           note: r.wpNote ?? null,
+          loggedAt: r.wpLoggedAt ?? null,
+          updatedAt: r.wpUpdatedAt ?? null,
         }))
-        .sort((a, b) => b.date.localeCompare(a.date)),
+        .sort(
+          (a, b) =>
+            b.date.localeCompare(a.date) ||
+            (b.updatedAt ?? b.loggedAt ?? "").localeCompare(
+              a.updatedAt ?? a.loggedAt ?? "",
+            ),
+        ),
     [list],
   );
 
@@ -194,6 +205,8 @@ export function PersonalHabits() {
         rowKey={(r) => r.date}
         columns={[
           { key: "date", header: "Ngày" },
+          { key: "time", header: "Giờ" },
+          { key: "updated", header: "Cập nhật" },
           { key: "wp", header: "WP" },
           { key: "note", header: "Ghi chú" },
           { key: "actions", header: "Thao tác" },
@@ -213,6 +226,12 @@ export function PersonalHabits() {
           <>
             <TableCell className="tabular-nums">
               <RelativeDateCell date={r.date} todayKey={todayKey} />
+            </TableCell>
+            <TableCell className="tabular-nums text-muted-foreground">
+              {formatLoggedAt(r.loggedAt)}
+            </TableCell>
+            <TableCell className="tabular-nums text-muted-foreground">
+              {formatLoggedAt(r.updatedAt)}
             </TableCell>
             <TableCell className="tabular-nums">{r.wp}</TableCell>
             <NoteCell note={r.note} />

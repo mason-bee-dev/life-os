@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/toast";
+import { formatLoggedAt } from "@/lib/datetime";
 import { NapModal } from "./NapModal";
 import { SleepChart } from "./SleepChart";
 import { SleepDateCell } from "./SleepDateCell";
@@ -52,6 +53,8 @@ type Props = {
 
 const columns = [
   { key: "date", header: "Ngày" },
+  { key: "time", header: "Giờ" },
+  { key: "updated", header: "Cập nhật" },
   { key: "range", header: "Giờ bắt đầu → dậy" },
   { key: "duration", header: "Thời lượng" },
   { key: "note", header: "Ghi chú" },
@@ -77,8 +80,12 @@ export function NapTab({
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
   const napRows = useMemo(() => {
-    return [...napRecordsInPeriod(records, period, refDate)].sort((a, b) =>
-      b.date.localeCompare(a.date),
+    return [...napRecordsInPeriod(records, period, refDate)].sort(
+      (a, b) =>
+        b.date.localeCompare(a.date) ||
+        (b.napUpdatedAt ?? b.napLoggedAt ?? "").localeCompare(
+          a.napUpdatedAt ?? a.napLoggedAt ?? "",
+        ),
     );
   }, [records, period, refDate]);
 
@@ -229,6 +236,12 @@ export function NapTab({
             <>
               <TableCell className="tabular-nums">
                 <SleepDateCell date={r.date} todayKey={todayKey} />
+              </TableCell>
+              <TableCell className="tabular-nums text-muted-foreground">
+                {formatLoggedAt(r.napLoggedAt)}
+              </TableCell>
+              <TableCell className="tabular-nums text-muted-foreground">
+                {formatLoggedAt(r.napUpdatedAt)}
               </TableCell>
               <TableCell className="tabular-nums text-muted-foreground">
                 {r.napStart} → {r.napEnd}

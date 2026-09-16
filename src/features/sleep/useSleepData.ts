@@ -55,6 +55,7 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
         ? incomingNote
         : (existing?.note ?? null);
 
+    const now = new Date().toISOString();
     saveRecord(
       {
         date: input.date,
@@ -65,6 +66,10 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
         note,
         napStart: existing?.napStart ?? null,
         napEnd: existing?.napEnd ?? null,
+        nightLoggedAt: existing?.nightLoggedAt ?? now,
+        nightUpdatedAt: now,
+        napLoggedAt: existing?.napLoggedAt ?? null,
+        napUpdatedAt: existing?.napUpdatedAt ?? null,
       },
       opts,
     );
@@ -80,6 +85,7 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
         ? incomingNote
         : (existing?.note ?? null);
 
+    const now = new Date().toISOString();
     saveRecord(
       {
         date: input.date,
@@ -90,6 +96,10 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
         note,
         napStart: input.startTime,
         napEnd: input.endTime,
+        nightLoggedAt: existing?.nightLoggedAt ?? null,
+        nightUpdatedAt: existing?.nightUpdatedAt ?? null,
+        napLoggedAt: existing?.napLoggedAt ?? now,
+        napUpdatedAt: now,
       },
       opts,
     );
@@ -149,6 +159,10 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
           note: record.note,
           napStart: record.napStart,
           napEnd: record.napEnd,
+          nightLoggedAt: null,
+          nightUpdatedAt: null,
+          napLoggedAt: record.napLoggedAt ?? null,
+          napUpdatedAt: record.napUpdatedAt ?? null,
         },
         opts,
       );
@@ -169,6 +183,10 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
           note: record.note,
           napStart: null,
           napEnd: null,
+          nightLoggedAt: record.nightLoggedAt ?? null,
+          nightUpdatedAt: record.nightUpdatedAt ?? null,
+          napLoggedAt: null,
+          napUpdatedAt: null,
         },
         opts,
       );
