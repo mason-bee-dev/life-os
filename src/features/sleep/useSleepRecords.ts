@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteSleepRecord,
   fetchSleepRecords,
+  moveSleepEntryAtomic,
   upsertSleepRecord,
 } from "./api";
 import type { SleepRecord } from "./types";
@@ -30,6 +31,11 @@ export function useSleepRecords(range: { from: string; to: string }) {
     onSuccess: invalidate,
   });
 
+  const moveMutation = useMutation({
+    mutationFn: moveSleepEntryAtomic,
+    onSuccess: invalidate,
+  });
+
   const getRecord = (date: string): SleepRecord | undefined =>
     records.find((r) => r.date === date);
 
@@ -37,10 +43,11 @@ export function useSleepRecords(range: { from: string; to: string }) {
     records,
     isLoading,
     error,
-    isSaving: saveMutation.isPending,
+    isSaving: saveMutation.isPending || moveMutation.isPending,
     isDeleting: deleteMutation.isPending,
     getRecord,
     saveRecord: saveMutation.mutate,
+    moveRecord: moveMutation.mutate,
     deleteRecord: deleteMutation.mutate,
   };
 }

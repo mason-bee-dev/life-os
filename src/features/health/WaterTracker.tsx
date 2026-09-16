@@ -92,15 +92,37 @@ export function WaterTracker() {
     date: string;
     glasses: number;
   }) => {
-    updateRecord(date, { waterGlasses: next });
-    notify("Đã lưu uống nước");
-    setModalOpen(false);
+    const movingDate = Boolean(editDate && editDate !== date);
+    const targetUsed = movingDate && (getRecord(date).waterGlasses ?? 0) > 0;
+    if (targetUsed) {
+      const ok = window.confirm(
+        `Ngày ${dayjs(date).format("DD/MM/YYYY")} đã có dữ liệu nước. Ghi đè?`,
+      );
+      if (!ok) return;
+    }
+
+    const clearFrom =
+      editDate && editDate !== date
+        ? { date: editDate, patch: { waterGlasses: 0 } }
+        : undefined;
+    updateRecord(date, { waterGlasses: next }, clearFrom, {
+      onSuccess: () => {
+        notify("Đã lưu uống nước");
+        setModalOpen(false);
+        setEditDate(null);
+      },
+      onError: () => notify("Không lưu được. Thử lại sau."),
+    });
   };
 
   const handleClear = (date: string) => {
-    updateRecord(date, { waterGlasses: 0 });
-    notify("Đã xoá bản ghi nước");
-    setConfirmKey(null);
+    updateRecord(date, { waterGlasses: 0 }, undefined, {
+      onSuccess: () => {
+        notify("Đã xoá bản ghi nước");
+        setConfirmKey(null);
+      },
+      onError: () => notify("Không xoá được. Thử lại sau."),
+    });
   };
 
   return (
@@ -199,6 +221,13 @@ export function WaterTracker() {
         defaultDate={modalDate}
         initialGlasses={modalGlasses}
         isSaving={isSaving}
+        valuesForDate={
+          editDate
+            ? undefined
+            : (d) => ({
+                glasses: getRecord(d).waterGlasses ?? 0,
+              })
+        }
         onSave={handleSave}
       />
     </div>

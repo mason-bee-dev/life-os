@@ -23,6 +23,8 @@ type Props = {
   defaultDate: string;
   initialGlasses?: number;
   isSaving?: boolean;
+  /** When user picks another day, load that day's values. */
+  valuesForDate?: (date: string) => { glasses: number };
   onSave: (input: { date: string; glasses: number }) => void;
 };
 
@@ -32,6 +34,7 @@ export function WaterModal({
   defaultDate,
   initialGlasses = 0,
   isSaving,
+  valuesForDate,
   onSave,
 }: Props) {
   const [date, setDate] = useState(defaultDate);
@@ -44,6 +47,14 @@ export function WaterModal({
     setGlasses(initialGlasses);
     setDatePickerOpen(false);
   }, [open, defaultDate, initialGlasses]);
+
+  const selectDate = (next: string) => {
+    setDate(next);
+    if (valuesForDate) {
+      setGlasses(valuesForDate(next).glasses);
+    }
+    setDatePickerOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -72,8 +83,7 @@ export function WaterModal({
                   selected={dayjs(date).toDate()}
                   onSelect={(d) => {
                     if (!d) return;
-                    setDate(dayjs(d).format("YYYY-MM-DD"));
-                    setDatePickerOpen(false);
+                    selectDate(dayjs(d).format("YYYY-MM-DD"));
                   }}
                   disabled={{ after: dayjs().endOf("day").toDate() }}
                 />

@@ -100,48 +100,77 @@ export function DrinkTracker() {
     amount: number;
     note: string;
   }) => {
-    const existing = drinksOf(getRecord(input.date));
-    let next: DrinkLog[];
+    const updated: DrinkLog = {
+      id: editRow?.id ?? Date.now(),
+      category: input.category,
+      type: input.type,
+      customType: input.customType,
+      cups: input.cups,
+      amount: input.amount,
+      note: input.note || null,
+    };
 
-    if (editRow) {
-      next = existing.map((d) =>
-        d.id === editRow.id
-          ? {
-              ...d,
-              category: input.category,
-              type: input.type,
-              customType: input.customType,
-              cups: input.cups,
-              amount: input.amount,
-              note: input.note || null,
-            }
-          : d,
+    if (editRow && editRow.date !== input.date) {
+      const nextOnTarget = [...drinksOf(getRecord(input.date)), updated];
+      const nextOnSource = drinksOf(getRecord(editRow.date)).filter(
+        (d) => d.id !== editRow.id,
       );
-    } else {
-      next = [
-        ...existing,
+      updateRecord(
+        input.date,
+        { drinks: nextOnTarget },
         {
-          id: Date.now(),
-          category: input.category,
-          type: input.type,
-          customType: input.customType,
-          cups: input.cups,
-          amount: input.amount,
-          note: input.note || null,
+          date: editRow.date,
+          patch: { drinks: nextOnSource },
         },
-      ];
+        {
+          onSuccess: () => {
+            notify("Đã cập nhật đồ uống");
+            setModalOpen(false);
+            setEditRow(null);
+          },
+          onError: () => notify("Không lưu được. Thử lại sau."),
+        },
+      );
+    } else if (editRow) {
+      const next = drinksOf(getRecord(input.date)).map((d) =>
+        d.id === editRow.id ? updated : d,
+      );
+      updateRecord(input.date, { drinks: next }, undefined, {
+        onSuccess: () => {
+          notify("Đã cập nhật đồ uống");
+          setModalOpen(false);
+          setEditRow(null);
+        },
+        onError: () => notify("Không lưu được. Thử lại sau."),
+      });
+    } else {
+      updateRecord(
+        input.date,
+        {
+          drinks: [...drinksOf(getRecord(input.date)), updated],
+        },
+        undefined,
+        {
+          onSuccess: () => {
+            notify("Đã thêm đồ uống");
+            setModalOpen(false);
+            setEditRow(null);
+          },
+          onError: () => notify("Không lưu được. Thử lại sau."),
+        },
+      );
     }
-
-    updateRecord(input.date, { drinks: next });
-    notify(editRow ? "Đã cập nhật đồ uống" : "Đã thêm đồ uống");
-    setModalOpen(false);
   };
 
   const removeLog = (date: string, id: number) => {
     const next = drinksOf(getRecord(date)).filter((c) => c.id !== id);
-    updateRecord(date, { drinks: next });
-    notify("Đã xoá đồ uống");
-    setConfirmKey(null);
+    updateRecord(date, { drinks: next }, undefined, {
+      onSuccess: () => {
+        notify("Đã xoá đồ uống");
+        setConfirmKey(null);
+      },
+      onError: () => notify("Không xoá được. Thử lại sau."),
+    });
   };
 
   return (

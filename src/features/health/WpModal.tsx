@@ -24,6 +24,8 @@ type Props = {
   initialCount?: number;
   initialNote?: string | null;
   isSaving?: boolean;
+  /** When user picks another day, load that day's values. */
+  valuesForDate?: (date: string) => { count: number; note: string };
   onSave: (input: { date: string; count: number; note: string }) => void;
 };
 
@@ -34,6 +36,7 @@ export function WpModal({
   initialCount = 0,
   initialNote = "",
   isSaving,
+  valuesForDate,
   onSave,
 }: Props) {
   const [date, setDate] = useState(defaultDate);
@@ -48,6 +51,16 @@ export function WpModal({
     setNote(initialNote ?? "");
     setDatePickerOpen(false);
   }, [open, defaultDate, initialCount, initialNote]);
+
+  const selectDate = (next: string) => {
+    setDate(next);
+    if (valuesForDate) {
+      const v = valuesForDate(next);
+      setCount(v.count);
+      setNote(v.note);
+    }
+    setDatePickerOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -76,8 +89,7 @@ export function WpModal({
                   selected={dayjs(date).toDate()}
                   onSelect={(d) => {
                     if (!d) return;
-                    setDate(dayjs(d).format("YYYY-MM-DD"));
-                    setDatePickerOpen(false);
+                    selectDate(dayjs(d).format("YYYY-MM-DD"));
                   }}
                   disabled={{ after: dayjs().endOf("day").toDate() }}
                 />

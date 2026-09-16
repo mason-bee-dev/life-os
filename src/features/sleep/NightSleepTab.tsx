@@ -41,6 +41,12 @@ type Props = {
   isDeleting: boolean;
   getRecord: (date: string) => SleepRecord | undefined;
   onSave: (input: NightSleepInput, opts?: { onSuccess?: () => void; onError?: () => void }) => void;
+  onMove: (
+    sourceDate: string,
+    input: NightSleepInput,
+    allowOverwrite: boolean,
+    opts?: { onSuccess?: () => void; onError?: () => void },
+  ) => void;
   onClear: (record: SleepRecord, opts?: { onSuccess?: () => void; onError?: () => void }) => void;
 };
 
@@ -64,6 +70,7 @@ export function NightSleepTab({
   isDeleting,
   getRecord,
   onSave,
+  onMove,
   onClear,
 }: Props) {
   const { notify } = useToast();
@@ -104,17 +111,31 @@ export function NightSleepTab({
   const handleSave = (input: NightSleepInput) => {
     const existing = getRecord(input.date);
     const isEdit = Boolean(editRecord?.bedtime && editRecord?.wakeTime);
-    const conflict =
-      !isEdit &&
-      existing?.bedtime &&
-      existing?.wakeTime &&
-      existing.date === input.date;
+    const sameDate = Boolean(isEdit && editRecord && editRecord.date === input.date);
+    const targetOccupied = Boolean(existing?.bedtime && existing?.wakeTime);
+    const conflict = targetOccupied && !sameDate;
 
     if (conflict) {
       const ok = window.confirm(
         `Ngày ${dayjs(input.date).format("DD/MM/YYYY")} đã có giấc ngủ đêm. Ghi đè?`,
       );
       if (!ok) return;
+    }
+
+    const dateMoved = Boolean(
+      isEdit && editRecord && editRecord.date !== input.date,
+    );
+
+    if (dateMoved && editRecord) {
+      onMove(editRecord.date, input, conflict, {
+        onSuccess: () => {
+          notify("Đã lưu giấc ngủ đêm");
+          setModalOpen(false);
+          setEditDate(null);
+        },
+        onError: () => notify("Không lưu được. Thử lại sau."),
+      });
+      return;
     }
 
     onSave(input, {
@@ -279,6 +300,7 @@ export function NightSleepTab({
         defaultDate={todayKey}
         isSaving={isSaving}
         isDeleting={isDeleting}
+        recordForDate={getRecord}
         onSave={handleSave}
         onDelete={
           editRecord?.bedtime && editRecord?.wakeTime

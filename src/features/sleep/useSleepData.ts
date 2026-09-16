@@ -40,11 +40,21 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
     isDeleting,
     getRecord,
     saveRecord,
+    moveRecord,
     deleteRecord,
   } = useSleepRecords(fetchRange);
 
   const saveNightSleep = (input: NightSleepInput, opts?: MutateOpts) => {
     const existing = getRecord(input.date);
+    const editingNight = Boolean(existing?.bedtime && existing?.wakeTime);
+    const incomingNote = input.note ?? null;
+    // Shared note column: when adding night onto a nap-only day with blank note,
+    // keep the existing note instead of wiping it.
+    const note =
+      incomingNote || editingNight
+        ? incomingNote
+        : (existing?.note ?? null);
+
     saveRecord(
       {
         date: input.date,
@@ -52,7 +62,7 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
         wakeTime: input.wakeTime,
         nightWakingTimes: input.nightWakingTimes,
         quality: input.quality ?? null,
-        note: input.note ?? null,
+        note,
         napStart: existing?.napStart ?? null,
         napEnd: existing?.napEnd ?? null,
       },
@@ -62,6 +72,14 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
 
   const saveNap = (input: NapInput, opts?: MutateOpts) => {
     const existing = getRecord(input.date);
+    const editingNap = Boolean(existing?.napStart && existing?.napEnd);
+    const incomingNote =
+      input.note !== undefined ? input.note : (existing?.note ?? null);
+    const note =
+      incomingNote || editingNap
+        ? incomingNote
+        : (existing?.note ?? null);
+
     saveRecord(
       {
         date: input.date,
@@ -69,9 +87,51 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
         wakeTime: existing?.wakeTime ?? null,
         nightWakingTimes: existing?.nightWakingTimes ?? [],
         quality: existing?.quality ?? null,
-        note: input.note !== undefined ? input.note : (existing?.note ?? null),
+        note,
         napStart: input.startTime,
         napEnd: input.endTime,
+      },
+      opts,
+    );
+  };
+
+  const moveNightSleep = (
+    sourceDate: string,
+    input: NightSleepInput,
+    allowOverwrite: boolean,
+    opts?: MutateOpts,
+  ) => {
+    moveRecord(
+      {
+        kind: "night",
+        sourceDate,
+        targetDate: input.date,
+        bedtime: input.bedtime,
+        wakeTime: input.wakeTime,
+        nightWakingTimes: input.nightWakingTimes,
+        quality: input.quality ?? null,
+        note: input.note ?? null,
+        allowOverwrite,
+      },
+      opts,
+    );
+  };
+
+  const moveNap = (
+    sourceDate: string,
+    input: NapInput,
+    allowOverwrite: boolean,
+    opts?: MutateOpts,
+  ) => {
+    moveRecord(
+      {
+        kind: "nap",
+        sourceDate,
+        targetDate: input.date,
+        napStart: input.startTime,
+        napEnd: input.endTime,
+        note: input.note ?? null,
+        allowOverwrite,
       },
       opts,
     );
@@ -128,6 +188,8 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
     getRecord,
     saveNightSleep,
     saveNap,
+    moveNightSleep,
+    moveNap,
     clearNightSleep,
     clearNap,
   };

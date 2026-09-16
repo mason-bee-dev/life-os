@@ -38,6 +38,8 @@ type Props = {
   defaultDate: string;
   isSaving: boolean;
   isDeleting?: boolean;
+  /** Prefill when creating and user picks another day. */
+  recordForDate?: (date: string) => SleepRecord | undefined;
   onSave: (input: NightSleepInput) => void;
   onDelete?: () => void;
 };
@@ -49,6 +51,7 @@ export function NightSleepModal({
   defaultDate,
   isSaving,
   isDeleting,
+  recordForDate,
   onSave,
   onDelete,
 }: Props) {
@@ -75,6 +78,22 @@ export function NightSleepModal({
     setManualTime(null);
     setConfirmDelete(false);
   }, [open, defaultDate, record]);
+
+  const applyRecordFields = (r: SleepRecord | undefined) => {
+    setBedtime(r?.bedtime ?? null);
+    setWakeTime(r?.wakeTime ?? null);
+    setNightWakingTimes(r?.nightWakingTimes ?? []);
+    setQuality(r?.quality ?? "binh_thuong");
+    setNote(r?.note ?? "");
+    setManualTime(null);
+  };
+
+  const selectDate = (next: string) => {
+    setDate(next);
+    setDatePickerOpen(false);
+    // Edit+move keeps current form values; create loads that day's data.
+    if (!editing) applyRecordFields(recordForDate?.(next));
+  };
 
   const sortedWakings = useMemo(
     () => sortTimesAsc(nightWakingTimes),
@@ -138,8 +157,7 @@ export function NightSleepModal({
                   selected={dayjs(date).toDate()}
                   onSelect={(d) => {
                     if (!d) return;
-                    setDate(dayjs(d).format("YYYY-MM-DD"));
-                    setDatePickerOpen(false);
+                    selectDate(dayjs(d).format("YYYY-MM-DD"));
                   }}
                   disabled={{ after: dayjs().endOf("day").toDate() }}
                   initialFocus

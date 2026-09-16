@@ -80,6 +80,39 @@ export async function upsertSleepRecord(
   return fromRow(data as SleepRow);
 }
 
+export type MoveSleepEntryInput = {
+  kind: "night" | "nap";
+  sourceDate: string;
+  targetDate: string;
+  bedtime?: string | null;
+  wakeTime?: string | null;
+  nightWakingTimes?: string[];
+  quality?: SleepQuality | null;
+  napStart?: string | null;
+  napEnd?: string | null;
+  note?: string | null;
+  allowOverwrite?: boolean;
+};
+
+export async function moveSleepEntryAtomic(
+  input: MoveSleepEntryInput,
+): Promise<void> {
+  const { error } = await supabase.rpc("move_sleep_entry_atomic", {
+    p_kind: input.kind,
+    p_source_date: input.sourceDate,
+    p_target_date: input.targetDate,
+    p_bedtime: input.bedtime ?? null,
+    p_wake_time: input.wakeTime ?? null,
+    p_night_waking_times: input.nightWakingTimes ?? [],
+    p_quality: input.quality ?? null,
+    p_nap_start: input.napStart ?? null,
+    p_nap_end: input.napEnd ?? null,
+    p_note: input.note ?? null,
+    p_allow_overwrite: input.allowOverwrite ?? false,
+  });
+  if (error) throw error;
+}
+
 export async function deleteSleepRecord(id: string): Promise<void> {
   const { error } = await supabase.from("sleep_records").delete().eq("id", id);
   if (error) throw error;

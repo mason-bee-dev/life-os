@@ -77,6 +77,12 @@ function joinRecords(
       ...(row.watched_porn != null ? { watchedPorn: row.watched_porn } : {}),
     };
   }
+
+  // Include drink-only dates if a parent daily_records row is missing.
+  for (const [date, drinks] of drinksByDate) {
+    if (records[date]) continue;
+    records[date] = { date, drinks };
+  }
   return records;
 }
 
@@ -102,43 +108,27 @@ async function fetchDailyRecords(): Promise<DailyRecords> {
   );
 }
 
-async function persistRecord(date: string, patch: Partial<DailyRecord>) {
-  const row: Record<string, unknown> = {
-    date,
-    updated_at: new Date().toISOString(),
-  };
-  if (patch.waterGlasses !== undefined) row.water_glasses = patch.waterGlasses;
+function toPatchJson(patch: Partial<DailyRecord>): Record<string, unknown> {
+  const json: Record<string, unknown> = {};
+  if (patch.waterGlasses !== undefined) json.waterGlasses = patch.waterGlasses;
   if (patch.masturbationCount !== undefined) {
-    row.masturbation_count = patch.masturbationCount;
+    json.masturbationCount = patch.masturbationCount;
   }
-  if (patch.wpNote !== undefined) row.wp_note = patch.wpNote;
-  if (patch.watchedPorn !== undefined) row.watched_porn = patch.watchedPorn;
-
-  const { error } = await supabase.from("daily_records").upsert(row);
-  if (error) throw error;
-
+  if (patch.wpNote !== undefined) json.wpNote = patch.wpNote;
+  if (patch.watchedPorn !== undefined) json.watchedPorn = patch.watchedPorn;
   const nextDrinks = patch.drinks ?? patch.coffee;
   if (nextDrinks !== undefined) {
-    const { error: delError } = await supabase
-      .from("coffee_logs")
-      .delete()
-      .eq("date", date);
-    if (delError) throw delError;
-    if (nextDrinks.length > 0) {
-      const { error: insError } = await supabase.from("coffee_logs").insert(
-        nextDrinks.map((c) => ({
-          date,
-          type: c.type,
-          custom_type: c.customType ?? null,
-          cups: c.cups,
-          category: c.category ?? "cafe",
-          amount: c.amount ?? 0,
-          note: c.note?.trim() ? c.note.trim() : null,
-        })),
-      );
-      if (insError) throw insError;
-    }
+    json.drinks = nextDrinks.map((d) => ({
+      id: d.id,
+      category: d.category ?? "cafe",
+      type: d.type,
+      customType: d.customType ?? null,
+      cups: d.cups,
+      amount: d.amount ?? 0,
+      note: d.note ?? null,
+    }));
   }
+  return json;
 }
 
 export function useDailyRecords() {
@@ -150,28 +140,56 @@ export function useDailyRecords() {
     queryFn: fetchDailyRecords,
   });
 
+  type UpdateArgs = {
+    date: string;
+    patch: Partial<DailyRecord>;
+    clearFrom?: { date: string; patch: Partial<DailyRecord> };
+  };
+
+  type UpdateOpts = {
+    onSuccess?: () => void;
+    onError?: () => void;
+  };
+
   const mutation = useMutation({
-    mutationFn: ({
-      date,
-      patch,
-    }: {
-      date: string;
-      patch: Partial<DailyRecord>;
-    }) => persistRecord(date, patch),
-    onMutate: async ({ date, patch }) => {
+    mutationFn: async ({ date, patch, clearFrom }: UpdateArgs) => {
+      const { error } = await supabase.rpc("save_daily_record_atomic", {
+        p_target_date: date,
+        p_target_patch: toPatchJson(patch),
+        p_source_date:
+          clearFrom && clearFrom.date !== date ? clearFrom.date : null,
+        p_source_patch:
+          clearFrom && clearFrom.date !== date
+            ? toPatchJson(clearFrom.patch)
+            : null,
+      });
+      if (error) throw error;
+    },
+    onMutate: async ({ date, patch, clearFrom }) => {
       await queryClient.cancelQueries({ queryKey: DAILY_RECORDS_QUERY_KEY });
       const previous =
         queryClient.getQueryData<DailyRecords>(DAILY_RECORDS_QUERY_KEY);
       queryClient.setQueryData<DailyRecords>(
         DAILY_RECORDS_QUERY_KEY,
         (old = {}) => {
-          const prev = old[date] ?? { date };
-          const merged: DailyRecord = { ...prev, date, ...patch };
-          if (patch.drinks !== undefined) {
-            merged.drinks = patch.drinks;
-            delete merged.coffee;
+          const apply = (
+            map: DailyRecords,
+            d: string,
+            p: Partial<DailyRecord>,
+          ): DailyRecords => {
+            const prev = map[d] ?? { date: d };
+            const merged: DailyRecord = { ...prev, date: d, ...p };
+            if (p.drinks !== undefined) {
+              merged.drinks = p.drinks;
+              delete merged.coffee;
+            }
+            return { ...map, [d]: merged };
+          };
+          let next = apply(old, date, patch);
+          if (clearFrom && clearFrom.date !== date) {
+            next = apply(next, clearFrom.date, clearFrom.patch);
           }
-          return { ...old, [date]: merged };
+          return next;
         },
       );
       return { previous };
@@ -191,8 +209,19 @@ export function useDailyRecords() {
     return { ...r, drinks: drinksOf(r) };
   };
 
-  const updateRecord = (date: string, patch: Partial<DailyRecord>) => {
-    mutation.mutate({ date, patch });
+  const updateRecord = (
+    date: string,
+    patch: Partial<DailyRecord>,
+    clearFrom?: { date: string; patch: Partial<DailyRecord> },
+    opts?: UpdateOpts,
+  ) => {
+    mutation.mutate(
+      { date, patch, clearFrom },
+      {
+        onSuccess: opts?.onSuccess,
+        onError: opts?.onError,
+      },
+    );
   };
 
   return {

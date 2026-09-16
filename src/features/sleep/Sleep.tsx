@@ -26,6 +26,8 @@ export function Sleep() {
     getRecord,
     saveNightSleep,
     saveNap,
+    moveNightSleep,
+    moveNap,
     clearNightSleep,
     clearNap,
   } = useSleepData({ night: nightPeriod, nap: napPeriod });
@@ -54,6 +56,7 @@ export function Sleep() {
             isDeleting={isDeleting}
             getRecord={getRecord}
             onSave={saveNightSleep}
+            onMove={moveNightSleep}
             onClear={clearNightSleep}
           />
         </TabsContent>
@@ -69,6 +72,7 @@ export function Sleep() {
             isDeleting={isDeleting}
             getRecord={getRecord}
             onSave={saveNap}
+            onMove={moveNap}
             onClear={clearNap}
           />
         </TabsContent>

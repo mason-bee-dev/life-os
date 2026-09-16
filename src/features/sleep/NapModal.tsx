@@ -27,6 +27,8 @@ type Props = {
   defaultDate: string;
   isSaving: boolean;
   isDeleting?: boolean;
+  /** Prefill when creating and user picks another day. */
+  recordForDate?: (date: string) => SleepRecord | undefined;
   onSave: (input: NapInput) => void;
   onDelete?: () => void;
 };
@@ -38,6 +40,7 @@ export function NapModal({
   defaultDate,
   isSaving,
   isDeleting,
+  recordForDate,
   onSave,
   onDelete,
 }: Props) {
@@ -58,6 +61,18 @@ export function NapModal({
     setNote(record?.note ?? "");
     setConfirmDelete(false);
   }, [open, defaultDate, record]);
+
+  const applyRecordFields = (r: SleepRecord | undefined) => {
+    setStartTime(r?.napStart ?? null);
+    setEndTime(r?.napEnd ?? null);
+    setNote(r?.note ?? "");
+  };
+
+  const selectDate = (next: string) => {
+    setDate(next);
+    setDatePickerOpen(false);
+    if (!editing) applyRecordFields(recordForDate?.(next));
+  };
 
   const napMins =
     startTime && endTime ? durationMinutes(startTime, endTime) : null;
@@ -101,8 +116,7 @@ export function NapModal({
                   selected={dayjs(date).toDate()}
                   onSelect={(d) => {
                     if (!d) return;
-                    setDate(dayjs(d).format("YYYY-MM-DD"));
-                    setDatePickerOpen(false);
+                    selectDate(dayjs(d).format("YYYY-MM-DD"));
                   }}
                   disabled={{ after: dayjs().endOf("day").toDate() }}
                   initialFocus

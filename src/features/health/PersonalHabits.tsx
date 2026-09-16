@@ -93,18 +93,53 @@ export function PersonalHabits() {
     count: number;
     note: string;
   }) => {
-    updateRecord(date, {
-      masturbationCount: count,
-      wpNote: note || null,
-    });
-    notify("Đã lưu WP");
-    setModalOpen(false);
+    const movingDate = Boolean(editDate && editDate !== date);
+    const target = getRecord(date);
+    const targetUsed =
+      movingDate &&
+      ((target.masturbationCount ?? 0) > 0 || (target.wpNote?.trim() ?? "").length > 0);
+    if (targetUsed) {
+      const ok = window.confirm(
+        `Ngày ${dayjs(date).format("DD/MM/YYYY")} đã có dữ liệu WP. Ghi đè?`,
+      );
+      if (!ok) return;
+    }
+
+    const clearFrom =
+      editDate && editDate !== date
+        ? { date: editDate, patch: { masturbationCount: 0, wpNote: null } }
+        : undefined;
+    updateRecord(
+      date,
+      {
+        masturbationCount: count,
+        wpNote: note || null,
+      },
+      clearFrom,
+      {
+        onSuccess: () => {
+          notify("Đã lưu WP");
+          setModalOpen(false);
+          setEditDate(null);
+        },
+        onError: () => notify("Không lưu được. Thử lại sau."),
+      },
+    );
   };
 
   const handleClear = (date: string) => {
-    updateRecord(date, { masturbationCount: 0, wpNote: null });
-    notify("Đã xoá WP");
-    setConfirmKey(null);
+    updateRecord(
+      date,
+      { masturbationCount: 0, wpNote: null },
+      undefined,
+      {
+        onSuccess: () => {
+          notify("Đã xoá WP");
+          setConfirmKey(null);
+        },
+        onError: () => notify("Không xoá được. Thử lại sau."),
+      },
+    );
   };
 
   return (
@@ -199,6 +234,17 @@ export function PersonalHabits() {
         initialCount={modalCount}
         initialNote={modalNote}
         isSaving={isSaving}
+        valuesForDate={
+          editDate
+            ? undefined
+            : (d) => {
+                const r = getRecord(d);
+                return {
+                  count: r.masturbationCount ?? 0,
+                  note: r.wpNote ?? "",
+                };
+              }
+        }
         onSave={handleSave}
       />
     </div>
