@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { getSessionUserDisplay, useAuth } from "@/features/auth";
 import { BrandLogo } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { PAGE_PATHS } from "@/lib/routes";
+import { DEFAULT_PAGE_PATH } from "@/lib/routes";
 
 export function AppHeader() {
   const { session, signOut } = useAuth();
@@ -23,7 +23,7 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-40 hidden shrink-0 items-center justify-between border-b border-border bg-background px-4 py-2.5 lg:flex lg:px-5">
-      <Link to={PAGE_PATHS.Dashboard} className="min-w-0">
+      <Link to={DEFAULT_PAGE_PATH} className="min-w-0">
         <BrandLogo size={34} />
       </Link>
 

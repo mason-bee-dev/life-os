@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 import { ComingSoon } from "@/components/ComingSoon";
 import { ToastProvider } from "@/components/ui/toast";
 import { usePersistentState } from "@/hooks/usePersistentState";
-import { pageIdFromPath } from "@/lib/routes";
+import { DEFAULT_PAGE_PATH, PAGE_PATHS, pageIdFromPath } from "@/lib/routes";
 import { AuthProvider, useAuth } from "@/features/auth/AuthProvider";
 import { Login } from "@/features/auth/Login";
 import { RequireAuth } from "@/features/auth/RequireAuth";
@@ -24,9 +24,21 @@ import { defaultHabits } from "@/features/habits/data";
 import { defaultJournal } from "@/features/journal/data";
 import type { Habit } from "@/features/habits/types";
 import type { JournalEntry, Mood } from "@/features/journal/types";
+import type { PageBreadcrumbItem } from "@/components/PageBreadcrumb";
 import type { PageId } from "@/types";
 
-const headers: Record<string, { title: string; sub: string }> = {
+type PageHeader = {
+  title: string;
+  sub: string;
+  breadcrumbs?: PageBreadcrumbItem[];
+};
+
+const homeCrumb: PageBreadcrumbItem = {
+  label: "Life OS",
+  href: DEFAULT_PAGE_PATH,
+};
+
+const headers: Record<string, PageHeader> = {
   Dashboard: {
     title: "Chào buổi sáng, Alex 👋",
     sub: "Đây là tình hình cuộc sống của bạn hôm nay.",
@@ -40,6 +52,20 @@ const headers: Record<string, { title: string; sub: string }> = {
     sub: "Danh sách việc cần làm — ưu tiên và hoàn thành.",
   },
   Journal: { title: "Nhật ký", sub: "Những suy nghĩ của bạn, từng ngày." },
+  Health: {
+    title: "Thói quen",
+    sub: "Theo dõi thói quen cá nhân.",
+    breadcrumbs: [homeCrumb, { label: "Thói quen" }],
+  },
+  Sleep: {
+    title: "Giấc ngủ",
+    sub: "Giấc ngủ đêm và ngủ trưa — thống kê theo kỳ.",
+    breadcrumbs: [homeCrumb, { label: "Giấc ngủ" }],
+  },
+  Utilities: {
+    title: "Tiện ích",
+    sub: "QR ngân hàng và các tiện ích khác.",
+  },
   Insights: {
     title: "Phân tích",
     sub: "Những xu hướng mà số liệu đang cho thấy.",
@@ -78,31 +104,15 @@ function AppInner() {
       ...j,
     ]);
 
-  const h =
+  const h: PageHeader =
     pathname === "/migrate-local-data"
       ? {
           title: "Migrate dữ liệu",
           sub: "Chuyển DailyRecords từ localStorage sang Supabase.",
         }
       : (headers[active] ?? {
-          title:
-            active === "Health"
-              ? "Thói quen"
-              : active === "Sleep"
-                ? "Giấc ngủ"
-                : active === "Utilities"
-                  ? "Tiện ích"
-                  : active === "Productivity"
-                    ? "Năng suất"
-                    : active,
-          sub:
-            active === "Health"
-              ? "Theo dõi thói quen cá nhân."
-              : active === "Sleep"
-                ? "Giấc ngủ đêm và ngủ trưa — thống kê theo kỳ."
-                : active === "Utilities"
-                  ? "QR ngân hàng và các tiện ích khác."
-                  : "Sắp ra mắt",
+          title: active === "Productivity" ? "Năng suất" : active,
+          sub: "Sắp ra mắt",
         });
 
   return (
@@ -113,10 +123,18 @@ function AppInner() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <MobileNav />
           <main className="flex-1 overflow-y-auto px-4 pb-[60px] pt-4 sm:px-6 lg:px-8 lg:pt-[26px]">
-            <Header title={h.title} subtitle={h.sub} />
+            <Header
+              title={h.title}
+              subtitle={h.sub}
+              breadcrumbs={h.breadcrumbs}
+            />
             <Routes>
               <Route
                 path="/"
+                element={<Navigate to={DEFAULT_PAGE_PATH} replace />}
+              />
+              <Route
+                path={PAGE_PATHS.Dashboard}
                 element={
                   <Dashboard
                     habits={habits}
@@ -128,13 +146,13 @@ function AppInner() {
                 }
               />
               <Route
-                path="/today"
+                path={PAGE_PATHS.Today}
                 element={
                   <Today habits={habits} toggle={toggle} addEntry={addEntry} />
                 }
               />
               <Route
-                path="/todos"
+                path={PAGE_PATHS.Todos}
                 element={
                   <Todos
                     todos={todos}
@@ -146,22 +164,25 @@ function AppInner() {
                 }
               />
               <Route
-                path="/journal"
+                path={PAGE_PATHS.Journal}
                 element={<Journal journal={journal} addEntry={addEntry} />}
               />
-              <Route path="/health" element={<Health />} />
-              <Route path="/sleep" element={<Sleep />} />
-              <Route path="/utilities" element={<Utilities />} />
+              <Route path={PAGE_PATHS.Health} element={<Health />} />
+              <Route path={PAGE_PATHS.Sleep} element={<Sleep />} />
+              <Route path={PAGE_PATHS.Utilities} element={<Utilities />} />
               <Route
-                path="/productivity"
+                path={PAGE_PATHS.Productivity}
                 element={<ComingSoon label="Productivity" />}
               />
-              <Route path="/insights" element={<Insights />} />
+              <Route path={PAGE_PATHS.Insights} element={<Insights />} />
               <Route
                 path="/migrate-local-data"
                 element={<MigrateLocalData />}
               />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route
+                path="*"
+                element={<Navigate to={DEFAULT_PAGE_PATH} replace />}
+              />
             </Routes>
           </main>
         </div>
@@ -179,7 +200,7 @@ function PublicLoginRoute() {
       </div>
     );
   }
-  if (session) return <Navigate to="/" replace />;
+  if (session) return <Navigate to={DEFAULT_PAGE_PATH} replace />;
   return <Login />;
 }
 

@@ -12,6 +12,9 @@ Khi implement feature mới: copy khung này trước, chỉ thay domain logic. 
 
 ```
 ┌─────────────────────────────────────────────────────────┐
+│  Breadcrumb  Life OS / {Page name}                      │
+│  Page title + subtitle  (via App Header)                │
+├─────────────────────────────────────────────────────────┤
 │  [Tabs?]  feature-level (Sleep: đêm | trưa)             │
 ├─────────────────────────────────────────────────────────┤
 │  Toolbar                                                │
@@ -36,6 +39,34 @@ Khi implement feature mới: copy khung này trước, chỉ thay domain logic. 
 **Không** đảo thứ tự (ví dụ table trước stats). Insight luôn **trên** stats; stats luôn **trên** chart (nếu có); chart luôn **trên** table.
 
 Vertical rhythm: container `flex flex-col gap-4`.
+
+### Breadcrumb (bắt buộc cho page mới)
+
+Mỗi tracker page phải có breadcrumb phía trên title. Khai báo trong `headers` ở `src/app/App.tsx` (không hard-code trong feature folder).
+
+```tsx
+import { DEFAULT_PAGE_PATH } from "@/lib/routes";
+import type { PageBreadcrumbItem } from "@/components/PageBreadcrumb";
+
+const homeCrumb: PageBreadcrumbItem = {
+  label: "Life OS",
+  href: DEFAULT_PAGE_PATH,
+};
+
+// trong headers:
+MyFeature: {
+  title: "Tên trang",
+  sub: "Mô tả ngắn.",
+  breadcrumbs: [homeCrumb, { label: "Tên trang" }],
+},
+```
+
+- Dùng `PageBreadcrumb` / primitives ở `@/components/ui/breadcrumb` — không invent markup riêng.
+- Crumb cuối = trang hiện tại, **không** có `href`.
+- Crumb gốc luôn `Life OS` → `DEFAULT_PAGE_PATH` (`/health`).
+- `Header` nhận `breadcrumbs` và render tự động; page component chỉ lo nội dung tracker.
+
+Reference: Thói quen (`Health`) và Giấc ngủ (`Sleep`).
 
 ---
 
@@ -315,14 +346,16 @@ Tokens / spacing dùng CSS variables có sẵn (`--primary`, `--border`, `--card
 
 1. [ ] `types.ts` — record shape, `Period`, `PAGE_SIZE`
 2. [ ] `api` + hooks CRUD + period fetch
-3. [ ] Tab shell: toolbar (filter trái + CTA phải) + date caption
-4. [ ] Stats pure functions + StatsCards
-5. [ ] Table + empty state + pagination
-6. [ ] Modal create/edit + toast
-7. [ ] (Optional) Evaluation / insight box trên stats
-8. [ ] (Optional) Sort, secondary filters
-9. [ ] Mobile: `flex-wrap` toolbar, stats `grid-cols-2`, table scroll ngang nếu cần
-10. [ ] Không lệch pattern Sleep trừ khi document lý do
+3. [ ] Route + `PAGE_PATHS` + sidebar nav item
+4. [ ] Header: title, subtitle, **breadcrumbs** (`Life OS` → page) trong `App.tsx`
+5. [ ] Tab shell: toolbar (filter trái + CTA phải) + date caption
+6. [ ] Stats pure functions + StatsCards
+7. [ ] Table + empty state + pagination
+8. [ ] Modal create/edit + toast
+9. [ ] (Optional) Evaluation / insight box trên stats
+10. [ ] (Optional) Sort, secondary filters
+11. [ ] Mobile: `flex-wrap` toolbar, stats `grid-cols-2`, table scroll ngang nếu cần
+12. [ ] Không lệch pattern Sleep trừ khi document lý do
 
 ---
 
@@ -341,6 +374,7 @@ Tokens / spacing dùng CSS variables có sẵn (`--primary`, `--border`, `--card
 
 | Concern | File |
 |---------|------|
+| Breadcrumb | `App.tsx` `headers` + `@/components/PageBreadcrumb` |
 | Page + tabs | `Sleep.tsx` |
 | Tab composition | `NightSleepTab.tsx`, `NapTab.tsx` |
 | Period chips | `@/components/PeriodFilter` + `PERIOD_OPTIONS` in `types.ts` |
