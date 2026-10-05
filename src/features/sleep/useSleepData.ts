@@ -9,6 +9,37 @@ type MutateOpts = {
   onError?: () => void;
 };
 
+/** Build the upsert payload for night sleep without wiping nap fields. */
+export function toNightSleepRecord(
+  existing: SleepRecord | undefined,
+  input: NightSleepInput,
+  nowIso = new Date().toISOString(),
+): Partial<SleepRecord> & { date: string } {
+  const editingNight = Boolean(existing?.bedtime && existing?.wakeTime);
+  const incomingNote = input.note ?? null;
+  // Shared note column: when adding night onto a nap-only day with blank note,
+  // keep the existing note instead of wiping it.
+  const note =
+    incomingNote || editingNight
+      ? incomingNote
+      : (existing?.note ?? null);
+
+  return {
+    date: input.date,
+    bedtime: input.bedtime,
+    wakeTime: input.wakeTime,
+    nightWakingTimes: input.nightWakingTimes,
+    quality: input.quality ?? null,
+    note,
+    napStart: existing?.napStart ?? null,
+    napEnd: existing?.napEnd ?? null,
+    nightLoggedAt: existing?.nightLoggedAt ?? nowIso,
+    nightUpdatedAt: nowIso,
+    napLoggedAt: existing?.napLoggedAt ?? null,
+    napUpdatedAt: existing?.napUpdatedAt ?? null,
+  };
+}
+
 function hasRemainingNight(r: Partial<SleepRecord>): boolean {
   return Boolean(r.bedtime && r.wakeTime);
 }
@@ -45,34 +76,7 @@ export function useSleepData(periods: { night: Period; nap: Period }) {
   } = useSleepRecords(fetchRange);
 
   const saveNightSleep = (input: NightSleepInput, opts?: MutateOpts) => {
-    const existing = getRecord(input.date);
-    const editingNight = Boolean(existing?.bedtime && existing?.wakeTime);
-    const incomingNote = input.note ?? null;
-    // Shared note column: when adding night onto a nap-only day with blank note,
-    // keep the existing note instead of wiping it.
-    const note =
-      incomingNote || editingNight
-        ? incomingNote
-        : (existing?.note ?? null);
-
-    const now = new Date().toISOString();
-    saveRecord(
-      {
-        date: input.date,
-        bedtime: input.bedtime,
-        wakeTime: input.wakeTime,
-        nightWakingTimes: input.nightWakingTimes,
-        quality: input.quality ?? null,
-        note,
-        napStart: existing?.napStart ?? null,
-        napEnd: existing?.napEnd ?? null,
-        nightLoggedAt: existing?.nightLoggedAt ?? now,
-        nightUpdatedAt: now,
-        napLoggedAt: existing?.napLoggedAt ?? null,
-        napUpdatedAt: existing?.napUpdatedAt ?? null,
-      },
-      opts,
-    );
+    saveRecord(toNightSleepRecord(getRecord(input.date), input), opts);
   };
 
   const saveNap = (input: NapInput, opts?: MutateOpts) => {

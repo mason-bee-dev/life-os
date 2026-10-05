@@ -3,6 +3,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { Sidebar } from "@/components/Sidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { Header } from "@/components/Header";
+import { QuickActionsFab } from "@/components/QuickActionsFab";
 import { ComingSoon } from "@/components/ComingSoon";
 import { ToastProvider } from "@/components/ui/toast";
 import { usePersistentState } from "@/hooks/usePersistentState";
@@ -187,6 +188,7 @@ function AppInner() {
           </main>
         </div>
       </div>
+      <QuickActionsFab />
     </div>
   );
 }
