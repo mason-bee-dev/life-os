@@ -42,4 +42,11 @@ export const QR_BANK_ITEMS: QrBankItem[] = [
     accountNumber: "0983648016",
     imageSrc: "/images/qr-bank/timo-bank.jpeg",
   },
+  {
+    id: "vpbank",
+    bank: "VPBank",
+    accountName: "DUONG VAN TIN",
+    accountNumber: "0983648016",
+    imageSrc: "/images/qr-bank/VPBank.JPG",
+  },
 ];
